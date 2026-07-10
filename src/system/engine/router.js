@@ -1,38 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ShopLayout from '@/shoplayout/index.vue'
 import * as NProgress from 'nprogress'
 
 export const mainRoutes = [
     {
         path: '/',
-        redirect: '/shop',
-    },
-    {
-        path: '/shop',
-        component: ShopLayout,
-        meta: { title: 'Shop' },
-        children: [
-            {
-                path: '',
-                name: 'ShopHome',
-                component: () => import('@/views/dashboard/index.vue'),
-            },
-        ],
+        name: 'POSDashboard',
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: { title: 'POSfood' },
     },
     {
         path: '/:pathMatch(.*)*',
-        redirect: '/shop',
+        redirect: '/',
     },
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     scrollBehavior() {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({ left: 0, top: 0 })
-            }, 50)
-        })
+        return { left: 0, top: 0 }
     },
     routes: mainRoutes,
 })
