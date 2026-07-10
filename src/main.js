@@ -21,6 +21,7 @@ import Vue3VideoPlayer from '@cloudgeek/vue3-video-player'
 import 'element-plus/dist/index.css'
 import 'nprogress/nprogress.css'
 import './assets/css/animate.css'
+import './assets/fonts/font-awesome/style.css'
 
 import './system/engine/permission'
 

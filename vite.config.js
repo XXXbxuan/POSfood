@@ -2,8 +2,12 @@ const path = require('path')
 const vue = require('@vitejs/plugin-vue')
 
 module.exports = {
+    build: {
+        cssCodeSplit: false,
+    },
     server: {
         port: 3333,
+        strictPort: true,
         host: true,
     },
     resolve: {

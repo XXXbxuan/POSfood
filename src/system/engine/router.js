@@ -9,6 +9,18 @@ export const mainRoutes = [
         meta: { title: 'POSfood' },
     },
     {
+        path: '/pos/order',
+        name: 'POSOrder',
+        component: () => import('@/views/order/index.vue'),
+        meta: { title: 'POSfood Order' },
+    },
+    {
+        path: '/pos/start',
+        name: 'POSStart',
+        component: () => import('@/views/order/start.vue'),
+        meta: { title: 'POSfood Start Order' },
+    },
+    {
         path: '/:pathMatch(.*)*',
         redirect: '/',
     },
