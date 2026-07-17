@@ -1,71 +1,29 @@
 import { createApp } from 'vue'
+import VueKonva from 'vue-konva'
 import App from './App.vue'
-import router from './system/engine/router.js'
-import ElementPlus from 'element-plus'
-import i18n from './system/language/index.js'
-import Global from './system/store/global.js'
-import PermmissionVue from './system/engine/permissionVue.js'
-import BootstrapVue3 from 'bootstrap-vue-3'
-import VueApexCharts from 'vue3-apexcharts'
-import BootstrapVue3Wrappers from 'bootstrap-vue-3-wrappers'
-import VueSocialSharing from 'vue-social-sharing'
-import YoutubeIframe from '@techassi/vue-youtube-iframe'
-import VueViewer from 'v-viewer'
-import V3waterfall from 'v3-waterfall'
-import { createMetaManager, defaultConfig, deepestResolver, plugin as vueMetaPlugin } from 'vue-meta'
-import VueQrcode from '@chenfengyuan/vue-qrcode'
-import VueCountdown from '@chenfengyuan/vue-countdown'
-import VueTelInput from 'vue3-tel-input'
-import Vue3VideoPlayer from '@cloudgeek/vue3-video-player'
-
-import 'element-plus/dist/index.css'
+import router from './router'
 import 'nprogress/nprogress.css'
-import './assets/css/animate.css'
 import './assets/fonts/font-awesome/style.css'
-
-import './system/engine/permission'
-
-const app = createApp(App)
-
-const globalOptions = {
-    mode: 'auto',
-}
-
-window.onerror = function (message, source, lineno, colno, error) {
-    document.body.innerHTML = `
-        <pre style="white-space: pre-wrap; padding: 20px; color: red;">
-${message}
-${source}:${lineno}:${colno}
-${error && error.stack ? error.stack : ''}
-        </pre>
-    `
-}
-
-
-app.use(router)
-app.use(i18n)
-app.use(ElementPlus)
-app.use(Global)
-app.use(PermmissionVue)
-app.use(BootstrapVue3)
-app.use(BootstrapVue3Wrappers)
-app.use(VueApexCharts)
-app.use(VueSocialSharing)
-app.use(YoutubeIframe)
-app.use(V3waterfall)
-app.use(createMetaManager(defaultConfig, deepestResolver))
-app.use(vueMetaPlugin)
-app.use(Vue3VideoPlayer)
-app.use(VueViewer, {
-    defaultOptions: {
-        title: false,
-        navbar: false,
-        scalable: false,
-        rotatable: false,
-    },
-})
-app.use(VueTelInput, globalOptions)
-app.component(VueQrcode.name, VueQrcode)
-app.component(VueCountdown.name, VueCountdown)
-
-app.mount('#app')
+import './assets/css/variables.css'
+import './assets/css/base.css'
+import './assets/css/layout.css'
+import './assets/css/responsive.css'
+import './assets/css/components/camera-scanner.css'
+import './assets/css/components/product-menu.css'
+import './assets/css/components/set-meal-customizer.css'
+import './assets/css/components/qr-zoom-modal.css'
+import './assets/css/components/sidebar.css'
+import './assets/css/components/table-grid.css'
+import './assets/css/components/table-layout-designer.css'
+import './assets/css/components/sortable.css'
+import './assets/css/components/thermal-receipt.css'
+import './assets/css/components/topbar.css'
+import './assets/css/pages/checkout.css'
+import './assets/css/pages/login.css'
+import './assets/css/pages/menu-management.css'
+import './assets/css/pages/order.css'
+import './assets/css/pages/receipt.css'
+import './assets/css/pages/reporting.css'
+import './assets/css/pages/start.css'
+import './assets/css/pages/transactions.css'
+createApp(App).use(router).use(VueKonva).mount('#app')

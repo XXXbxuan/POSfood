@@ -1,0 +1,926 @@
+.reporting-page * {
+    box-sizing: border-box;
+}
+
+.reporting-page {
+    height: 100vh;
+    overflow: hidden;
+    background: #f4f4f5;
+    color: #171826;
+    font-family: 'poppins', Arial, sans-serif;
+}
+
+.reporting-page .reporting-shell {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 4.65rem minmax(0, 1fr);
+}
+
+.reporting-page .reporting-workspace {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem 1.35rem 1.15rem;
+    overflow-y: auto;
+}
+
+.reporting-page .reporting-workspace.overview-workspace {
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1.08fr) minmax(0, 0.92fr);
+    overflow: hidden;
+}
+
+.reporting-page .reporting-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.reporting-page .reporting-header h2 {
+    margin: 0;
+    font-size: 1.55rem;
+}
+
+.reporting-page .reporting-header nav {
+    display: flex;
+    gap: 0.3rem;
+    padding: 0.25rem;
+    border: 1px solid #e2e3e5;
+    border-radius: 0.65rem;
+    background: #fff;
+}
+
+.reporting-page .reporting-header nav button {
+    height: 2.2rem;
+    padding: 0 0.85rem;
+    border: 0;
+    border-radius: 0.45rem;
+    background: #fff;
+    color: #777b84;
+    font-size: 0.68rem;
+    font-weight: 850;
+}
+
+.reporting-page .reporting-header nav button.active {
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.reporting-page .reporting-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.7rem;
+}
+
+.reporting-page .reporting-stats article {
+    min-height: 5.2rem;
+    display: grid;
+    grid-template-columns: 2.55rem 1fr;
+    grid-template-rows: auto auto;
+    align-content: center;
+    gap: 0.12rem 0.65rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid #e2e3e5;
+    border-radius: 0.75rem;
+    background: #fff;
+}
+
+.reporting-page .reporting-stats i {
+    grid-row: 1/3;
+    width: 2.55rem;
+    height: 2.55rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.6rem;
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.reporting-page .reporting-stats span {
+    color: #888c94;
+    font-size: 0.62rem;
+    font-weight: 800;
+}
+
+.reporting-page .reporting-stats strong {
+    font-size: 1.05rem;
+}
+
+.reporting-page .reporting-grid {
+    min-height: 0;
+    display: grid;
+    gap: 0.7rem;
+}
+
+.reporting-page .primary-grid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 0.5fr);
+}
+
+.reporting-page .secondary-grid {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.reporting-page .report-card {
+    min-height: 0;
+    padding: 1rem;
+    border: 1px solid #e2e3e5;
+    border-radius: 0.8rem;
+    background: #fff;
+}
+
+.reporting-page .report-card > header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+}
+
+.reporting-page .report-card > header span {
+    color: #fc8019;
+    font-size: 0.58rem;
+    font-weight: 900;
+}
+
+.reporting-page .report-card h3 {
+    margin: 0.08rem 0;
+    font-size: 0.92rem;
+}
+
+.reporting-page .report-card > header > strong {
+    color: #fc8019;
+    font-size: 0.95rem;
+}
+
+.reporting-page .sales-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reporting-page .sales-chart {
+    min-height: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    align-items: end;
+    gap: 0.55rem;
+    padding: 0.4rem 0.3rem 0;
+}
+
+.reporting-page .chart-column {
+    height: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) 1.25rem;
+    align-items: end;
+    text-align: center;
+}
+
+.reporting-page .bar-track {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-radius: 0.35rem;
+    background: #fafafa;
+    overflow: hidden;
+}
+
+.reporting-page .bar-track span {
+    width: min(1.75rem, 62%);
+    display: block;
+    border-radius: 0.35rem 0.35rem 0 0;
+    background: #fc8019;
+    transition: 0.2s;
+}
+
+.reporting-page .chart-column small {
+    align-self: end;
+    color: #8d9199;
+    font-size: 0.55rem;
+}
+
+.reporting-page .service-card {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.reporting-page .service-list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.reporting-page .service-list > div {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0.08rem 0.6rem;
+    padding: 0.75rem;
+    border: 1px solid #ececef;
+    border-radius: 0.65rem;
+}
+
+.reporting-page .service-list i {
+    grid-row: 1/3;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.55rem;
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.reporting-page .service-list span {
+    font-size: 0.72rem;
+    font-weight: 850;
+}
+
+.reporting-page .service-list strong {
+    grid-column: 3;
+    grid-row: 1/3;
+    font-size: 1.15rem;
+}
+
+.reporting-page .service-list small {
+    color: #8d9199;
+    font-size: 0.58rem;
+}
+
+.reporting-page .secondary-grid .report-card {
+    height: 100%;
+}
+
+.reporting-page .payment-list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.reporting-page .payment-list > div {
+    display: grid;
+    grid-template-columns: 1fr 2.4rem;
+    align-items: center;
+    gap: 0.2rem 0.6rem;
+}
+
+.reporting-page .payment-list > div > div:first-child {
+    grid-column: 1/3;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.67rem;
+}
+
+.reporting-page .progress {
+    height: 0.42rem;
+    border-radius: 1rem;
+    background: #eeeeef;
+    overflow: hidden;
+}
+
+.reporting-page .progress span {
+    height: 100%;
+    display: block;
+    border-radius: 1rem;
+    background: #fc8019;
+}
+
+.reporting-page .payment-list small {
+    color: #858991;
+    font-size: 0.58rem;
+    text-align: right;
+}
+
+.reporting-page .items-card ol {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.reporting-page .items-card li {
+    display: grid;
+    grid-template-columns: 1.8rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.42rem 0.5rem;
+    border-radius: 0.55rem;
+    background: #fafafa;
+}
+
+.reporting-page .items-card li > span {
+    width: 1.6rem;
+    height: 1.6rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.4rem;
+    background: #fff2e8;
+    color: #fc8019;
+    font-size: 0.62rem;
+    font-weight: 900;
+}
+
+.reporting-page .items-card li div {
+    min-width: 0;
+}
+
+.reporting-page .items-card li strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.68rem;
+}
+
+.reporting-page .items-card li small {
+    display: block;
+    color: #8d9199;
+    font-size: 0.54rem;
+}
+
+.reporting-page .items-card li b {
+    font-size: 0.75rem;
+}
+
+.reporting-page .report-empty {
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    color: #a0a4ac;
+    font-size: 0.68rem;
+}
+
+.reporting-page .report-empty i {
+    color: #fc8019;
+    font-size: 1.4rem;
+}
+
+.reporting-page .report-empty.compact {
+    min-height: 6rem;
+}
+
+@media (max-width: 68.75em) {
+    .reporting-page .reporting-workspace {
+        padding: 0.8rem;
+    }
+
+    .reporting-page .reporting-stats {
+        gap: 0.5rem;
+    }
+
+    .reporting-page .reporting-stats article {
+        padding: 0.65rem;
+    }
+
+    .reporting-page .primary-grid {
+        grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.65fr);
+    }
+
+    .reporting-page .sales-chart {
+        gap: 0.3rem;
+    }
+
+    .reporting-page .secondary-grid .report-card {
+        height: 13.5rem;
+    }
+}
+
+@media (max-width: 47.5em) {
+    .reporting-page {
+        height: auto;
+        min-height: 100vh;
+        overflow: auto;
+    }
+
+    .reporting-page .reporting-shell {
+        min-height: 100vh;
+        grid-template-rows: auto 1fr;
+    }
+
+    .reporting-page .reporting-header {
+        align-items: flex-start;
+        gap: 0.7rem;
+    }
+
+    .reporting-page .reporting-header nav button {
+        padding: 0 0.55rem;
+    }
+
+    .reporting-page .reporting-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .reporting-page .primary-grid,
+    .reporting-page .secondary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reporting-page .reporting-workspace {
+        overflow: visible;
+    }
+
+    .reporting-page .sales-card,
+    .reporting-page .service-card,
+    .reporting-page .secondary-grid .report-card {
+        height: auto;
+        min-height: 14rem;
+    }
+}
+
+.reporting-page .reporting-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reporting-page .reporting-header .report-view-tabs {
+    background: transparent;
+}
+
+.reporting-page .reporting-header .report-view-tabs button {
+    border: 1px solid transparent;
+}
+
+.reporting-page .reporting-header .report-view-tabs button.active {
+    border-color: #ffc99d;
+    background: #fff;
+}
+
+.reporting-page .product-report-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 10rem;
+    gap: 0.7rem;
+}
+
+.reporting-page .product-category-tabs {
+    min-width: 0;
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    border: 1px solid #e2e3e5;
+    border-radius: 0.7rem;
+    background: #fff;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.reporting-page .product-category-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.reporting-page .product-category-tabs button {
+    height: 2.45rem;
+    flex: 0 0 auto;
+    padding: 0 0.8rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #737780;
+    font-size: 0.68rem;
+    font-weight: 850;
+}
+
+.reporting-page .product-category-tabs button.active {
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.reporting-page .product-report-toolbar select {
+    padding: 0 0.75rem;
+    border: 1px solid #e2e3e5;
+    border-radius: 0.7rem;
+    background: #fff;
+    font-size: 0.7rem;
+    font-weight: 850;
+}
+
+.reporting-page .product-performance-grid {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 6.5rem;
+    align-content: start;
+    gap: 0.7rem;
+}
+
+.reporting-page .performance-card {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 1.7rem 4.6rem minmax(0, 1fr) auto 1rem;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e3e5;
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #171826;
+    text-align: left;
+}
+
+.reporting-page .performance-card:hover {
+    border-color: #ffc38f;
+    box-shadow: 0 0.35rem 1rem rgba(252, 128, 25, 0.08);
+}
+
+.reporting-page .product-rank {
+    width: 1.65rem;
+    height: 1.65rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.45rem;
+    background: #fff2e8;
+    color: #fc8019;
+    font-size: 0.68rem;
+    font-weight: 900;
+}
+
+.reporting-page .performance-card > img,
+.reporting-page .product-image-empty {
+    width: 4.6rem;
+    height: 4.6rem;
+    display: grid;
+    place-items: center;
+    object-fit: contain;
+    border-radius: 0.6rem;
+    background: #fafafa;
+    color: #a2a6ae;
+}
+
+.reporting-page .performance-copy {
+    min-width: 0;
+}
+
+.reporting-page .performance-copy small {
+    color: #fc8019;
+    font-size: 0.55rem;
+    font-weight: 900;
+}
+
+.reporting-page .performance-copy h3 {
+    margin: 0.08rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+.reporting-page .performance-copy p {
+    margin: 0;
+    color: #888c94;
+    font-size: 0.58rem;
+}
+
+.reporting-page .performance-total {
+    text-align: right;
+}
+
+.reporting-page .performance-total strong,
+.reporting-page .performance-total small {
+    display: block;
+    white-space: nowrap;
+}
+
+.reporting-page .performance-total strong {
+    color: #fc8019;
+    font-size: 0.82rem;
+}
+
+.reporting-page .performance-total small {
+    margin-top: 0.12rem;
+    color: #91959d;
+    font-size: 0.52rem;
+}
+
+.reporting-page .performance-card > i {
+    color: #a2a6ae;
+}
+
+.reporting-page .product-report-empty {
+    min-height: 22rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #969aa2;
+}
+
+.reporting-page .product-report-empty i {
+    color: #fc8019;
+    font-size: 1.8rem;
+}
+
+.reporting-page .product-report-empty h3 {
+    margin: 0.6rem 0 0.15rem;
+}
+
+.reporting-page .product-report-empty p {
+    margin: 0;
+    font-size: 0.68rem;
+}
+
+.reporting-page .product-detail-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 170;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(23, 24, 38, 0.55);
+}
+
+.reporting-page .product-detail-modal {
+    width: min(52rem, 94vw);
+    max-height: 92vh;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.4rem 4rem rgba(23, 24, 38, 0.24);
+}
+
+.reporting-page .product-detail-modal > header {
+    height: 4.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.25rem;
+    border-bottom: 1px solid #ececef;
+}
+
+.reporting-page .product-detail-modal > header span {
+    color: #fc8019;
+    font-size: 0.6rem;
+    font-weight: 900;
+}
+
+.reporting-page .product-detail-modal > header h2 {
+    margin: 0.08rem 0;
+    font-size: 1.15rem;
+}
+
+.reporting-page .product-detail-modal > header button {
+    width: 2.55rem;
+    height: 2.55rem;
+    border: 0;
+    border-radius: 50%;
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.reporting-page .product-detail-body {
+    min-height: 28rem;
+    display: grid;
+    grid-template-columns: 30% minmax(0, 1fr);
+}
+
+.reporting-page .product-detail-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    border-right: 1px solid #ececef;
+    background: #fafafa;
+}
+
+.reporting-page .product-detail-summary > img,
+.reporting-page .product-detail-summary > span {
+    width: min(12rem, 90%);
+    height: 12rem;
+    display: grid;
+    place-items: center;
+    object-fit: contain;
+    border-radius: 0.8rem;
+    background: #fff;
+    color: #a4a8af;
+}
+
+.reporting-page .product-detail-summary > div {
+    text-align: center;
+}
+
+.reporting-page .product-detail-summary small,
+.reporting-page .product-detail-summary strong {
+    display: block;
+}
+
+.reporting-page .product-detail-summary small {
+    color: #898d95;
+    font-size: 0.62rem;
+}
+
+.reporting-page .product-detail-summary strong {
+    color: #fc8019;
+    font-size: 1.35rem;
+}
+
+.reporting-page .product-detail-content {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.reporting-page .product-detail-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+}
+
+.reporting-page .product-detail-stats article {
+    padding: 0.7rem;
+    border: 1px solid #e4e5e8;
+    border-radius: 0.65rem;
+    background: #fafafa;
+}
+
+.reporting-page .product-detail-stats span,
+.reporting-page .product-detail-stats strong {
+    display: block;
+}
+
+.reporting-page .product-detail-stats span {
+    color: #898d95;
+    font-size: 0.58rem;
+}
+
+.reporting-page .product-detail-stats strong {
+    margin-top: 0.15rem;
+    font-size: 0.85rem;
+}
+
+.reporting-page .product-trend-card {
+    min-height: 11rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.8rem;
+    border: 1px solid #e4e5e8;
+    border-radius: 0.65rem;
+}
+
+.reporting-page .product-trend-card > header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.reporting-page .product-trend-card h3 {
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+.reporting-page .product-trend-card > header strong {
+    color: #fc8019;
+    font-size: 0.72rem;
+}
+
+.reporting-page .product-trend {
+    min-height: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    align-items: end;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+}
+
+.reporting-page .product-trend > div {
+    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) 1rem;
+    text-align: center;
+}
+
+.reporting-page .product-trend > div > span {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-radius: 0.3rem;
+    background: #fafafa;
+    overflow: hidden;
+}
+
+.reporting-page .product-trend i {
+    width: 55%;
+    display: block;
+    border-radius: 0.3rem 0.3rem 0 0;
+    background: #fc8019;
+}
+
+.reporting-page .product-trend small {
+    color: #8c9098;
+    font-size: 0.5rem;
+}
+
+.reporting-page .product-detail-lists {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+}
+
+.reporting-page .product-detail-lists article {
+    padding: 0.75rem;
+    border: 1px solid #e4e5e8;
+    border-radius: 0.65rem;
+}
+
+.reporting-page .product-detail-lists h3 {
+    margin: 0 0 0.4rem;
+    font-size: 0.7rem;
+}
+
+.reporting-page .product-detail-lists article > div {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    border-top: 1px solid #f0f0f1;
+    font-size: 0.6rem;
+}
+
+.reporting-page .product-detail-lists p {
+    margin: 0.5rem 0 0;
+    color: #969aa2;
+    font-size: 0.58rem;
+}
+
+@media (max-width: 68.75em) {
+    .reporting-page .product-performance-grid {
+        grid-auto-rows: 6rem;
+    }
+
+    .reporting-page .performance-card {
+        grid-template-columns: 1.6rem 4rem minmax(0, 1fr) auto 1rem;
+        gap: 0.45rem;
+    }
+
+    .reporting-page .performance-card > img,
+    .reporting-page .product-image-empty {
+        width: 4rem;
+        height: 4rem;
+    }
+}
+
+@media (max-width: 47.5em) {
+    .reporting-page .reporting-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.45rem;
+    }
+
+    .reporting-page .product-report-toolbar,
+    .reporting-page .product-performance-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reporting-page .product-report-toolbar select {
+        height: 2.7rem;
+    }
+
+    .reporting-page .product-detail-body {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+
+    .reporting-page .product-detail-summary {
+        border-right: 0;
+        border-bottom: 1px solid #ececef;
+    }
+
+    .reporting-page .product-detail-summary > img,
+    .reporting-page .product-detail-summary > span {
+        height: 8rem;
+    }
+}
+
+.reporting-page .secondary-grid {
+    align-items: stretch;
+}
+
+.reporting-page .secondary-grid .report-card {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.reporting-page .items-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.reporting-page .items-card ol {
+    min-height: 0;
+    flex: 1;
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+    overflow-y: auto;
+}
+
+.reporting-page .items-card li {
+    min-height: 2.4rem;
+}

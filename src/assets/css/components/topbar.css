@@ -1,0 +1,103 @@
+.pos-topbar {
+    grid-column: 1/-1;
+    height: 4.65rem;
+    display: grid;
+    grid-template-columns: 12rem minmax(12rem, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+    padding: 0 1.5rem 0 3.15rem;
+    border-bottom: 1px solid #ececec;
+    background: #fff;
+}
+
+.pos-topbar h1 {
+    margin: 0;
+    color: #171826;
+    font:
+        900 1.5rem 'poppins',
+        Arial,
+        sans-serif;
+    white-space: nowrap;
+}
+
+.pos-topbar h1 span {
+    color: #fc8019;
+}
+
+.pos-topbar .header-center {
+    min-width: 0;
+}
+
+.pos-topbar .header-actions {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+}
+
+.pos-topbar .order-action {
+    height: 2.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0 1.05rem;
+    border-radius: 0.55rem;
+    font-weight: 900;
+}
+
+.pos-topbar .dine-in-button {
+    border: 1px solid #fc8019;
+    background: #fff;
+    color: #fc8019;
+}
+
+.pos-topbar .takeaway-button {
+    border: 1px solid #fc8019;
+    background: #fff;
+    color: #fc8019;
+}
+
+.pos-topbar .order-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.35rem 0.75rem rgba(252, 128, 25, 0.16);
+}
+
+@media (max-width: 43.75em) {
+    .pos-topbar {
+        height: auto;
+        min-height: 4.65rem;
+        grid-template-columns: 1fr auto;
+        padding: 0.7rem 0.75rem 0.7rem 3rem;
+    }
+
+    .pos-topbar .header-center {
+        display: none;
+    }
+
+    .pos-topbar h1 {
+        font-size: 1.15rem;
+    }
+
+    .pos-topbar .order-action {
+        height: 2.55rem;
+        padding: 0 0.7rem;
+        font-size: 0.72rem;
+    }
+}
+
+.pos-topbar .order-action {
+    min-width: 8.05rem;
+}
+
+@media (max-width: 43.75em) {
+    .pos-topbar .order-action {
+        min-width: 0;
+    }
+}
+
+.pos-topbar h1 {
+    cursor: pointer;
+}

@@ -1,0 +1,227 @@
+.camera-backdrop * {
+    box-sizing: border-box;
+}
+
+.camera-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(23, 24, 38, 0.62);
+    font-family: 'poppins', Arial, sans-serif;
+}
+
+.camera-backdrop .camera-modal {
+    width: min(36rem, 94vw);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.8rem 4rem rgba(23, 24, 38, 0.3);
+}
+
+.camera-backdrop .camera-modal > header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+}
+
+.camera-backdrop .camera-modal header span {
+    color: #fc8019;
+    font-size: 0.62rem;
+    font-weight: 900;
+}
+
+.camera-backdrop .camera-modal h2 {
+    margin: 0.12rem 0;
+    font-size: 1.15rem;
+}
+
+.camera-backdrop .camera-modal header p {
+    margin: 0;
+    color: #92949b;
+    font-size: 0.68rem;
+}
+
+.camera-backdrop .camera-modal header button {
+    width: 2.55rem;
+    height: 2.55rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 2.55rem;
+    border: 0;
+    border-radius: 50%;
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.camera-backdrop .camera-viewport {
+    height: 22rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #10131a, #2a303b);
+}
+
+.camera-backdrop .camera-viewport video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.camera-backdrop .camera-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    color: #fff;
+    background: radial-gradient(circle at center, #303845, #12151c);
+}
+
+.camera-backdrop .camera-fallback i {
+    color: #fc8019;
+    font-size: 2.5rem;
+}
+
+.camera-backdrop .camera-fallback small {
+    max-width: 20rem;
+    color: #c5cad2;
+    text-align: center;
+}
+
+.camera-backdrop .scan-window {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14rem;
+    height: 14rem;
+    transform: translate(-50%, -54%);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.camera-backdrop .corner {
+    position: absolute;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-color: #fc8019;
+    border-style: solid;
+}
+
+.camera-backdrop .top-left {
+    left: 0;
+    top: 0;
+    border-width: 0.24rem 0 0 0.24rem;
+}
+
+.camera-backdrop .top-right {
+    right: 0;
+    top: 0;
+    border-width: 0.24rem 0.24rem 0 0;
+}
+
+.camera-backdrop .bottom-left {
+    left: 0;
+    bottom: 0;
+    border-width: 0 0 0.24rem 0.24rem;
+}
+
+.camera-backdrop .bottom-right {
+    right: 0;
+    bottom: 0;
+    border-width: 0 0.24rem 0.24rem 0;
+}
+
+.camera-backdrop .scan-line {
+    position: absolute;
+    left: 0.6rem;
+    right: 0.6rem;
+    top: 1rem;
+    height: 0.13rem;
+    background: #fc8019;
+    box-shadow: 0 0 0.9rem #fc8019;
+    animation: scanner 2.2s ease-in-out infinite;
+}
+
+.camera-backdrop .camera-status {
+    position: absolute;
+    left: 50%;
+    bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    transform: translateX(-50%);
+    padding: 0.48rem 0.75rem;
+    border-radius: 2rem;
+    background: rgba(10, 12, 18, 0.72);
+    color: #fff;
+    font-size: 0.62rem;
+    white-space: nowrap;
+}
+
+.camera-backdrop .camera-status i {
+    color: #6ee7b7;
+}
+
+.camera-backdrop .camera-modal > footer {
+    display: grid;
+    grid-template-columns: 0.75fr 1.25fr;
+    gap: 0.7rem;
+    padding: 1rem;
+}
+
+.camera-backdrop .camera-modal footer button {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.48rem;
+    border-radius: 0.55rem;
+    font-weight: 900;
+}
+
+.camera-backdrop .cancel {
+    border: 1px solid #dedede;
+    background: #fff;
+    color: #171826;
+}
+
+.camera-backdrop .complete {
+    border: 0;
+    background: #09aa29;
+    color: #fff;
+}
+
+@keyframes scanner {
+    0%,
+    100% {
+        top: 1rem;
+    }
+
+    50% {
+        top: 12.7rem;
+    }
+}
+
+@media (max-width: 43.75em) {
+    .camera-backdrop .camera-viewport {
+        height: 19rem;
+    }
+
+    .camera-backdrop .scan-window {
+        width: 12rem;
+        height: 12rem;
+    }
+
+    .camera-backdrop .camera-modal > footer {
+        grid-template-columns: 1fr;
+    }
+}
