@@ -5,26 +5,6 @@
     pointer-events: none;
 }
 
-.sidebar-controller .sidebar-handle {
-    position: absolute;
-    left: 0;
-    top: 5.05rem;
-    z-index: 3;
-    width: 2.15rem;
-    height: 3.4rem;
-    border: 0;
-    border-radius: 0 0.65rem 0.65rem 0;
-    background: #171826;
-    color: #fff;
-    box-shadow: 0 0.3rem 0.9rem rgba(23, 24, 38, 0.2);
-    pointer-events: auto;
-    transition: left 0.2s ease;
-}
-
-.sidebar-controller .sidebar-handle.open {
-    left: 16.5rem;
-}
-
 .sidebar-controller .sidebar-scrim {
     position: fixed;
     inset: 0;
@@ -74,6 +54,7 @@
 }
 
 .sidebar-controller .pos-sidebar nav button,
+.sidebar-controller .lock-button,
 .sidebar-controller .logout-button {
     width: 100%;
     min-height: 3.35rem;
@@ -90,7 +71,8 @@
 }
 
 .sidebar-controller .pos-sidebar button i {
-    width: 1.2rem;
+    width: 1.4rem;
+    font-size: 1.12rem;
     text-align: center;
 }
 
@@ -144,6 +126,15 @@
     font-weight: 900;
 }
 
+.sidebar-controller .lock-button {
+    margin-bottom: 0.35rem;
+    color: #fc8019;
+}
+
+.sidebar-controller .lock-button:hover {
+    background: #fff2e8;
+}
+
 .sidebar-controller .logout-button {
     color: #ef4444;
 }
@@ -157,9 +148,6 @@
         width: 15rem;
     }
 
-    .sidebar-controller .sidebar-handle.open {
-        left: 15rem;
-    }
 }
 
 .sidebar-controller .sidebar-brand {

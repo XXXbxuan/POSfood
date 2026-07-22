@@ -81,6 +81,15 @@
     letter-spacing: -0.045em;
 }
 
+.login-page .login-pin-form {
+    padding: 2rem 2.4rem;
+}
+
+.login-page .login-pin-form h1 {
+    margin-bottom: 0.8rem;
+    font-size: 2.8rem;
+}
+
 .login-page .login-mode-tabs {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -189,7 +198,104 @@
 
 .login-page .input-row > i {
     color: var(--orange);
+    font-size: 1.08rem;
     text-align: center;
+}
+
+.login-page .login-pin-lock {
+    text-align: center;
+}
+
+.login-page .login-pin-photo {
+    width: 4rem;
+    height: 4rem;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 0.9rem;
+    border-radius: 50%;
+    background: #fff2e8;
+    color: var(--orange);
+    font-weight: 900;
+}
+
+.login-page .login-pin-lock h2 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.login-page .login-pin-role,
+.login-page .login-pin-prompt {
+    color: #92949b;
+    font-size: 0.68rem;
+}
+
+.login-page .login-pin-role {
+    margin: 0.2rem 0 0;
+}
+
+.login-page .login-pin-prompt {
+    margin: 0.45rem 0 0.8rem;
+}
+
+.login-page .login-pin-boxes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.55rem;
+    margin-bottom: 0.85rem;
+}
+
+.login-page .login-pin-boxes span {
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.3rem;
+    background: #f6f6f6;
+    color: var(--orange);
+    font-size: 1.15rem;
+    font-weight: 900;
+}
+
+.login-page .login-pin-boxes span.filled {
+    background: #fff2e8;
+    box-shadow: inset 0 0 0 2px var(--orange);
+}
+
+.login-page .login-pin-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
+}
+
+.login-page .login-pin-pad button {
+    height: 2.8rem;
+    border: 1px solid #ececec;
+    border-radius: 0.4rem;
+    background: #fff;
+    color: var(--ink);
+    font-weight: 900;
+}
+
+.login-page .login-pin-pad button:hover {
+    border-color: var(--orange);
+    background: #fff8f1;
+    color: var(--orange);
+}
+
+.login-page .login-pin-error {
+    margin: 0.7rem 0 0;
+    color: #d9433b;
+    font-size: 0.68rem;
+    font-weight: 900;
+}
+
+.login-page .login-pin-back {
+    margin-top: 0.8rem;
+    padding: 0.45rem 1.2rem;
+    border: 1px solid #dedfe3;
+    border-radius: 0.45rem;
+    background: #fff;
+    color: #696d76;
+    font-weight: 900;
 }
 
 .login-page .input-row input {

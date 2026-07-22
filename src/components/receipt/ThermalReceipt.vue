@@ -21,6 +21,13 @@
                 <span>Staff ID</span
                 ><strong>{{ receipt.employeeId || 'EMP001' }}</strong>
             </div>
+            <div v-if="receipt.member">
+                <span>Member</span
+                ><strong
+                    >{{ receipt.member.memberId }} ·
+                    {{ receipt.member.name }}</strong
+                >
+            </div>
         </section>
         <div class="receipt-divider">--------------------------------</div>
         <div class="items-heading">
@@ -53,6 +60,10 @@
             <div>
                 <span>Sales Tax</span
                 ><strong>RM {{ money(receipt.tax) }}</strong>
+            </div>
+            <div v-if="receipt.voucherDiscount">
+                <span>Voucher {{ receipt.voucher?.code }}</span
+                ><strong>- RM {{ money(receipt.voucherDiscount) }}</strong>
             </div>
             <div class="grand">
                 <span>TOTAL</span><strong>RM {{ money(receipt.total) }}</strong>

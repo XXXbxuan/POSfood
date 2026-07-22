@@ -2,7 +2,6 @@
     <main class="restro-page dashboard-page">
         <section class="dashboard-shell">
             <PosTopbar :show-order-actions="false" />
-            <PosSidebar active="Home" />
 
             <section class="dashboard-workspace">
                 <section class="order-lane dine-lane">
@@ -126,7 +125,7 @@
                                 v-if="tablePickerMode === 'overview'"
                                 type="button"
                                 class="open-layout-designer-button"
-                                @click="openTableDesigner"
+                                @click="openTableDesigner(selectedTableLayoutId)"
                             >
                                 <i class="fa-solid fa-pen-ruler"></i>
                                 Design layout
@@ -173,23 +172,55 @@
                             v-for="filter in ['All', 'Available', 'Unpaid']"
                             :key="filter"
                             type="button"
-                            :class="{ active: tableFilter === filter }"
-                            @click="tableFilter = filter"
+                            :class="{
+                                active:
+                                    !selectedTableLayout &&
+                                    tableFilter === filter,
+                            }"
+                            @click="selectTableFilter(filter)"
                         >
                             {{ filter }}
+                        </button>
+                        <span
+                            v-if="tableLayouts.length"
+                            class="table-layout-filter-divider"
+                            aria-hidden="true"
+                        ></span>
+                        <button
+                            v-for="layout in tableLayouts"
+                            :key="layout.id"
+                            type="button"
+                            class="table-layout-filter"
+                            :class="{
+                                active: selectedTableLayoutId === layout.id,
+                            }"
+                            :title="`Open ${layout.name}`"
+                            @click="showTableLayout(layout.id)"
+                        >
+                            {{ layout.name }}
                         </button>
                     </nav>
                     <p
                         v-if="
                             tablePickerMode === 'overview' &&
-                            tableFilter === 'All'
+                            tableFilter === 'All' &&
+                            !selectedTableLayout
                         "
                         class="table-sort-hint"
                     >
                         <i class="fa-solid fa-grip"></i>
                         Hold a table for 1 second, then drag it to reorder.
                     </p>
+                    <TableLayoutPreview
+                        v-if="
+                            tablePickerMode === 'overview' &&
+                            selectedTableLayout
+                        "
+                        :layout="selectedTableLayout"
+                        :tables="tables"
+                    />
                     <TableGrid
+                        v-else
                         :tables="
                             tablePickerMode === 'overview'
                                 ? filteredTables
@@ -213,7 +244,10 @@
 
         <TableLayoutDesigner
             v-if="showTableDesigner"
+            ref="tableDesigner"
             :tables="tables"
+            :initial-layout-id="designerInitialLayoutId"
+            @add-table="requestAddTable"
             @close="closeTableDesigner"
         />
 
@@ -301,7 +335,7 @@
                 <p>
                     {{
                         tableAdminAction === 'add'
-                            ? `A new ${managementTarget.seats}-seat table will be added after the latest table.`
+                            ? 'Choose the table size.'
                             : tableAdminAction === 'delete'
                               ? 'This table will be removed from the layout.'
                               : tableAdminAction === 'unservice'
@@ -309,7 +343,24 @@
                                 : 'This table will be marked unavailable for service.'
                     }}
                 </p>
-                <footer>
+                <footer v-if="tableAdminAction === 'add'" class="seat-choice-footer">
+                    <button
+                        type="button"
+                        class="seat-choice-button"
+                        @click="confirmAddTableWithSeats(4)"
+                    >
+                        <i class="fa-solid fa-user-group"></i>
+                        4 Pax</button
+                    ><button
+                        type="button"
+                        class="seat-choice-button"
+                        @click="confirmAddTableWithSeats(6)"
+                    >
+                        <i class="fa-solid fa-user-group"></i>
+                        6 Pax
+                    </button>
+                </footer>
+                <footer v-else>
                     <button type="button" @click="resetTableAdmin">
                         Cancel</button
                     ><button
@@ -597,17 +648,27 @@
 
 <script>
 import PosTopbar from '@/components/common/PosTopbar.vue'
-import PosSidebar from '@/components/common/PosSidebar.vue'
 import TableGrid from '@/components/table/TableGrid.vue'
 import TableLayoutDesigner from '@/components/table/TableLayoutDesigner.vue'
+import TableLayoutPreview from '@/components/table/TableLayoutPreview.vue'
+import { createDefaultTables } from '@/data/tables.js'
 import { readList as readStoredList } from '@/services/pos/storage.js'
 import {
     createLongPressSortable,
     moveListItem,
 } from '@/utils/sortable.js'
+import { MAX_MENU_PRICE, validOrderLine } from '@/utils/money.js'
+
+const TABLE_LAYOUT_STORAGE_KEY = 'posfood_table_layout'
+
 export default {
     name: 'POSStart',
-    components: { PosTopbar, PosSidebar, TableGrid, TableLayoutDesigner },
+    components: {
+        PosTopbar,
+        TableGrid,
+        TableLayoutDesigner,
+        TableLayoutPreview,
+    },
     data() {
         return {
             activeOrders: [],
@@ -617,6 +678,9 @@ export default {
             showSplit: false,
             showTables: false,
             showTableDesigner: false,
+            tableLayouts: [],
+            selectedTableLayoutId: '',
+            designerInitialLayoutId: '',
             showDineZoom: false,
             tablePickerMode: 'new',
             tableFilter: 'All',
@@ -631,20 +695,8 @@ export default {
             showTableActionMenu: false,
             tableToast: '',
             tableToastTimer: null,
-            tables: [
-                { number: 'T21', status: 'vacant', seats: 4, guests: 0 },
-                { number: 'T22', status: 'vacant', seats: 4, guests: 0 },
-                { number: 'T23', status: 'vacant', seats: 4, guests: 0 },
-                { number: 'T24', status: 'vacant', seats: 4, guests: 0 },
-                { number: 'T25', status: 'vacant', seats: 4, guests: 0 },
-                { number: 'T26', status: 'vacant', seats: 4, guests: 0 },
-                { number: 'T41', status: 'vacant', seats: 6, guests: 0 },
-                { number: 'T42', status: 'vacant', seats: 6, guests: 0 },
-                { number: 'T43', status: 'vacant', seats: 6, guests: 0 },
-                { number: 'T44', status: 'vacant', seats: 6, guests: 0 },
-                { number: 'T45', status: 'vacant', seats: 6, guests: 0 },
-                { number: 'T46', status: 'vacant', seats: 6, guests: 0 },
-            ],
+            addTableToCurrentLayout: false,
+            tables: createDefaultTables(),
         }
     },
     computed: {
@@ -693,6 +745,13 @@ export default {
                 (table) =>
                     this.tableSeatFilter === 'All' ||
                     String(table.seats) === this.tableSeatFilter,
+            )
+        },
+        selectedTableLayout() {
+            return (
+                this.tableLayouts.find(
+                    (layout) => layout.id === this.selectedTableLayoutId,
+                ) || null
             )
         },
         splitCandidates() {
@@ -760,10 +819,6 @@ export default {
                 Number(String(table.number).match(/\d+/)?.[0] || 0),
             )
             return `T${Math.max(0, ...numbers) + 1}`
-        },
-        nextTableSeats() {
-            const seats = Number(this.tables[this.tables.length - 1]?.seats)
-            return [4, 6].includes(seats) ? seats : 4
         },
     },
     mounted() {
@@ -843,17 +898,45 @@ export default {
         },
         loadDashboard() {
             this.loadTableConfiguration()
+            this.loadTableLayouts()
             this.dineOrderSequence = this.readList(
                 'posfood_dine_order_sequence',
             )
             const stored = this.readList('posfood_held_orders')
-            const dineOnly = stored.filter((order) => !this.isTakeaway(order))
-            if (dineOnly.length !== stored.length)
-                localStorage.setItem(
-                    'posfood_held_orders',
-                    JSON.stringify(dineOnly),
+            const cancelled = stored.filter((order) =>
+                this.isCorruptOrder(order),
+            )
+            const validOrders = stored.filter(
+                (order) => !cancelled.includes(order),
+            )
+            if (cancelled.length) {
+                // Remove invalid orders first so their large image payloads no
+                // longer consume the storage needed for the cancellation log.
+                this.writeStorage('posfood_held_orders', validOrders)
+                const tableStates = this.readObject('posfood_table_states')
+                cancelled.forEach((order) => {
+                    const tableNumber = order.orderSetup?.tableNumber
+                    if (tableNumber)
+                        tableStates[tableNumber] = {
+                            status: 'vacant',
+                            updatedAt: Date.now(),
+                        }
+                })
+                const cancelledOrders = [
+                    ...cancelled.map((order) =>
+                        this.compactCancelledOrder(order),
+                    ),
+                    ...this.readList('posfood_cancelled_orders').map((order) =>
+                        this.compactCancelledOrder(order),
+                    ),
+                ]
+                this.writeStorage(
+                    'posfood_cancelled_orders',
+                    cancelledOrders,
                 )
-            this.activeOrders = dineOnly
+                this.writeStorage('posfood_table_states', tableStates)
+            }
+            this.activeOrders = validOrders
                 .slice()
                 .sort(
                     (a, b) =>
@@ -861,6 +944,63 @@ export default {
                         new Date(a.updatedAt || a.heldAt || a.createdAt || 0),
                 )
             this.hydrateTables()
+        },
+        writeStorage(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value))
+                return true
+            } catch (error) {
+                console.error(`Unable to save ${key}.`, error)
+                return false
+            }
+        },
+        compactCancelledOrder(order) {
+            const compactItem = ({ image, ...item } = {}) => ({
+                ...item,
+                setSelections: (item.setSelections || []).map(
+                    ({ image: selectionImage, ...selection }) => selection,
+                ),
+            })
+            return {
+                ...order,
+                items: (order.items || []).map(compactItem),
+                orderGroups: (order.orderGroups || []).map((group) => ({
+                    ...group,
+                    items: (group.items || []).map(compactItem),
+                })),
+                status: 'cancelled',
+                cancelledAt:
+                    order.cancelledAt || new Date().toISOString(),
+                cancelledBy: order.cancelledBy || 'system',
+            }
+        },
+        loadTableLayouts() {
+            const stored = this.readObject(TABLE_LAYOUT_STORAGE_KEY)
+            const canvas = {
+                width: Number(stored.canvas?.width) || 600,
+                height: Number(stored.canvas?.height) || 600,
+            }
+            if (stored.version >= 2 && Array.isArray(stored.layouts)) {
+                this.tableLayouts = stored.layouts.map((layout, index) => ({
+                    id: String(layout.id || `map-${index + 1}`),
+                    name: String(layout.name || `Layout ${index + 1}`),
+                    items: Array.isArray(layout.items) ? layout.items : [],
+                    canvas,
+                }))
+                return
+            }
+            this.tableLayouts = stored.savedAt
+                ? [
+                      {
+                          id: 'main-map',
+                          name: String(stored.name || 'Main dining layout'),
+                          items: Array.isArray(stored.items)
+                              ? stored.items
+                              : [],
+                          canvas,
+                      },
+                  ]
+                : []
         },
         setupDineOrderSorting() {
             this.dineOrderSortController?.destroy()
@@ -948,21 +1088,33 @@ export default {
         openTablePicker() {
             this.tablePickerMode = 'new'
             this.tableSeatFilter = 'All'
+            this.selectedTableLayoutId = ''
             this.loadDashboard()
             this.showTables = true
         },
         openTableOverview() {
             this.tablePickerMode = 'overview'
             this.tableFilter = 'All'
+            this.selectedTableLayoutId = ''
             this.resetTableAdmin()
             this.loadDashboard()
             this.showTables = true
         },
-        openTableDesigner() {
+        openTableDesigner(layoutId = '') {
+            this.designerInitialLayoutId =
+                typeof layoutId === 'string' ? layoutId : ''
             this.showTableDesigner = true
+        },
+        showTableLayout(layoutId) {
+            this.selectedTableLayoutId = layoutId
+        },
+        selectTableFilter(filter) {
+            this.selectedTableLayoutId = ''
+            this.tableFilter = filter
         },
         closeTableDesigner() {
             this.showTableDesigner = false
+            this.designerInitialLayoutId = ''
             this.loadDashboard()
         },
         resetTableAdmin() {
@@ -970,17 +1122,27 @@ export default {
             this.tableAdminError = ''
             this.managementTarget = null
             this.showTableActionMenu = false
+            this.addTableToCurrentLayout = false
         },
-        requestAddTable() {
+        requestAddTable(options = {}) {
+            this.addTableToCurrentLayout = Boolean(
+                options?.placeOnCurrentLayout,
+            )
             this.managementTarget = {
                 number: this.nextTableNumber,
-                seats: this.nextTableSeats,
+                seats: 4,
                 status: 'vacant',
                 guests: 0,
                 orders: [],
             }
             this.tableAdminAction = 'add'
             this.showTableActionMenu = false
+        },
+        confirmAddTableWithSeats(seats) {
+            if (!this.managementTarget || ![4, 6].includes(Number(seats)))
+                return
+            this.managementTarget.seats = Number(seats)
+            this.confirmTableAction()
         },
         requestTableAction(action) {
             const table = this.managementTarget
@@ -996,10 +1158,16 @@ export default {
             const table = this.managementTarget
             if (!table) return
             if (this.tableAdminAction === 'add') {
+                const placeOnCurrentLayout = this.addTableToCurrentLayout
+                const addedNumber = table.number
                 this.tables.push({ ...table })
                 this.saveTableConfiguration()
                 this.showTableToast(`${table.number} was added successfully.`)
                 this.resetTableAdmin()
+                if (placeOnCurrentLayout)
+                    this.$nextTick(() => {
+                        this.$refs.tableDesigner?.placeNewTable(addedNumber)
+                    })
                 return
             }
             if (table.status === 'served') {
@@ -1418,6 +1586,23 @@ export default {
                 return Number(item.lineTotal)
             if (Number.isFinite(Number(item.total))) return Number(item.total)
             return this.itemUnitTotal(item) * (Number(item.qty) || 1)
+        },
+        isCorruptOrder(order) {
+            const items = this.allItems(order)
+            if (!items.length) return false
+            if (items.some((item) => !validOrderLine(item))) return true
+            const calculated = items.reduce(
+                (sum, item) => sum + this.itemLineTotal(item),
+                0,
+            )
+            const storedTotal = Number(order.total ?? order.payable)
+            return (
+                !Number.isFinite(calculated) ||
+                calculated < 0 ||
+                calculated > MAX_MENU_PRICE * items.length * 999 ||
+                (Number.isFinite(storedTotal) &&
+                    storedTotal > MAX_MENU_PRICE * items.length * 999)
+            )
         },
         orderTaxRate(order) {
             const subtotal = Number(order?.subtotal || 0),

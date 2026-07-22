@@ -12,7 +12,8 @@ module.exports = {
             '/~/': path.resolve(__dirname, './src/assets'),
         },
     },
-    plugins: [
-        vue()
-    ]
+    optimizeDeps: {
+        exclude: ['@vue/devtools-api'],
+    },
+    plugins: [vue()],
 }

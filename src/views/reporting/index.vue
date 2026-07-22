@@ -2,11 +2,13 @@
     <main class="reporting-page">
         <section class="reporting-shell">
             <PosTopbar />
-            <PosSidebar active="Reports" />
 
             <section
                 class="reporting-workspace"
-                :class="{ 'overview-workspace': activeView === 'overview' }"
+                :class="{
+                    'overview-workspace': activeView === 'overview',
+                    'charts-workspace': activeView === 'charts',
+                }"
             >
                 <header class="reporting-header">
                     <div class="reporting-title">
@@ -27,81 +29,33 @@
                                 @click="activeView = 'products'"
                             >
                                 Product sales
+                            </button
+                            ><button
+                                type="button"
+                                :class="{ active: activeView === 'charts' }"
+                                @click="activeView = 'charts'"
+                            >
+                                Analysis
                             </button>
                         </nav>
                     </div>
-                    <nav class="period-tabs" aria-label="Report period">
-                        <button
-                            v-for="option in periodOptions"
-                            :key="option.key"
-                            type="button"
-                            :class="{ active: period === option.key }"
-                            @click="period = option.key"
-                        >
-                            {{ option.label }}
-                        </button>
-                    </nav>
+                    <div class="reporting-header-actions">
+                        <nav class="period-tabs" aria-label="Report period">
+                            <button
+                                v-for="option in periodOptions"
+                                :key="option.key"
+                                type="button"
+                                :class="{ active: period === option.key }"
+                                @click="period = option.key"
+                            >
+                                {{ option.label }}
+                            </button>
+                        </nav>
+                    </div>
                 </header>
 
                 <template v-if="activeView === 'overview'">
-                    <section class="reporting-stats">
-                        <article>
-                            <i class="fa-solid fa-coins"></i
-                            ><span>Net sales</span
-                            ><strong>RM {{ money(summary.revenue) }}</strong>
-                        </article>
-                        <article>
-                            <i class="fa-solid fa-receipt"></i
-                            ><span>Orders</span
-                            ><strong>{{ summary.orders }}</strong>
-                        </article>
-                        <article>
-                            <i class="fa-solid fa-calculator"></i
-                            ><span>Average order</span
-                            ><strong>RM {{ money(summary.average) }}</strong>
-                        </article>
-                        <article>
-                            <i class="fa-solid fa-bowl-food"></i
-                            ><span>Items sold</span
-                            ><strong>{{ summary.items }}</strong>
-                        </article>
-                    </section>
-
-                    <section class="reporting-grid primary-grid">
-                        <article class="report-card sales-card">
-                            <header>
-                                <div>
-                                    <span>SALES</span>
-                                    <h3>{{ chartTitle }}</h3>
-                                </div>
-                                <strong>RM {{ money(summary.revenue) }}</strong>
-                            </header>
-                            <div
-                                v-if="filteredSales.length"
-                                class="sales-chart"
-                            >
-                                <div
-                                    v-for="point in chartData"
-                                    :key="point.key"
-                                    class="chart-column"
-                                    :title="`${point.label}: RM ${money(point.value)}`"
-                                >
-                                    <div class="bar-track">
-                                        <span
-                                            :style="{
-                                                height: barHeight(point.value),
-                                            }"
-                                        ></span>
-                                    </div>
-                                    <small>{{ point.label }}</small>
-                                </div>
-                            </div>
-                            <div v-else class="report-empty">
-                                <i class="fa-solid fa-chart-column"></i
-                                ><span>No completed sales</span>
-                            </div>
-                        </article>
-
+                    <section class="reporting-grid overview-detail-grid">
                         <article class="report-card service-card">
                             <header>
                                 <div>
@@ -126,9 +80,6 @@
                                 </div>
                             </div>
                         </article>
-                    </section>
-
-                    <section class="reporting-grid secondary-grid">
                         <article class="report-card payment-card">
                             <header>
                                 <div>
@@ -166,6 +117,27 @@
                             </div>
                         </article>
 
+                        <article class="overview-kpi net-sales-kpi">
+                            <i class="fa-solid fa-coins"></i>
+                            <span>Net sales</span>
+                            <strong>RM {{ money(summary.revenue) }}</strong>
+                        </article>
+                        <article class="overview-kpi orders-kpi">
+                            <i class="fa-solid fa-receipt"></i>
+                            <span>Orders</span>
+                            <strong>{{ summary.orders }}</strong>
+                        </article>
+                        <article class="overview-kpi average-kpi">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span>Average order</span>
+                            <strong>RM {{ money(summary.average) }}</strong>
+                        </article>
+                        <article class="overview-kpi items-sold-kpi">
+                            <i class="fa-solid fa-bowl-food"></i>
+                            <span>Items sold</span>
+                            <strong>{{ summary.items }}</strong>
+                        </article>
+
                         <article class="report-card items-card">
                             <header>
                                 <div>
@@ -196,7 +168,7 @@
                     </section>
                 </template>
 
-                <template v-else>
+                <template v-else-if="activeView === 'products'">
                     <section class="product-report-toolbar">
                         <nav
                             class="product-category-tabs"
@@ -271,8 +243,344 @@
                         <p>Try another category or period.</p>
                     </div>
                 </template>
+
+                <template v-else>
+                    <section class="chart-summary-strip">
+                        <article>
+                            <span>Best category</span>
+                            <strong>{{ leadingCategory.name }}</strong>
+                            <small>RM {{ money(leadingCategory.revenue) }}</small>
+                        </article>
+                        <article>
+                            <span>Active categories</span>
+                            <strong>{{ categoryBreakdown.length }}</strong>
+                            <small>{{ summary.items }} items in total</small>
+                        </article>
+                        <article>
+                            <span>Average item value</span>
+                            <strong>RM {{ money(averageItemValue) }}</strong>
+                            <small>Revenue per item</small>
+                        </article>
+                    </section>
+
+                    <section class="analytics-grid">
+                        <article
+                            class="report-card category-pie-card interactive-chart-card"
+                            role="button"
+                            tabindex="0"
+                            @click="openChart('category-pie')"
+                            @keydown.enter="openChart('category-pie')"
+                        >
+                            <header>
+                                <div>
+                                    <span>CATEGORIES</span>
+                                    <h3>Category sales mix</h3>
+                                </div>
+                                <strong>RM {{ money(summary.revenue) }}</strong>
+                            </header>
+                            <div v-if="categoryBreakdown.length" class="category-pie-body">
+                                <div
+                                    class="category-pie"
+                                    :style="{ background: categoryPieGradient }"
+                                    aria-label="Category sales pie chart"
+                                >
+                                    <span>
+                                        <strong>{{ categoryBreakdown.length }}</strong>
+                                        <small>Categories</small>
+                                    </span>
+                                </div>
+                                <ol class="category-legend">
+                                    <li
+                                        v-for="category in categoryBreakdown"
+                                        :key="category.name"
+                                    >
+                                        <i :style="{ background: category.color }"></i>
+                                        <span>{{ category.name }}</span>
+                                        <strong>{{ category.percent }}%</strong>
+                                        <small>RM {{ money(category.revenue) }}</small>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div v-else class="report-empty">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <span>No category sales</span>
+                            </div>
+                        </article>
+
+                        <article
+                            class="report-card category-quantity-card interactive-chart-card"
+                            role="button"
+                            tabindex="0"
+                            @click="openChart('category-bars')"
+                            @keydown.enter="openChart('category-bars')"
+                        >
+                            <header>
+                                <div>
+                                    <span>TOP ITEMS</span>
+                                    <h3>Top items</h3>
+                                </div>
+                                <strong>Qty</strong>
+                            </header>
+                            <div v-if="topItemChart.length" class="category-bars top-item-bars">
+                                <div
+                                    v-for="item in topItemChart"
+                                    :key="item.name"
+                                >
+                                    <span>{{ item.name }}</span>
+                                    <div>
+                                        <i
+                                            :style="{
+                                                width: topItemWidth(item.qty),
+                                                background: item.color,
+                                            }"
+                                        ></i>
+                                    </div>
+                                    <strong>{{ item.qty }}</strong>
+                                </div>
+                            </div>
+                            <div v-else class="report-empty">
+                                <span>No item data</span>
+                            </div>
+                        </article>
+
+                        <article
+                            class="report-card analytics-trend-card interactive-chart-card"
+                            :class="{
+                                'today-histogram-card': period === 'today',
+                            }"
+                            role="button"
+                            tabindex="0"
+                            @click="openChart('histogram')"
+                            @keydown.enter="openChart('histogram')"
+                        >
+                            <header class="histogram-card-header">
+                                <div class="histogram-heading">
+                                    <span>REVENUE</span>
+                                    <div
+                                        class="histogram-title-switch"
+                                        :class="{
+                                            'no-navigation': period === 'today',
+                                        }"
+                                    >
+                                        <button
+                                            v-if="period !== 'today'"
+                                            type="button"
+                                            aria-label="Previous histogram view"
+                                            @click.stop="toggleHistogramMode"
+                                        >
+                                            <i class="fa-solid fa-chevron-left"></i>
+                                        </button>
+                                        <h3>{{ histogramTitle }}</h3>
+                                        <button
+                                            v-if="period !== 'today'"
+                                            type="button"
+                                            aria-label="Next histogram view"
+                                            @click.stop="toggleHistogramMode"
+                                        >
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <strong>RM {{ money(summary.revenue) }}</strong>
+                            </header>
+                            <div v-if="filteredSales.length" class="histogram-frame">
+                                <button
+                                    v-if="showHistogramScroll"
+                                    type="button"
+                                    class="histogram-scroll previous"
+                                    aria-label="Previous days"
+                                    @click.stop="scrollHistogram(-1, false)"
+                                >
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <div
+                                    ref="histogramViewport"
+                                    class="sales-chart histogram-chart"
+                                    :class="{
+                                        'daily-histogram':
+                                            period !== 'today' &&
+                                            histogramMode === 'day',
+                                    }"
+                                >
+                                    <div
+                                        v-for="point in histogramData"
+                                        :key="point.key"
+                                        class="chart-column"
+                                        :title="`${point.label}: RM ${money(point.value)}`"
+                                    >
+                                        <div class="bar-track">
+                                            <span
+                                                :style="{
+                                                    height: histogramHeight(
+                                                        point.value,
+                                                    ),
+                                                }"
+                                            ></span>
+                                        </div>
+                                        <small>{{ point.label }}</small>
+                                    </div>
+                                </div>
+                                <button
+                                    v-if="showHistogramScroll"
+                                    type="button"
+                                    class="histogram-scroll next"
+                                    aria-label="Next days"
+                                    @click.stop="scrollHistogram(1, false)"
+                                >
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div v-else class="report-empty">
+                                <span>No completed sales</span>
+                            </div>
+                        </article>
+                    </section>
+                </template>
             </section>
         </section>
+
+        <div
+            v-if="selectedChart"
+            class="chart-detail-backdrop"
+            @click.self="closeChart"
+        >
+            <section class="chart-detail-modal">
+                <header>
+                    <div>
+                        <span>ANALYSIS</span>
+                        <h2>{{ selectedChartTitle }}</h2>
+                    </div>
+                    <div>
+                        <button
+                            type="button"
+                            aria-label="Print chart"
+                            @click="printChart"
+                        >
+                            <i class="fa-solid fa-print"></i>
+                        </button>
+                        <button
+                            type="button"
+                            aria-label="Close chart"
+                            @click="closeChart"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="chart-detail-content">
+                    <div
+                        v-if="selectedChart === 'category-pie'"
+                        class="category-pie-body enlarged"
+                    >
+                        <div
+                            class="category-pie"
+                            :style="{ background: categoryPieGradient }"
+                        >
+                            <span>
+                                <strong>{{ categoryBreakdown.length }}</strong>
+                                <small>Categories</small>
+                            </span>
+                        </div>
+                        <ol class="category-legend">
+                            <li
+                                v-for="category in categoryBreakdown"
+                                :key="category.name"
+                            >
+                                <i :style="{ background: category.color }"></i>
+                                <span>{{ category.name }}</span>
+                                <strong>{{ category.percent }}%</strong>
+                                <small>RM {{ money(category.revenue) }}</small>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div
+                        v-else-if="selectedChart === 'category-bars'"
+                        class="category-bars top-item-bars enlarged"
+                    >
+                        <div
+                            v-for="item in topItemChart"
+                            :key="item.name"
+                        >
+                            <span>{{ item.name }}</span>
+                            <div>
+                                <i
+                                    :style="{
+                                        width: topItemWidth(item.qty),
+                                        background: item.color,
+                                    }"
+                                ></i>
+                            </div>
+                            <strong>{{ item.qty }}</strong>
+                        </div>
+                    </div>
+
+                    <div v-else class="chart-detail-histogram">
+                        <div class="histogram-title-switch enlarged">
+                            <button
+                                v-if="period !== 'today'"
+                                type="button"
+                                @click="toggleHistogramMode"
+                            >
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <h3>{{ histogramTitle }}</h3>
+                            <button
+                                v-if="period !== 'today'"
+                                type="button"
+                                @click="toggleHistogramMode"
+                            >
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="histogram-frame">
+                            <button
+                                v-if="showHistogramScroll"
+                                type="button"
+                                class="histogram-scroll previous"
+                                @click="scrollHistogram(-1, true)"
+                            >
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div
+                                ref="modalHistogramViewport"
+                                class="sales-chart histogram-chart"
+                                :class="{
+                                    'daily-histogram':
+                                        period !== 'today' &&
+                                        histogramMode === 'day',
+                                }"
+                            >
+                                <div
+                                    v-for="point in histogramData"
+                                    :key="point.key"
+                                    class="chart-column"
+                                    :title="`${point.label}: RM ${money(point.value)}`"
+                                >
+                                    <div class="bar-track">
+                                        <span
+                                            :style="{
+                                                height: histogramHeight(point.value),
+                                            }"
+                                        ></span>
+                                    </div>
+                                    <small>{{ point.label }}</small>
+                                </div>
+                            </div>
+                            <button
+                                v-if="showHistogramScroll"
+                                type="button"
+                                class="histogram-scroll next"
+                                @click="scrollHistogram(1, true)"
+                            >
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
 
         <div
             v-if="selectedProductDetail"
@@ -399,12 +707,12 @@
 
 <script>
 import PosTopbar from '@/components/common/PosTopbar.vue'
-import PosSidebar from '@/components/common/PosSidebar.vue'
 import { readList } from '@/services/pos/storage.js'
 import { loadMenuCatalog } from '@/services/pos/menuCatalog.js'
+import { printElement } from '@/utils/printElement.js'
 export default {
     name: 'POSReporting',
-    components: { PosTopbar, PosSidebar },
+    components: { PosTopbar },
     data() {
         const catalog = loadMenuCatalog()
         return {
@@ -416,6 +724,8 @@ export default {
             selectedCategory: 'All',
             productSort: 'revenue',
             selectedProductName: '',
+            selectedChart: '',
+            histogramMode: 'hour',
             periodOptions: [
                 { key: 'today', label: 'Today' },
                 { key: 'week', label: '7 days' },
@@ -529,7 +839,122 @@ export default {
             )
             return [...groups.values()]
                 .sort((a, b) => b.qty - a.qty || b.revenue - a.revenue)
-                .slice(0, 5)
+                .slice(0, 10)
+        },
+        categoryBreakdown() {
+            const colors = [
+                '#fc8019',
+                '#23b26d',
+                '#4d7cfe',
+                '#8b5cf6',
+                '#f2b84b',
+                '#ef5b5b',
+                '#20a4b8',
+                '#9aa0aa',
+            ]
+            const groups = new Map()
+            this.productPerformance.forEach((product) => {
+                const name = product.category || 'Uncategorised'
+                const current = groups.get(name) || {
+                    name,
+                    revenue: 0,
+                    qty: 0,
+                }
+                current.revenue += Number(product.revenue || 0)
+                current.qty += Number(product.qty || 0)
+                groups.set(name, current)
+            })
+            const total = [...groups.values()].reduce(
+                (sum, category) => sum + category.revenue,
+                0,
+            )
+            return [...groups.values()]
+                .sort((a, b) => b.revenue - a.revenue)
+                .map((category, index) => ({
+                    ...category,
+                    color: colors[index % colors.length],
+                    ratio: total ? (category.revenue / total) * 100 : 0,
+                    percent: total
+                        ? Math.round((category.revenue / total) * 100)
+                        : 0,
+                }))
+        },
+        leadingCategory() {
+            return this.categoryBreakdown[0] || {
+                name: 'No sales yet',
+                revenue: 0,
+            }
+        },
+        averageItemValue() {
+            return this.summary.items
+                ? this.summary.revenue / this.summary.items
+                : 0
+        },
+        categoryPieGradient() {
+            if (!this.categoryBreakdown.length) return '#eeeeef'
+            let cursor = 0
+            const stops = this.categoryBreakdown.map((category) => {
+                const start = cursor
+                cursor += category.ratio
+                return `${category.color} ${start}% ${cursor}%`
+            })
+            return `conic-gradient(${stops.join(', ')})`
+        },
+        categoryQuantityMax() {
+            return Math.max(
+                0,
+                ...this.categoryBreakdown.map((category) => category.qty),
+            )
+        },
+        topItemChart() {
+            return [...this.productPerformance]
+                .sort((a, b) => b.qty - a.qty || b.revenue - a.revenue)
+                .slice(0, 10)
+                .map((item, index) => ({
+                    ...item,
+                    color: this.categoryColor(item.category, index),
+                }))
+        },
+        topItemChartMax() {
+            return Math.max(0, ...this.topItemChart.map((item) => item.qty))
+        },
+        salesByHourHistogram() {
+            return this.hourlyChart()
+        },
+        salesByHourMax() {
+            return Math.max(
+                0,
+                ...this.salesByHourHistogram.map((point) => point.value),
+            )
+        },
+        histogramData() {
+            if (this.period === 'today' || this.histogramMode === 'hour')
+                return this.salesByHourHistogram
+            return this.dailyChart(this.period === 'week' ? 7 : 30)
+        },
+        histogramMax() {
+            return Math.max(
+                0,
+                ...this.histogramData.map((point) => point.value),
+            )
+        },
+        histogramTitle() {
+            return this.period === 'today' || this.histogramMode === 'hour'
+                ? 'Sales by hour'
+                : 'Sales by day'
+        },
+        histogramModeLabel() {
+            return this.histogramMode === 'hour' ? 'Hour' : 'Day'
+        },
+        showHistogramScroll() {
+            return this.period === 'month' && this.histogramMode === 'day'
+        },
+        selectedChartTitle() {
+            if (this.selectedChart === 'category-pie')
+                return 'Category sales mix'
+            if (this.selectedChart === 'category-bars')
+                return 'Top items'
+            return this.histogramTitle
         },
         productPerformance() {
             const productsByName = new Map(
@@ -688,6 +1113,15 @@ export default {
         window.removeEventListener('storage', this.loadSales)
         window.removeEventListener('focus', this.loadSales)
     },
+    watch: {
+        period(value) {
+            this.histogramMode = value === 'today' ? 'hour' : 'day'
+            this.$nextTick(() => {
+                if (this.$refs.histogramViewport)
+                    this.$refs.histogramViewport.scrollLeft = 0
+            })
+        },
+    },
     methods: {
         loadSales() {
             this.sales = readList('posfood_sales').filter(
@@ -699,6 +1133,62 @@ export default {
         },
         money(value) {
             return Number(value || 0).toFixed(2)
+        },
+        openChart(chart) {
+            this.selectedChart = chart
+        },
+        closeChart() {
+            this.selectedChart = ''
+        },
+        async printChart() {
+            await this.$nextTick()
+            await printElement(
+                document.querySelector('.reporting-page .chart-detail-modal'),
+                { variant: 'reporting-page report-chart-print' },
+            )
+        },
+        toggleHistogramMode() {
+            this.histogramMode =
+                this.histogramMode === 'hour' ? 'day' : 'hour'
+        },
+        scrollHistogram(direction, modal) {
+            const target = modal
+                ? this.$refs.modalHistogramViewport
+                : this.$refs.histogramViewport
+            if (!target) return
+            target.scrollBy({
+                left: direction * target.clientWidth * 0.75,
+                behavior: 'smooth',
+            })
+        },
+        categoryQuantityWidth(value) {
+            return value && this.categoryQuantityMax
+                ? `${Math.max(5, Math.round((value / this.categoryQuantityMax) * 100))}%`
+                : '0%'
+        },
+        topItemWidth(value) {
+            return value && this.topItemChartMax
+                ? `${Math.max(5, Math.round((value / this.topItemChartMax) * 100))}%`
+                : '0%'
+        },
+        categoryColor(name, index = 0) {
+            const colors = {
+                Lunch: '#fc8019',
+                Supper: '#23b26d',
+                Breakfast: '#f2b84b',
+                Starters: '#8b5cf6',
+                Beverages: '#4d7cfe',
+                Deserts: '#ef5b5b',
+                Sets: '#20a4b8',
+                Uncategorised: '#9aa0aa',
+            }
+            const fallback = ['#fc8019', '#23b26d', '#4d7cfe', '#8b5cf6']
+            return colors[name] || fallback[index % fallback.length]
+        },
+        histogramHeight(value) {
+            return value && this.histogramMax
+                ? `${Math.max(7, Math.round((value / this.histogramMax) * 100))}%`
+                : '0%'
         },
         startOfDay(value) {
             const date = new Date(value)
@@ -771,9 +1261,12 @@ export default {
                     .reduce((sum, sale) => sum + Number(sale.total || 0), 0)
                 return {
                     key: date.toISOString(),
-                    label: new Intl.DateTimeFormat('en-MY', {
-                        weekday: 'short',
-                    }).format(date),
+                    label: new Intl.DateTimeFormat(
+                        'en-MY',
+                        days > 7
+                            ? { day: 'numeric', month: 'short' }
+                            : { weekday: 'short' },
+                    ).format(date),
                     value,
                 }
             })

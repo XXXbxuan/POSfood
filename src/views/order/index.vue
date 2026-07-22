@@ -1,7 +1,9 @@
 <template>
     <main class="restro-page order-page" @click="resetIdleTimer">
         <section class="restro-shell">
-            <PosTopbar @new-takeaway="applyNewTakeaway">
+            <PosTopbar
+                @new-takeaway="applyNewTakeaway"
+            >
                 <template #center>
                     <label class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -13,8 +15,6 @@
                     </label>
                 </template>
             </PosTopbar>
-
-            <PosSidebar active="Home" />
 
             <ProductMenu
                 :categories="categories"
@@ -211,6 +211,9 @@
                 </button>
 
                 <div class="cart-buttons">
+                    <p v-if="orderError" class="order-submit-error">
+                        {{ orderError }}
+                    </p>
                     <button
                         type="button"
                         class="proceed-btn"
@@ -222,6 +225,100 @@
                 </div>
             </aside>
         </section>
+
+        <transition name="modal-fade">
+            <div
+                v-if="showMemberPicker"
+                class="modal-backdrop"
+                @click.self="closeMemberPicker"
+            >
+                <section class="order-member-modal">
+                    <header>
+                        <div>
+                            <span>MEMBERSHIP</span>
+                            <h2>
+                                {{
+                                    memberRegisterMode
+                                        ? 'Register member'
+                                        : 'Sign in member'
+                                }}
+                            </h2>
+                        </div>
+                        <button
+                            type="button"
+                            aria-label="Close"
+                            @click="closeMemberPicker"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+                    <template v-if="!memberRegisterMode">
+                        <label class="order-member-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input
+                                v-model.trim="memberQuery"
+                                type="search"
+                                placeholder="Name, phone or Member ID"
+                                autofocus
+                            />
+                        </label>
+                        <div class="order-member-results">
+                            <button
+                                v-for="member in memberResults"
+                                :key="member.id"
+                                type="button"
+                                @click="attachMember(member)"
+                            >
+                                <span class="order-member-avatar">{{
+                                    memberInitials(member.name)
+                                }}</span>
+                                <span
+                                    ><strong>{{ member.name }}</strong
+                                    ><small
+                                        >{{ member.memberId }} ·
+                                        {{ member.phone }}</small
+                                    ></span
+                                >
+                                <b>{{ member.points }} pts</b>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                            <div
+                                v-if="!memberResults.length"
+                                class="order-member-empty"
+                            >
+                                <i class="fa-solid fa-user-plus"></i>
+                                <strong>No member found</strong>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            class="order-member-register-link"
+                            @click="memberRegisterMode = true"
+                        >
+                            Register
+                        </button>
+                    </template>
+                    <form
+                        v-else
+                        class="order-quick-register"
+                        @submit.prevent="quickRegisterMember"
+                    >
+                        <MemberFormFields v-model="quickMember" />
+                        <p v-if="memberError">{{ memberError }}</p>
+                        <footer>
+                            <button
+                                type="button"
+                                class="order-member-register-back"
+                                @click="memberRegisterMode = false"
+                            >
+                                Back
+                            </button>
+                            <button type="submit">Register</button>
+                        </footer>
+                    </form>
+                </section>
+            </div>
+        </transition>
 
         <transition name="modal-fade">
             <div
@@ -419,7 +516,8 @@
                                 :alt="drawerProduct.name"
                             /><i v-else class="fa-regular fa-image"></i
                             ><strong
-                                >RM {{ formatMoney(drawerProduct.price) }}</strong
+                                >RM
+                                {{ formatMoney(drawerProduct.price) }}</strong
                             >
                         </div>
                     </div>
@@ -604,14 +702,24 @@
 
 <script>
 import PosTopbar from '@/components/common/PosTopbar.vue'
-import PosSidebar from '@/components/common/PosSidebar.vue'
+import MemberFormFields from '@/components/membership/MemberFormFields.vue'
 import ProductMenu from '@/components/order/ProductMenu.vue'
 import SetMealCustomizer from '@/components/order/SetMealCustomizer.vue'
+import {
+    loadMembers,
+    saveMember,
+} from '@/services/pos/memberships.js'
+import { findStaffAccount } from '@/services/pos/staff.js'
 import { loadMenuCatalog } from '@/services/pos/menuCatalog.js'
 import {
     productAvailabilityStatus,
     sortProductsByAvailability,
 } from '@/utils/menu.js'
+import {
+    moneyNumber,
+    safeMenuPrice,
+    validOrderLine,
+} from '@/utils/money.js'
 import {
     createProductOptionState,
     productOptionExtra,
@@ -619,7 +727,12 @@ import {
 } from '@/utils/productOptions.js'
 export default {
     name: 'POSOrder',
-    components: { PosTopbar, PosSidebar, ProductMenu, SetMealCustomizer },
+    components: {
+        MemberFormFields,
+        PosTopbar,
+        ProductMenu,
+        SetMealCustomizer,
+    },
     data() {
         const catalog = loadMenuCatalog()
         return {
@@ -641,6 +754,19 @@ export default {
             baseEditingOrder: null,
             isEditingExistingOrder: false,
             showCancelOrder: false,
+            showMemberPicker: false,
+            memberRegisterMode: false,
+            memberQuery: '',
+            members: [],
+            selectedMember: null,
+            quickMember: {
+                name: '',
+                phone: '',
+                email: '',
+                birthday: '',
+                note: '',
+            },
+            memberError: '',
             showHoldCart: false,
             holdNote: '',
             guestCount: 2,
@@ -655,6 +781,7 @@ export default {
             paymentMethod: 'Cash',
             cashReceived: 0,
             paymentError: '',
+            orderError: '',
             lastReceipt: {},
             paymentMethods: [
                 { name: 'Cash', icon: 'fa-money-bill-wave' },
@@ -731,9 +858,23 @@ export default {
                     !occupied.has(table),
             )
         },
+        memberResults() {
+            const keyword = this.memberQuery.toLowerCase()
+            return this.members
+                .filter((member) => member.status === 'active')
+                .filter(
+                    (member) =>
+                        !keyword ||
+                        [member.name, member.phone, member.memberId].some(
+                            (value) =>
+                                String(value).toLowerCase().includes(keyword),
+                        ),
+                )
+                .slice(0, 8)
+        },
         subtotal() {
             return this.allItems.reduce(
-                (total, item) => total + Number(item.total || 0),
+                (total, item) => total + moneyNumber(item.total),
                 0,
             )
         },
@@ -897,16 +1038,21 @@ export default {
                     .filter(Boolean)
             }
 
-            const setItems = product.setItems?.length
-                ? product.setItems
-                : (product.setItemIds || []).map((productId) => ({
-                      productId,
-                      quantity: 1,
-                  }))
+            const setItems =
+                Array.isArray(product.setItems) && product.setItems.length
+                    ? product.setItems
+                    : (Array.isArray(product.setItemIds)
+                          ? product.setItemIds
+                          : []
+                      ).map((productId) => ({
+                          productId,
+                          quantity: 1,
+                      }))
             let sequence = 0
             return setItems.flatMap((item) => {
                 const itemProduct = this.products.find(
-                    (productItem) => productItem.id === item.productId,
+                    (productItem) =>
+                        String(productItem.id) === String(item.productId),
                 )
                 if (!itemProduct) return []
                 return Array.from(
@@ -959,10 +1105,15 @@ export default {
                         draft.previousOrderGroups || []
                     ).map((group) => ({
                         ...group,
-                        items: (group.items || []).map((item) => ({ ...item })),
+                        items: (group.items || []).map((item) =>
+                            this.repairOrderItem(item),
+                        ),
                     }))
-                    this.cart = (draft.cart || []).map((item) => ({ ...item }))
+                    this.cart = (draft.cart || []).map((item) =>
+                        this.repairOrderItem(item),
+                    )
                     this.baseEditingOrder = draft.baseEditingOrder || null
+                    this.selectedMember = draft.member || null
                     this.isEditingExistingOrder = Boolean(
                         draft.isEditingExistingOrder,
                     )
@@ -972,14 +1123,15 @@ export default {
                     localStorage.getItem('posfood_editing_order'),
                 )
                 this.baseEditingOrder = editingOrder || null
+                this.selectedMember = editingOrder?.member || null
                 this.isEditingExistingOrder = Boolean(editingOrder)
                 if (editingOrder?.orderGroups?.length)
                     this.previousOrderGroups = editingOrder.orderGroups.map(
                         (group) => ({
                             ...group,
-                            items: (group.items || []).map((item) => ({
-                                ...item,
-                            })),
+                            items: (group.items || []).map((item) =>
+                                this.repairOrderItem(item),
+                            ),
                         }),
                     )
                 else if (
@@ -990,9 +1142,9 @@ export default {
                         {
                             label: 'Order',
                             createdAt: editingOrder.createdAt,
-                            items: editingOrder.items.map((item) => ({
-                                ...item,
-                            })),
+                            items: editingOrder.items.map((item) =>
+                                this.repairOrderItem(item),
+                            ),
                         },
                     ]
                 else this.previousOrderGroups = []
@@ -1015,9 +1167,105 @@ export default {
             this.isEditingExistingOrder = false
             this.selectedCartKey = ''
             this.selectedPreviousItem = ''
+            this.selectedMember = null
+        },
+        openMemberPicker() {
+            this.members = loadMembers()
+            this.memberRegisterMode = false
+            this.memberQuery = ''
+            this.memberError = ''
+            this.quickMember = {
+                name: '',
+                phone: '',
+                email: '',
+                birthday: '',
+                note: '',
+            }
+            this.showMemberPicker = true
+        },
+        closeMemberPicker() {
+            this.showMemberPicker = false
+            this.memberRegisterMode = false
+            this.memberError = ''
+        },
+        memberInitials(name) {
+            return String(name || '')
+                .split(' ')
+                .map((part) => part[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()
+        },
+        attachMember(member) {
+            this.selectedMember = { ...member }
+            this.closeMemberPicker()
+        },
+        removeMember() {
+            this.selectedMember = null
+            this.closeMemberPicker()
+        },
+        quickRegisterMember() {
+            try {
+                const member = saveMember(this.quickMember)
+                this.members = loadMembers()
+                this.attachMember(member)
+            } catch (error) {
+                this.memberError = error.message
+            }
         },
         formatMoney(value) {
-            return Number(value || 0).toFixed(2)
+            return moneyNumber(value).toFixed(2)
+        },
+        repairOrderItem(item) {
+            const quantity = Math.max(1, Math.min(999, Number(item?.qty) || 1))
+            const product = this.products.find(
+                (candidate) =>
+                    candidate.id === item?.productId ||
+                    candidate.name === item?.name,
+            )
+            let unitPrice = Number(item?.unitPrice ?? item?.unitTotal)
+            if (!validOrderLine(item) || !Number.isFinite(unitPrice)) {
+                const basePrice = safeMenuPrice(product?.price)
+                const setExtras =
+                    product?.type === 'set'
+                        ? (item?.setSelections || []).reduce(
+                              (total, selection) =>
+                                  total + safeMenuPrice(selection.extraPrice),
+                              0,
+                          )
+                        : 0
+                unitPrice = basePrice + setExtras
+            }
+            unitPrice = safeMenuPrice(unitPrice, product?.price)
+            return {
+                ...item,
+                qty: quantity,
+                unitPrice: Number(unitPrice.toFixed(2)),
+                total: Number((unitPrice * quantity).toFixed(2)),
+            }
+        },
+        compactOrderItem(item, stripImage = false) {
+            return {
+                ...item,
+                image: stripImage ? '' : item.image,
+                setSelections: (item.setSelections || []).map(
+                    ({ image, ...selection }) => selection,
+                ),
+            }
+        },
+        compactStoredOrder(order) {
+            return {
+                ...order,
+                items: (order.items || []).map((item) =>
+                    this.compactOrderItem(item, true),
+                ),
+                orderGroups: (order.orderGroups || []).map((group) => ({
+                    ...group,
+                    items: (group.items || []).map((item) =>
+                        this.compactOrderItem(item, true),
+                    ),
+                })),
+            }
         },
         optionText(item) {
             const lines = (item.optionLines || [item.size]).filter(Boolean)
@@ -1063,9 +1311,10 @@ export default {
                 return `${selection.name}${options ? `: ${options}` : ''}`
             })
             const unitPrice =
-                Number(product.price || 0) +
+                safeMenuPrice(product.price) +
                 setSelections.reduce(
-                    (total, selection) => total + selection.extraPrice,
+                    (total, selection) =>
+                        total + safeMenuPrice(selection.extraPrice),
                     0,
                 )
             const key = JSON.stringify({
@@ -1080,14 +1329,16 @@ export default {
                 key,
                 productId: product.id,
                 name: product.name,
+                category: product.category,
                 image: product.image,
                 type: 'set',
                 setSelections,
                 optionLines,
                 remark: state.remark,
-                qty: state.qty,
+                qty: Math.max(1, Number(state.qty) || 1),
                 unitPrice,
-                total: unitPrice * state.qty,
+                total:
+                    unitPrice * Math.max(1, Number(state.qty) || 1),
             }
         },
         buildCartItem(product, state) {
@@ -1124,11 +1375,14 @@ export default {
                 ...removedLines,
             ].filter(Boolean)
             const unitPrice =
-                product.price +
-                (size?.price || 0) +
-                addons.reduce((total, item) => total + item.price, 0) +
+                safeMenuPrice(product.price) +
+                safeMenuPrice(size?.price) +
+                addons.reduce(
+                    (total, item) => total + safeMenuPrice(item.price),
+                    0,
+                ) +
                 selectedModifiers.reduce(
-                    (total, item) => total + Number(item.price || 0),
+                    (total, item) => total + safeMenuPrice(item.price),
                     0,
                 )
             const key = JSON.stringify({
@@ -1144,6 +1398,7 @@ export default {
                 key,
                 productId: product.id,
                 name: product.name,
+                category: product.category,
                 image: product.image,
                 optionLines,
                 size: state.size,
@@ -1152,9 +1407,9 @@ export default {
                 addons: [...selectedAddons],
                 modifiers,
                 remark: state.remark,
-                qty: state.qty,
+                qty: Math.max(1, Number(state.qty) || 1),
                 unitPrice,
-                total: unitPrice * state.qty,
+                total: unitPrice * Math.max(1, Number(state.qty) || 1),
             }
         },
         addCartItem(item) {
@@ -1277,70 +1532,111 @@ export default {
             else if (this.editingKey) this.removeCartItem(this.editingKey)
             this.closeDrawer()
         },
-        confirmOrder() {
+        async confirmOrder() {
             if (!this.allItems.length) return
-            const orderGroups = [
-                ...this.previousOrderGroups,
-                ...(this.cart.length
-                    ? [
-                          {
-                              label: this.previousOrderGroups.length
-                                  ? 'Add-on order'
-                                  : 'Order',
-                              createdAt: new Date().toISOString(),
-                              items: this.cart.map((item) => ({ ...item })),
-                          },
-                      ]
-                    : []),
-            ]
-            const heldOrder = {
-                ...(this.baseEditingOrder || {}),
-                id: this.baseEditingOrder?.id || `HOLD-${Date.now()}`,
-                orderNumber: this.orderNumber,
-                orderSetup: { ...this.orderSetup },
-                cashier: this.cashierName,
-                employeeId: this.employeeId,
-                guests: this.guestCount,
-                status: 'unpaid',
-                items: this.allItems.map((item) => ({ ...item })),
-                orderGroups,
-                subtotal: Number(this.subtotal.toFixed(2)),
-                tax: Number(this.tax.toFixed(2)),
-                total: Number(this.payableAmount.toFixed(2)),
-                createdAt:
-                    this.baseEditingOrder?.createdAt ||
-                    new Date().toISOString(),
-                heldAt:
-                    this.baseEditingOrder?.heldAt || new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
+            this.orderError = ''
+            try {
+                this.previousOrderGroups = this.previousOrderGroups.map(
+                    (group) => ({
+                        ...group,
+                        items: (group.items || []).map((item) =>
+                            this.repairOrderItem(item),
+                        ),
+                    }),
+                )
+                this.cart = this.cart.map((item) =>
+                    this.repairOrderItem(item),
+                )
+                const orderGroups = [
+                    ...this.previousOrderGroups,
+                    ...(this.cart.length
+                        ? [
+                              {
+                                  label: this.previousOrderGroups.length
+                                      ? 'Add-on order'
+                                      : 'Order',
+                                  createdAt: new Date().toISOString(),
+                                  items: this.cart.map((item) => ({ ...item })),
+                              },
+                          ]
+                        : []),
+                ].map((group) => ({
+                    ...group,
+                    items: (group.items || []).map((item) =>
+                        this.compactOrderItem(item),
+                    ),
+                }))
+                const fallbackItems = orderGroups.flatMap((group) =>
+                    (group.items || []).map((item) =>
+                        this.compactOrderItem(item, true),
+                    ),
+                )
+                const heldOrder = {
+                    ...(this.baseEditingOrder || {}),
+                    id: this.baseEditingOrder?.id || `HOLD-${Date.now()}`,
+                    orderNumber: this.orderNumber,
+                    orderSetup: { ...this.orderSetup },
+                    cashier: this.cashierName,
+                    employeeId: this.employeeId,
+                    member: this.selectedMember
+                        ? { ...this.selectedMember }
+                        : null,
+                    guests: this.guestCount,
+                    status: 'unpaid',
+                    items: fallbackItems,
+                    orderGroups,
+                    subtotal: Number(this.subtotal.toFixed(2)),
+                    tax: Number(this.tax.toFixed(2)),
+                    total: Number(this.payableAmount.toFixed(2)),
+                    createdAt:
+                        this.baseEditingOrder?.createdAt ||
+                        new Date().toISOString(),
+                    heldAt:
+                        this.baseEditingOrder?.heldAt ||
+                        new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                }
+                const heldOrders = this.readLocalList('posfood_held_orders')
+                const remaining = this.baseEditingOrder?.id
+                    ? heldOrders.filter((order) => order.id !== heldOrder.id)
+                    : heldOrders.filter(
+                          (order) =>
+                              order.orderNumber !== heldOrder.orderNumber,
+                      )
+                const isTakeaway =
+                    heldOrder.orderSetup?.orderType === 'Takeaway'
+                if (isTakeaway)
+                    localStorage.setItem(
+                        'posfood_checkout',
+                        JSON.stringify(heldOrder),
+                    )
+                else {
+                    localStorage.setItem(
+                        'posfood_held_orders',
+                        JSON.stringify([heldOrder, ...remaining]),
+                    )
+                    localStorage.setItem(
+                        'posfood_dashboard_focus_order',
+                        heldOrder.id,
+                    )
+                }
+                localStorage.removeItem('posfood_order_draft')
+                localStorage.removeItem('posfood_order_setup')
+                localStorage.removeItem('posfood_editing_order')
+                localStorage.removeItem('posfood_add_order_mode')
+                await this.$router.push(
+                    isTakeaway ? '/pos/checkout' : '/pos/start',
+                )
+            } catch (error) {
+                const quotaError =
+                    error?.name === 'QuotaExceededError' ||
+                    error?.code === 22 ||
+                    error?.code === 1014
+                this.orderError = quotaError
+                    ? 'Order storage is full. Remove oversized menu photos and try again.'
+                    : 'Unable to confirm this order. Please try again.'
+                console.error('Unable to confirm order.', error)
             }
-            const heldOrders = this.readLocalList('posfood_held_orders')
-            const remaining = this.baseEditingOrder?.id
-                ? heldOrders.filter((order) => order.id !== heldOrder.id)
-                : heldOrders.filter(
-                      (order) => order.orderNumber !== heldOrder.orderNumber,
-                  )
-            const isTakeaway = heldOrder.orderSetup?.orderType === 'Takeaway'
-            if (isTakeaway)
-                localStorage.setItem(
-                    'posfood_checkout',
-                    JSON.stringify(heldOrder),
-                )
-            else {
-                localStorage.setItem(
-                    'posfood_held_orders',
-                    JSON.stringify([heldOrder, ...remaining]),
-                )
-                localStorage.setItem(
-                    'posfood_dashboard_focus_order',
-                    heldOrder.id,
-                )
-            }
-            localStorage.removeItem('posfood_order_draft')
-            localStorage.removeItem('posfood_order_setup')
-            localStorage.removeItem('posfood_editing_order')
-            localStorage.removeItem('posfood_add_order_mode')
-            this.$router.push(isTakeaway ? '/pos/checkout' : '/pos/start')
         },
         selectPaymentMethod(method) {
             this.paymentMethod = method
@@ -1411,6 +1707,25 @@ export default {
                 this.showHoldCart = false
                 return
             }
+            const orderGroups = [
+                ...this.previousOrderGroups,
+                ...(this.cart.length
+                    ? [
+                          {
+                              label: this.previousOrderGroups.length
+                                  ? 'Add-on order'
+                                  : 'Order',
+                              createdAt: new Date().toISOString(),
+                              items: this.cart,
+                          },
+                      ]
+                    : []),
+            ].map((group) => ({
+                ...group,
+                items: (group.items || []).map((item) =>
+                    this.compactOrderItem(item),
+                ),
+            }))
             const heldOrder = {
                 id: this.baseEditingOrder?.id || `HOLD-${Date.now()}`,
                 orderNumber: this.orderNumber,
@@ -1419,21 +1734,12 @@ export default {
                 note: this.holdNote,
                 orderNote: this.orderNote,
                 guests: this.guestCount,
-                items: this.allItems.map((item) => ({ ...item })),
-                orderGroups: [
-                    ...this.previousOrderGroups,
-                    ...(this.cart.length
-                        ? [
-                              {
-                                  label: this.previousOrderGroups.length
-                                      ? 'Add-on order'
-                                      : 'Order',
-                                  createdAt: new Date().toISOString(),
-                                  items: this.cart.map((item) => ({ ...item })),
-                              },
-                          ]
-                        : []),
-                ],
+                items: orderGroups.flatMap((group) =>
+                    (group.items || []).map((item) =>
+                        this.compactOrderItem(item, true),
+                    ),
+                ),
+                orderGroups,
                 subtotal: Number(this.subtotal.toFixed(2)),
                 tax: Number(this.tax.toFixed(2)),
                 total: Number(this.payableAmount.toFixed(2)),
@@ -1485,12 +1791,14 @@ export default {
                     'posfood_cancelled_orders',
                     JSON.stringify([
                         {
-                            ...cancelled,
+                            ...this.compactStoredOrder(cancelled),
                             status: 'cancelled',
                             cancelledAt: new Date().toISOString(),
                             cancelledBy: this.employeeId,
                         },
-                        ...this.readLocalList('posfood_cancelled_orders'),
+                        ...this.readLocalList(
+                            'posfood_cancelled_orders',
+                        ).map((order) => this.compactStoredOrder(order)),
                     ]),
                 )
             if (this.orderSetup.tableNumber) {
@@ -1542,7 +1850,8 @@ export default {
             if (this.staffPin.length >= 4) return
             this.staffPin += String(number)
             if (this.staffPin.length === 4) {
-                if (this.staffPin === '1234') {
+                const account = findStaffAccount(this.employeeId)
+                if (this.staffPin === (account?.pin || '1234')) {
                     this.isStaffLocked = false
                     this.staffPin = ''
                     this.staffPinError = ''

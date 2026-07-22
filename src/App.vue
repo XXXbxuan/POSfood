@@ -1,3 +1,18 @@
 <template>
-    <RouterView />
+    <MainLayout>
+        <RouterView v-slot="{ Component, route }">
+            <component :is="Component" :key="route.fullPath" />
+        </RouterView>
+    </MainLayout>
+    <TabletKeyboard />
 </template>
+
+<script>
+import MainLayout from '@/layouts/MainLayout.vue'
+import TabletKeyboard from '@/components/common/TabletKeyboard.vue'
+
+export default {
+    name: 'App',
+    components: { MainLayout, TabletKeyboard },
+}
+</script>

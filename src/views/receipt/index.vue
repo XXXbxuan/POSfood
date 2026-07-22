@@ -34,6 +34,8 @@
 </template>
 <script>
 import ThermalReceipt from '@/components/receipt/ThermalReceipt.vue'
+import { readList, readObject } from '@/services/pos/storage.js'
+
 export default {
     name: 'POSReceipt',
     components: { ThermalReceipt },
@@ -41,10 +43,10 @@ export default {
         return { receipt: { items: [], orderSetup: {} } }
     },
     mounted() {
-        const sales = this.readList('posfood_sales')
+        const sales = readList('posfood_sales')
         this.receipt =
             sales.find((sale) => sale.id === this.$route.params.id) ||
-            this.readObject('posfood_last_receipt') ||
+            readObject('posfood_last_receipt') ||
             this.receipt
         if (!this.receipt.id) return this.$router.replace('/pos/transactions')
         if (this.$route.query.print === '1')
@@ -53,21 +55,6 @@ export default {
     methods: {
         money(value) {
             return Number(value || 0).toFixed(2)
-        },
-        readList(key) {
-            try {
-                const value = JSON.parse(localStorage.getItem(key))
-                return Array.isArray(value) ? value : []
-            } catch (error) {
-                return []
-            }
-        },
-        readObject(key) {
-            try {
-                return JSON.parse(localStorage.getItem(key)) || null
-            } catch (error) {
-                return null
-            }
         },
         continueRemaining() {
             const id = this.receipt.remainingOrderId

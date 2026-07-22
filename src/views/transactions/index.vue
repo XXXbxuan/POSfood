@@ -2,7 +2,6 @@
     <main class="transactions-page">
         <section class="transactions-shell">
             <PosTopbar />
-            <PosSidebar active="History" />
             <section class="workspace">
                 <div class="page-title">
                     <div>
@@ -286,14 +285,13 @@
 </template>
 
 <script>
-import pastaImg from '@/assets/img/food/pasta.png'
-import pizzaImg from '@/assets/img/food/pizza.png'
 import PosTopbar from '@/components/common/PosTopbar.vue'
-import PosSidebar from '@/components/common/PosSidebar.vue'
 import ThermalReceipt from '@/components/receipt/ThermalReceipt.vue'
+import { createDemoTransactions } from '@/data/transactions.js'
+import { readList } from '@/services/pos/storage.js'
 export default {
     name: 'POSTransactions',
-    components: { PosTopbar, PosSidebar, ThermalReceipt },
+    components: { PosTopbar, ThermalReceipt },
     data() {
         return {
             keyword: '',
@@ -394,20 +392,12 @@ export default {
         this.loadTransactions()
     },
     methods: {
-        readList(key) {
-            try {
-                const value = JSON.parse(localStorage.getItem(key))
-                return Array.isArray(value) ? value : []
-            } catch (error) {
-                return []
-            }
-        },
         loadTransactions() {
-            const saved = this.readList('posfood_sales').map((item) => ({
+            const saved = readList('posfood_sales').map((item) => ({
                 ...item,
                 status: 'paid',
             }))
-            const unique = [...saved, ...this.demoTransactions()].filter(
+            const unique = [...saved, ...createDemoTransactions()].filter(
                 (item, index, array) =>
                     array.findIndex((other) => other.id === item.id) === index,
             )
@@ -461,62 +451,6 @@ export default {
                     new Date(b.paidAt || b.createdAt) -
                     new Date(a.paidAt || a.createdAt),
             )
-        },
-        demoTransactions() {
-            const now = Date.now()
-            return [
-                {
-                    id: 'DEMO-DINE',
-                    orderNumber: '#05822',
-                    status: 'paid',
-                    orderSetup: { orderType: 'Dine In', tableNumber: 'T22' },
-                    guests: 4,
-                    paymentMethod: 'Cash',
-                    subtotal: 87,
-                    tax: 19.58,
-                    total: 106.58,
-                    paidAt: new Date(now - 42 * 6e4).toISOString(),
-                    items: [
-                        {
-                            name: 'Schezwan Egg Noodles',
-                            size: 'Large',
-                            optionLines: ['Large', 'No onion'],
-                            qty: 2,
-                            total: 58,
-                            image: pastaImg,
-                        },
-                        {
-                            name: 'Margherita Pizza',
-                            size: 'Regular',
-                            optionLines: ['Regular'],
-                            qty: 1,
-                            total: 29,
-                            image: pizzaImg,
-                        },
-                    ],
-                },
-                {
-                    id: 'DEMO-TAKE',
-                    orderNumber: '#05818',
-                    status: 'paid',
-                    orderSetup: { orderType: 'Takeaway', tableNumber: '' },
-                    paymentMethod: 'E-Wallet',
-                    subtotal: 48,
-                    tax: 10.8,
-                    total: 58.8,
-                    paidAt: new Date(now - 96 * 6e4).toISOString(),
-                    items: [
-                        {
-                            name: 'Thai Style Fried Noodles',
-                            size: 'Medium',
-                            optionLines: ['Medium'],
-                            qty: 2,
-                            total: 48,
-                            image: pastaImg,
-                        },
-                    ],
-                },
-            ]
         },
         tableNumber(item) {
             return item.orderSetup?.tableNumber || item.tableNumber || ''

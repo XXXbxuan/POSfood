@@ -2,7 +2,6 @@
     <main class="menu-admin-page">
         <section class="menu-admin-shell">
             <PosTopbar />
-            <PosSidebar active="Menu" />
             <section class="menu-admin-workspace">
                 <header class="menu-admin-header">
                     <h2>Menu Management</h2>
@@ -237,6 +236,15 @@
                                     ></i>
                                     {{ category }}
                                 </button>
+                                <button
+                                    type="button"
+                                    class="product-category-add"
+                                    aria-label="Add category"
+                                    title="Add category"
+                                    @click="showCategoryField"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
                             </div>
                         </fieldset>
                         <div
@@ -389,6 +397,7 @@
                             v-model.number="setEditor.price"
                             type="number"
                             min="0.01"
+                            max="99999.99"
                             step="0.01"
                             required
                         />
@@ -1158,7 +1167,6 @@
 
 <script>
 import PosTopbar from '@/components/common/PosTopbar.vue'
-import PosSidebar from '@/components/common/PosSidebar.vue'
 import { loadMenuCatalog, saveMenuCatalog } from '@/services/pos/menuCatalog.js'
 import {
     createLongPressSortable,
@@ -1169,9 +1177,10 @@ import {
     productAvailabilityStatus,
     sortProductsByAvailability,
 } from '@/utils/menu.js'
+import { safeMenuPrice, validMenuPrice } from '@/utils/money.js'
 export default {
     name: 'POSMenuManagement',
-    components: { PosTopbar, PosSidebar },
+    components: { PosTopbar },
     data() {
         const catalog = loadMenuCatalog()
         return {
@@ -1238,6 +1247,7 @@ export default {
         setEditorReady() {
             return Boolean(
                 this.setEditor?.name?.trim() &&
+                    validMenuPrice(this.setEditor?.price) &&
                     Number(this.setEditor?.price) > 0 &&
                     this.setEditor?.setItems?.length,
             )
@@ -1558,7 +1568,7 @@ export default {
                             `${item.quantity > 1 ? `${item.quantity}× ` : ''}${item.product.name}`,
                     )
                     .join(', '),
-                price: Number(this.setEditor.price),
+                price: Number(safeMenuPrice(this.setEditor.price).toFixed(2)),
                 image: existing?.image || itemProducts[0]?.product.image || '',
                 availableFrom: this.setEditor.availableFrom,
                 availableTo: this.setEditor.availableTo,

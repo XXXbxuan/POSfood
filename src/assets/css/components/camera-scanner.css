@@ -68,11 +68,20 @@
     background: linear-gradient(135deg, #10131a, #2a303b);
 }
 
-.camera-backdrop .camera-viewport video {
+.camera-backdrop .camera-reader,
+.camera-backdrop .camera-reader video {
     width: 100%;
     height: 100%;
     display: block;
     object-fit: cover;
+}
+
+.camera-backdrop .camera-reader {
+    overflow: hidden;
+}
+
+.camera-backdrop .camera-reader > div {
+    height: 100%;
 }
 
 .camera-backdrop .camera-fallback {
@@ -172,10 +181,13 @@
 }
 
 .camera-backdrop .camera-modal > footer {
-    display: grid;
-    grid-template-columns: 0.75fr 1.25fr;
-    gap: 0.7rem;
+    display: flex;
+    justify-content: flex-end;
     padding: 1rem;
+}
+
+.camera-backdrop .camera-modal.center-action > footer {
+    justify-content: center;
 }
 
 .camera-backdrop .camera-modal footer button {
@@ -189,6 +201,7 @@
 }
 
 .camera-backdrop .cancel {
+    min-width: 12rem;
     border: 1px solid #dedede;
     background: #fff;
     color: #171826;
@@ -221,7 +234,7 @@
         height: 12rem;
     }
 
-    .camera-backdrop .camera-modal > footer {
-        grid-template-columns: 1fr;
+    .camera-backdrop .cancel {
+        width: 100%;
     }
 }

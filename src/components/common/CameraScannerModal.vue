@@ -1,6 +1,9 @@
 <template>
     <div class="camera-backdrop" @click.self="$emit('close')">
-        <section class="camera-modal">
+        <section
+            class="camera-modal"
+            :class="{ 'center-action': centerAction }"
+        >
             <header>
                 <div>
                     <span>CAMERA SCANNER</span>
@@ -16,32 +19,26 @@
                 </button>
             </header>
             <div class="camera-viewport">
-                <video ref="video" autoplay muted playsinline></video>
+                <div :id="readerId" class="camera-reader"></div>
                 <div v-if="cameraError" class="camera-fallback">
-                    <i class="fa-solid fa-camera"></i
-                    ><strong>Camera preview</strong
-                    ><small>{{ cameraError }}</small>
+                    <i class="fa-solid fa-camera"></i>
+                    <strong>Camera unavailable</strong>
+                    <small>{{ cameraError }}</small>
                 </div>
-                <div class="scan-window">
-                    <i class="corner top-left"></i
-                    ><i class="corner top-right"></i
-                    ><i class="corner bottom-left"></i
-                    ><i class="corner bottom-right"></i
-                    ><span class="scan-line"></span>
+                <div v-else class="scan-window" aria-hidden="true">
+                    <i class="corner top-left"></i>
+                    <i class="corner top-right"></i>
+                    <i class="corner bottom-left"></i>
+                    <i class="corner bottom-right"></i>
+                    <span class="scan-line"></span>
                 </div>
                 <div class="camera-status">
                     <i class="fa-solid fa-shield-halved"></i>{{ hint }}
                 </div>
             </div>
             <footer>
-                <button type="button" class="cancel" @click="$emit('close')">
-                    Cancel</button
-                ><button
-                    type="button"
-                    class="complete"
-                    @click="$emit('scanned')"
-                >
-                    <i class="fa-solid fa-qrcode"></i>{{ actionLabel }}
+                <button type="button" class="cancel" @click="$emit('action')">
+                    <i class="fa-solid fa-keyboard"></i>{{ actionLabel }}
                 </button>
             </footer>
         </section>
@@ -49,46 +46,69 @@
 </template>
 
 <script>
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode'
+
 export default {
     name: 'CameraScannerModal',
     props: {
         title: { type: String, default: 'Scan QR code' },
         subtitle: { type: String, default: 'Use this device camera' },
-        actionLabel: { type: String, default: 'Complete demo scan' },
+        actionLabel: { type: String, default: 'Enter code instead' },
+        centerAction: { type: Boolean, default: false },
+        unavailableMessage: {
+            type: String,
+            default:
+                'Allow camera permission, or close this window and enter the voucher code.',
+        },
         hint: {
             type: String,
             default: 'Position the QR code inside the frame',
         },
     },
-    emits: ['close', 'scanned'],
+    emits: ['action', 'close', 'scanned'],
     data() {
-        return { stream: null, cameraError: '' }
+        return {
+            scanner: null,
+            cameraError: '',
+            hasScanned: false,
+            readerId: `qr-reader-${Math.random().toString(36).slice(2)}`,
+        }
     },
     async mounted() {
         try {
-            if (!navigator.mediaDevices?.getUserMedia)
-                throw new Error('Camera is unavailable in this browser.')
-            this.stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: { ideal: 'environment' } },
-                audio: false,
+            this.scanner = new Html5Qrcode(this.readerId, {
+                formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+                verbose: false,
             })
-            if (this.$refs.video) {
-                this.$refs.video.srcObject = this.stream
-                await this.$refs.video.play()
-            }
+            await this.scanner.start(
+                { facingMode: 'environment' },
+                { fps: 10, qrbox: { width: 220, height: 220 } },
+                this.onScanSuccess,
+                () => {},
+            )
         } catch (error) {
-            this.cameraError =
-                'Camera permission is unavailable — demo scan is still available.'
+            this.cameraError = this.unavailableMessage
         }
     },
     beforeUnmount() {
-        this.stopCamera()
+        this.stopScanner()
     },
     methods: {
-        stopCamera() {
-            if (this.stream)
-                this.stream.getTracks().forEach((track) => track.stop())
-            this.stream = null
+        async onScanSuccess(value) {
+            if (this.hasScanned) return
+            this.hasScanned = true
+            await this.stopScanner()
+            this.$emit('scanned', value)
+        },
+        async stopScanner() {
+            if (!this.scanner) return
+            try {
+                if (this.scanner.isScanning) await this.scanner.stop()
+                this.scanner.clear()
+            } catch (error) {
+                // The browser can close the camera stream before this hook runs.
+            }
+            this.scanner = null
         },
     },
 }

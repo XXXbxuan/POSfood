@@ -1289,6 +1289,17 @@
     color: #fc6d0b;
 }
 
+.menu-admin-page .product-category-choices .product-category-add {
+    width: 2.45rem;
+    min-width: 2.45rem;
+    justify-content: center;
+    justify-self: start;
+    padding: 0;
+    border-style: dashed;
+    color: #fc8019;
+    font-size: 0.9rem;
+}
+
 .menu-admin-page .set-meal-layer {
     z-index: 45;
     padding: 1.5rem;
