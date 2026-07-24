@@ -1,7 +1,7 @@
 .sidebar-controller {
     position: fixed;
     inset: 0 auto 0 0;
-    z-index: 80;
+    z-index: 1000;
     pointer-events: none;
 }
 
@@ -49,8 +49,11 @@
 }
 
 .sidebar-controller .pos-sidebar nav {
+    min-height: 0;
     display: grid;
     gap: 0.55rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .sidebar-controller .pos-sidebar nav button,

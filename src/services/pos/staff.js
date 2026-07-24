@@ -1,3 +1,5 @@
+import { normalizeStaffPermissions } from './permissions.js'
+
 const STAFF_STORAGE_KEY = 'posfood_accounts'
 const STAFF_ROLES = ['Superadmin', 'Admin', 'Kitchen']
 
@@ -26,6 +28,10 @@ function normalizeStaff(account = {}) {
         pin: String(account.pin || ''),
         role: normalizeRole(account.role),
         status: account.status === 'disabled' ? 'disabled' : 'active',
+        permissions: normalizeStaffPermissions(
+            normalizeRole(account.role),
+            account.permissions,
+        ),
     }
 }
 
@@ -54,7 +60,21 @@ function loadStaffAccounts() {
 function saveStaffAccounts(accounts) {
     const normalized = accounts.map(normalizeStaff)
     localStorage.setItem(STAFF_STORAGE_KEY, JSON.stringify(normalized))
+    window.dispatchEvent(
+        new CustomEvent('pos-staff:changed', { detail: normalized }),
+    )
     return normalized
+}
+
+function recordStaffLogin(employeeId) {
+    const id = String(employeeId || '').trim().toUpperCase()
+    const accounts = loadStaffAccounts().map((account) =>
+        account.employeeId === id
+            ? { ...account, lastLoginAt: new Date().toISOString() }
+            : account,
+    )
+    saveStaffAccounts(accounts)
+    return accounts.find((account) => account.employeeId === id) || null
 }
 
 function findStaffAccount(employeeId) {
@@ -71,7 +91,7 @@ function nextEmployeeId(accounts = loadStaffAccounts()) {
 }
 
 function canManageStaff(role) {
-    return ['Superadmin', 'Admin'].includes(normalizeRole(role))
+    return normalizeRole(role) === 'Superadmin'
 }
 
 export {
@@ -82,5 +102,6 @@ export {
     loadStaffAccounts,
     nextEmployeeId,
     normalizeRole,
+    recordStaffLogin,
     saveStaffAccounts,
 }

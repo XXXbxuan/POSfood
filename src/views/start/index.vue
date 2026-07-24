@@ -4,6 +4,65 @@
             <PosTopbar :show-order-actions="false" />
 
             <section class="dashboard-workspace">
+                <section
+                    v-if="false && showKitchenNotifications"
+                    class="cashier-notification-panel"
+                >
+                    <header>
+                        <div>
+                            <span>KITCHEN ALERTS</span>
+                            <h2>Notifications</h2>
+                        </div>
+                        <button
+                            type="button"
+                            aria-label="Close notifications"
+                            @click="showKitchenNotifications = false"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+                    <p v-if="!kitchenNotifications.length" class="empty">
+                        <i class="fa-regular fa-bell"></i>
+                        No kitchen notifications.
+                    </p>
+                    <template v-else>
+                        <article
+                            v-for="notification in kitchenNotifications"
+                            :key="notification.id"
+                            :class="{
+                                unread: !notification.read,
+                                resolved: notification.resolved,
+                            }"
+                        >
+                            <div>
+                                <span>{{
+                                    notification.requestType
+                                }}</span>
+                                <strong
+                                    >#{{ notification.orderNumber }} ·
+                                    {{ notification.itemName }}</strong
+                                >
+                                <p>{{ notification.reason }}</p>
+                                <small v-if="notification.replacement"
+                                    >Replace with:
+                                    {{ notification.replacement }}</small
+                                >
+                            </div>
+                            <button
+                                type="button"
+                                @click="
+                                    openKitchenNotification(notification)
+                                "
+                            >
+                                {{
+                                    notification.resolved
+                                        ? 'Reviewed'
+                                        : 'Open order'
+                                }}
+                            </button>
+                        </article>
+                    </template>
+                </section>
                 <section class="order-lane dine-lane">
                     <header class="minimal-lane-title">
                         <div class="lane-left-tools">
@@ -64,6 +123,10 @@
                                 "
                                 type="button"
                                 class="simple-order-card dine-card"
+                                :class="{
+                                    'kitchen-action-order':
+                                        orderHasKitchenIssue(order),
+                                }"
                                 :data-sort-id="dashboardOrderKey(order)"
                                 :aria-label="`${order.orderNumber || order.orderSetup?.orderNo}, hold for one second to move`"
                                 @click="openDashboardCard(order)"
@@ -79,12 +142,16 @@
                                 ><strong class="card-table-number">{{
                                     orderLocation(order)
                                 }}</strong
-                                ><strong class="card-total"
+                                ><strong
+                                    v-if="orderHasKitchenIssue(order)"
+                                    class="card-total card-kitchen-action"
+                                    >{{ orderIssueLabel(order) }}</strong
+                                ><strong v-else class="card-total"
                                     >RM
                                     {{ orderTotal(order).toFixed(2) }}</strong
                                 ><time class="card-updated-time"
                                     ><i class="fa-regular fa-clock"></i
-                                    >{{ orderTime(order) }}</time
+                                    >{{ orderDisplayTime(order) }}</time
                                 >
                             </button>
                         </div>
@@ -122,7 +189,10 @@
                         </div>
                         <div class="table-picker-header-actions">
                             <button
-                                v-if="tablePickerMode === 'overview'"
+                                v-if="
+                                    tablePickerMode === 'overview' &&
+                                    canManageLayouts
+                                "
                                 type="button"
                                 class="open-layout-designer-button"
                                 @click="openTableDesigner(selectedTableLayoutId)"
@@ -204,7 +274,8 @@
                         v-if="
                             tablePickerMode === 'overview' &&
                             tableFilter === 'All' &&
-                            !selectedTableLayout
+                            !selectedTableLayout &&
+                            canManageTables
                         "
                         class="table-sort-hint"
                     >
@@ -228,11 +299,13 @@
                         "
                         :show-add="
                             tablePickerMode === 'overview' &&
-                            tableFilter === 'All'
+                            tableFilter === 'All' &&
+                            canManageTables
                         "
                         :sortable="
                             tablePickerMode === 'overview' &&
-                            tableFilter === 'All'
+                            tableFilter === 'All' &&
+                            canManageTables
                         "
                         @select="handleTableClick"
                         @add="requestAddTable"
@@ -243,7 +316,7 @@
         </div>
 
         <TableLayoutDesigner
-            v-if="showTableDesigner"
+            v-if="showTableDesigner && canManageLayouts"
             ref="tableDesigner"
             :tables="tables"
             :initial-layout-id="designerInitialLayoutId"
@@ -261,10 +334,15 @@
                     <span>TABLE</span>
                     <h3>{{ managementTarget.number }}</h3>
                 </header>
-                <button type="button" @click="requestTableAction('delete')">
+                <button
+                    v-if="canManageTables"
+                    type="button"
+                    @click="requestTableAction('delete')"
+                >
                     <i class="fa-solid fa-trash-can"></i><strong>Delete</strong>
                 </button>
                 <button
+                    v-if="canUpdateTableStatus"
                     type="button"
                     @click="
                         requestTableAction(
@@ -404,6 +482,10 @@
                         :key="`zoom-${order.id || order.orderNumber}`"
                         type="button"
                         class="simple-order-card dine-card"
+                        :class="{
+                            'kitchen-action-order':
+                                orderHasKitchenIssue(order),
+                        }"
                         @click="openZoomOrder(order)"
                     >
                         <span class="card-order-number">{{
@@ -416,11 +498,15 @@
                         ><strong class="card-table-number">{{
                             orderLocation(order)
                         }}</strong
-                        ><strong class="card-total"
+                        ><strong
+                            v-if="orderHasKitchenIssue(order)"
+                            class="card-total card-kitchen-action"
+                            >{{ orderIssueLabel(order) }}</strong
+                        ><strong v-else class="card-total"
                             >RM {{ orderTotal(order).toFixed(2) }}</strong
                         ><time class="card-updated-time"
                             ><i class="fa-regular fa-clock"></i
-                            >{{ orderTime(order) }}</time
+                            >{{ orderDisplayTime(order) }}</time
                         >
                     </button>
                 </div>
@@ -476,7 +562,11 @@
         >
             <section
                 class="order-action-modal"
-                :class="{ 'inline-split-mode': showSplit }"
+                :class="{
+                    'inline-split-mode': showSplit,
+                    'kitchen-action-order':
+                        orderHasKitchenIssue(selectedOrder),
+                }"
             >
                 <header>
                     <button
@@ -518,8 +608,13 @@
                 </header>
                 <div v-if="!showSplit" class="action-order-items">
                     <article
-                        v-for="(item, index) in allItems(selectedOrder)"
+                        v-for="(item, index) in allItemsWithIssues(
+                            selectedOrder,
+                        )"
                         :key="`${item.name}-${index}`"
+                        :class="{
+                            'kitchen-issue-item': item._kitchenIssue,
+                        }"
                     >
                         <img :src="item.image" :alt="item.name" />
                         <div>
@@ -529,7 +624,17 @@
                             }}</span>
                         </div>
                         <b>{{ item.qty || 1 }}x</b
-                        ><em>RM {{ itemLineTotal(item).toFixed(2) }}</em>
+                        ><em v-if="item._kitchenIssue">{{
+                            issueLabel(item._kitchenIssue)
+                        }}</em
+                        ><em v-else
+                            >RM {{ itemLineTotal(item).toFixed(2) }}</em
+                        >
+                        <small
+                            v-if="item._kitchenIssue"
+                            class="kitchen-issue-reason"
+                            >{{ item._kitchenIssue.reason }}</small
+                        >
                     </article>
                 </div>
                 <div v-else class="inline-split-items">
@@ -560,11 +665,13 @@
                                 selected: splitSelection.includes(
                                     candidate.key,
                                 ),
+                                'kitchen-issue-item': candidate.issue,
                             }"
                             ><input
                                 v-model="splitSelection"
                                 type="checkbox"
                                 :value="candidate.key"
+                                :disabled="Boolean(candidate.issue)"
                             /><span class="split-check-box"
                                 ><i class="fa-solid fa-check"></i></span
                             ><img
@@ -577,7 +684,10 @@
                                     candidate.item.size || 'Regular'
                                 }}</small>
                             </div>
-                            <b
+                            <b v-if="candidate.issue">{{
+                                issueLabel(candidate.issue)
+                            }}</b
+                            ><b v-else
                                 >RM
                                 {{
                                     itemUnitTotal(candidate.item).toFixed(2)
@@ -589,9 +699,16 @@
                 <p v-if="splitError" class="split-error">{{ splitError }}</p>
                 <div class="action-total">
                     <span>{{
-                        showSplit ? 'Selected amount' : 'Total payable'
+                        showSplit
+                            ? 'Selected amount'
+                            : orderHasKitchenIssue(selectedOrder)
+                              ? 'Kitchen action required'
+                              : 'Total payable'
                     }}</span
-                    ><strong
+                    ><strong v-if="orderHasKitchenIssue(selectedOrder)">{{
+                        orderIssueLabel(selectedOrder)
+                    }}</strong
+                    ><strong v-else
                         >RM
                         {{
                             (showSplit
@@ -603,7 +720,7 @@
                 </div>
                 <footer
                     v-if="!showSplit"
-                    :class="{ 'without-split': splitCandidates.length < 2 }"
+                    :class="{ 'without-split': !canSplitOrder }"
                 >
                     <button
                         type="button"
@@ -613,7 +730,7 @@
                         <i class="fa-regular fa-pen-to-square"></i
                         ><span>Edit</span></button
                     ><button
-                        v-if="splitCandidates.length >= 2"
+                        v-if="canSplitOrder"
                         type="button"
                         class="split-action"
                         @click="beginSplit"
@@ -623,6 +740,7 @@
                     ><button
                         type="button"
                         class="checkout-action"
+                        :disabled="orderHasKitchenIssue(selectedOrder)"
                         @click="checkoutOrder"
                     >
                         <i class="fa-regular fa-credit-card"></i
@@ -652,7 +770,17 @@ import TableGrid from '@/components/table/TableGrid.vue'
 import TableLayoutDesigner from '@/components/table/TableLayoutDesigner.vue'
 import TableLayoutPreview from '@/components/table/TableLayoutPreview.vue'
 import { createDefaultTables } from '@/data/tables.js'
+import {
+    PERMISSIONS,
+    hasPermission,
+    normalizePermissionRole,
+    readActiveAccount,
+} from '@/services/pos/permissions.js'
 import { readList as readStoredList } from '@/services/pos/storage.js'
+import {
+    loadNotifications,
+    markNotificationRead,
+} from '@/services/pos/notifications.js'
 import {
     createLongPressSortable,
     moveListItem,
@@ -695,11 +823,40 @@ export default {
             showTableActionMenu: false,
             tableToast: '',
             tableToastTimer: null,
+            kitchenNotifications: loadNotifications(),
+            showKitchenNotifications: false,
             addTableToCurrentLayout: false,
             tables: createDefaultTables(),
         }
     },
     computed: {
+        activeRole() {
+            return normalizePermissionRole(readActiveAccount()?.role)
+        },
+        canManageTables() {
+            return hasPermission(
+                this.activeRole,
+                PERMISSIONS.MANAGE_TABLES,
+            )
+        },
+        canUpdateTableStatus() {
+            return hasPermission(
+                this.activeRole,
+                PERMISSIONS.UPDATE_TABLE_STATUS,
+            )
+        },
+        canManageLayouts() {
+            return hasPermission(
+                this.activeRole,
+                PERMISSIONS.MANAGE_LAYOUTS,
+            )
+        },
+        unreadKitchenNotifications() {
+            return this.kitchenNotifications.filter(
+                (notification) =>
+                    !notification.read && !notification.resolved,
+            ).length
+        },
         dineInCount() {
             return this.activeOrders.filter((order) => !this.isTakeaway(order))
                 .length
@@ -775,6 +932,12 @@ export default {
                                 qty: 1,
                                 total: this.itemUnitTotal(item),
                             },
+                            issue: this.issueForUnit(
+                                this.selectedOrder,
+                                groupIndex,
+                                itemIndex,
+                                unit,
+                            ),
                         })
                 }),
             )
@@ -802,6 +965,14 @@ export default {
             })
             return groups
         },
+        splitAvailableCandidates() {
+            return this.splitCandidates.filter((candidate) => !candidate.issue)
+        },
+        canSplitOrder() {
+            return this.orderHasKitchenIssue(this.selectedOrder)
+                ? this.splitAvailableCandidates.length > 0
+                : this.splitCandidates.length >= 2
+        },
         splitSelectedSubtotal() {
             const chosen = new Set(this.splitSelection)
             return this.splitCandidates
@@ -825,6 +996,11 @@ export default {
         if (!localStorage.getItem('posfood_active_account'))
             return this.$router.push('/')
         this.loadDashboard()
+        window.addEventListener(
+            'pos-notifications:changed',
+            this.syncKitchenNotifications,
+        )
+        window.addEventListener('storage', this.syncKitchenNotifications)
         this.$nextTick(this.setupDineOrderSorting)
         const reopenId = String(this.$route.query.reopen || '')
         if (reopenId) {
@@ -840,8 +1016,177 @@ export default {
         this.dineOrderSortController?.destroy()
         this.dineOrderSortController = null
         clearTimeout(this.tableToastTimer)
+        window.removeEventListener(
+            'pos-notifications:changed',
+            this.syncKitchenNotifications,
+        )
+        window.removeEventListener('storage', this.syncKitchenNotifications)
     },
     methods: {
+        activeKitchenIssues(order) {
+            if (!order) return []
+            const orderId = String(order.id || '')
+            const orderNumber = String(
+                order.orderNumber || order.orderSetup?.orderNo || '',
+            ).replace(/^#/, '')
+            return this.kitchenNotifications.filter((notification) => {
+                if (notification.resolved) return false
+                const notificationNumber = String(
+                    notification.orderNumber || '',
+                ).replace(/^#/, '')
+                return (
+                    (orderId &&
+                        String(notification.orderId || '') === orderId) ||
+                    (orderNumber && notificationNumber === orderNumber)
+                )
+            })
+        },
+        orderHasKitchenIssue(order) {
+            return this.activeKitchenIssues(order).length > 0
+        },
+        issueLabel(issue) {
+            return String(issue?.requestType || '')
+                .toLowerCase()
+                .includes('replacement')
+                ? 'Replacement'
+                : 'Refund'
+        },
+        orderIssueLabel(order) {
+            const issues = this.activeKitchenIssues(order)
+            return issues.some(
+                (issue) => this.issueLabel(issue) === 'Replacement',
+            )
+                ? 'Replacement'
+                : 'Refund'
+        },
+        orderDisplayTime(order) {
+            const latestIssue = this.activeKitchenIssues(order)
+                .slice()
+                .sort(
+                    (first, second) =>
+                        new Date(second.createdAt || 0) -
+                        new Date(first.createdAt || 0),
+                )[0]
+            if (!latestIssue) return this.orderTime(order)
+            const date = new Date(latestIssue.createdAt)
+            if (Number.isNaN(date.getTime())) return this.orderTime(order)
+            return date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+            })
+        },
+        issuesForUnit(order, groupIndex, itemIndex, unitIndex = 0) {
+            const key = `${groupIndex}-${itemIndex}-${unitIndex}`
+            return this.activeKitchenIssues(order).filter((issue) => {
+                    const itemId = String(issue.itemId || '')
+                    return itemId === key || itemId.startsWith(`${key}::set::`)
+                })
+        },
+        issueForUnit(order, groupIndex, itemIndex, unitIndex = 0) {
+            return (
+                this.issuesForUnit(
+                    order,
+                    groupIndex,
+                    itemIndex,
+                    unitIndex,
+                )[0] || null
+            )
+        },
+        issuesForItem(order, groupIndex, itemIndex, item) {
+            return Array.from(
+                { length: Math.max(1, Number(item?.qty) || 1) },
+                (unused, unitIndex) =>
+                    this.issuesForUnit(
+                        order,
+                        groupIndex,
+                        itemIndex,
+                        unitIndex,
+                    ),
+            ).flat()
+        },
+        allItemsWithIssues(order) {
+            const groups = order?.orderGroups?.length
+                ? order.orderGroups
+                : [{ label: 'Order', items: order?.items || [] }]
+            return groups.flatMap((group, groupIndex) =>
+                (group.items || []).map((item, itemIndex) => {
+                    const kitchenIssues = this.issuesForItem(
+                        order,
+                        groupIndex,
+                        itemIndex,
+                        item,
+                    )
+                    return {
+                        ...item,
+                        _kitchenIssues: kitchenIssues,
+                        _kitchenIssue: kitchenIssues[0] || null,
+                    }
+                }),
+            )
+        },
+        enrichOrderWithIssues(order) {
+            const groups = order?.orderGroups?.length
+                ? order.orderGroups
+                : [{ label: 'Order', items: order?.items || [] }]
+            const orderGroups = groups.map((group, groupIndex) => ({
+                ...group,
+                items: (group.items || []).map((item, itemIndex) => {
+                    const kitchenIssues = this.issuesForItem(
+                        order,
+                        groupIndex,
+                        itemIndex,
+                        item,
+                    )
+                    return {
+                        ...item,
+                        kitchenIssues,
+                        kitchenIssue: kitchenIssues[0] || null,
+                    }
+                }),
+            }))
+            return {
+                ...order,
+                orderGroups,
+                items: orderGroups.flatMap((group) => group.items),
+            }
+        },
+        syncKitchenNotifications(event) {
+            this.kitchenNotifications = Array.isArray(event?.detail)
+                ? event.detail
+                : loadNotifications()
+        },
+        openKitchenNotification(notification) {
+            this.kitchenNotifications =
+                markNotificationRead(notification.id)
+            if (notification.resolved) return
+            this.showKitchenNotifications = false
+            const order = this.activeOrders.find(
+                (candidate) =>
+                    String(candidate.id) ===
+                        String(notification.orderId) ||
+                    String(candidate.orderNumber) ===
+                        String(notification.orderNumber),
+            )
+            if (order) {
+                this.openOrder(order)
+                return
+            }
+            let checkout = null
+            try {
+                checkout = JSON.parse(
+                    localStorage.getItem('posfood_checkout'),
+                )
+            } catch (error) {
+                checkout = null
+            }
+            if (
+                checkout &&
+                (String(checkout.id) === String(notification.orderId) ||
+                    String(checkout.orderNumber) ===
+                        String(notification.orderNumber))
+            )
+                this.$router.push('/pos/checkout')
+        },
         readList(key) {
             return readStoredList(key)
         },
@@ -874,6 +1219,7 @@ export default {
             )
         },
         reorderTables({ oldIndex, newIndex }) {
+            if (!this.canManageTables) return
             if (
                 !Number.isInteger(oldIndex) ||
                 !Number.isInteger(newIndex) ||
@@ -1101,6 +1447,7 @@ export default {
             this.showTables = true
         },
         openTableDesigner(layoutId = '') {
+            if (!this.canManageLayouts) return
             this.designerInitialLayoutId =
                 typeof layoutId === 'string' ? layoutId : ''
             this.showTableDesigner = true
@@ -1125,6 +1472,7 @@ export default {
             this.addTableToCurrentLayout = false
         },
         requestAddTable(options = {}) {
+            if (!this.canManageTables) return
             this.addTableToCurrentLayout = Boolean(
                 options?.placeOnCurrentLayout,
             )
@@ -1139,12 +1487,18 @@ export default {
             this.showTableActionMenu = false
         },
         confirmAddTableWithSeats(seats) {
+            if (!this.canManageTables) return
             if (!this.managementTarget || ![4, 6].includes(Number(seats)))
                 return
             this.managementTarget.seats = Number(seats)
             this.confirmTableAction()
         },
         requestTableAction(action) {
+            const allowed =
+                action === 'delete'
+                    ? this.canManageTables
+                    : this.canUpdateTableStatus
+            if (!allowed) return
             const table = this.managementTarget
             if (!table) return
             if (table.status === 'served') {
@@ -1158,6 +1512,7 @@ export default {
             const table = this.managementTarget
             if (!table) return
             if (this.tableAdminAction === 'add') {
+                if (!this.canManageTables) return
                 const placeOnCurrentLayout = this.addTableToCurrentLayout
                 const addedNumber = table.number
                 this.tables.push({ ...table })
@@ -1177,6 +1532,7 @@ export default {
             }
             const states = this.readObject('posfood_table_states')
             if (this.tableAdminAction === 'delete') {
+                if (!this.canManageTables) return
                 this.tables = this.tables.filter(
                     (item) => item.number !== table.number,
                 )
@@ -1188,6 +1544,7 @@ export default {
                 this.saveTableConfiguration()
                 this.showTableToast(`${table.number} was deleted.`)
             } else if (this.tableAdminAction === 'unservice') {
+                if (!this.canUpdateTableStatus) return
                 delete states[table.number]
                 localStorage.setItem(
                     'posfood_table_states',
@@ -1196,6 +1553,7 @@ export default {
                 this.hydrateTables()
                 this.showTableToast(`${table.number} is available again.`)
             } else {
+                if (!this.canUpdateTableStatus) return
                 states[table.number] = {
                     status: 'service',
                     updatedAt: Date.now(),
@@ -1224,6 +1582,8 @@ export default {
         },
         handleTableClick(table) {
             if (this.tablePickerMode === 'overview') {
+                if (!this.canManageTables && !this.canUpdateTableStatus)
+                    return
                 this.managementTarget = table
                 this.tableAdminAction = ''
                 this.showTableActionMenu = true
@@ -1380,7 +1740,10 @@ export default {
             const order = this.selectedOrder
             if (!order) return
             localStorage.removeItem('posfood_order_draft')
-            localStorage.setItem('posfood_editing_order', JSON.stringify(order))
+            localStorage.setItem(
+                'posfood_editing_order',
+                JSON.stringify(this.enrichOrderWithIssues(order)),
+            )
             localStorage.removeItem('posfood_add_order_mode')
             localStorage.setItem(
                 'posfood_order_setup',
@@ -1391,6 +1754,11 @@ export default {
         checkoutOrder() {
             const order = this.selectedOrder
             if (!order) return
+            if (this.orderHasKitchenIssue(order)) {
+                this.splitError =
+                    'Resolve the kitchen return before checking out.'
+                return
+            }
             localStorage.setItem('posfood_checkout', JSON.stringify(order))
             localStorage.setItem(
                 'posfood_order_setup',
@@ -1409,9 +1777,12 @@ export default {
             this.splitError = ''
         },
         isSplitGroupSelected(group) {
+            const selectable = group.candidates.filter(
+                (candidate) => !candidate.issue,
+            )
             return (
-                group.candidates.length > 0 &&
-                group.candidates.every((candidate) =>
+                selectable.length > 0 &&
+                selectable.every((candidate) =>
                     this.splitSelection.includes(candidate.key),
                 )
             )
@@ -1419,11 +1790,13 @@ export default {
         toggleSplitGroup(group) {
             const selected = new Set(this.splitSelection)
             const selectGroup = !this.isSplitGroupSelected(group)
-            group.candidates.forEach((candidate) =>
-                selectGroup
-                    ? selected.add(candidate.key)
-                    : selected.delete(candidate.key),
-            )
+            group.candidates
+                .filter((candidate) => !candidate.issue)
+                .forEach((candidate) =>
+                    selectGroup
+                        ? selected.add(candidate.key)
+                        : selected.delete(candidate.key),
+                )
             this.splitSelection = [...selected]
             this.splitError = ''
         },

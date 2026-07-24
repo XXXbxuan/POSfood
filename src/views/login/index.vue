@@ -176,7 +176,11 @@
 <script>
 import backgroundImg from '@/assets/img/background/dark_background.jpg'
 import CameraScannerModal from '@/components/common/CameraScannerModal.vue'
-import { findStaffAccount } from '@/services/pos/staff.js'
+import { roleHome } from '@/services/pos/permissions.js'
+import {
+    findStaffAccount,
+    recordStaffLogin,
+} from '@/services/pos/staff.js'
 
 export default {
     name: 'POSLogin',
@@ -230,7 +234,8 @@ export default {
                 activeAccount = null
             }
             const account = findStaffAccount(activeAccount?.employeeId)
-            if (!account) {
+            if (!account || account.status !== 'active') {
+                localStorage.removeItem('posfood_active_account')
                 localStorage.removeItem('posfood_session_locked')
                 return
             }
@@ -293,6 +298,7 @@ export default {
         verifyPin() {
             if (
                 !this.pendingAccount ||
+                this.pendingAccount.status !== 'active' ||
                 this.loginForm.pin !== this.pendingAccount.pin
             ) {
                 this.formMessage = 'Staff PIN is incorrect.'
@@ -311,7 +317,8 @@ export default {
                 }),
             )
             localStorage.removeItem('posfood_session_locked')
-            this.$router.replace('/pos/start')
+            recordStaffLogin(this.pendingAccount.employeeId)
+            this.$router.replace(roleHome(this.pendingAccount.role))
         },
         backToCredentials() {
             this.loginStep = 'credentials'

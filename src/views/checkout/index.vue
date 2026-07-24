@@ -619,6 +619,7 @@ import {
     saveMember,
 } from '@/services/pos/memberships.js'
 import { readList as readStoredList } from '@/services/pos/storage.js'
+import { loadNotifications } from '@/services/pos/notifications.js'
 import {
     calculateVoucherDiscount,
     findVoucherByCode,
@@ -695,6 +696,7 @@ export default {
             memberVerified: false,
             showVoucherList: false,
             voucherListReasonId: '',
+            kitchenNotifications: loadNotifications(),
         }
     },
     computed: {
@@ -729,7 +731,32 @@ export default {
             )
         },
         canRequestPayment() {
-            return this.paymentTotal > 0 && !this.cashShortfall
+            return (
+                this.paymentTotal > 0 &&
+                !this.cashShortfall &&
+                !this.hasPendingKitchenIssue
+            )
+        },
+        hasPendingKitchenIssue() {
+            if (this.checkout.partialPayment) return false
+            const orderId = String(this.checkout.id || '')
+            const orderNumber = String(
+                this.checkout.orderNumber ||
+                    this.checkout.orderSetup?.orderNo ||
+                    '',
+            ).replace(/^#/, '')
+            return this.kitchenNotifications.some((notification) => {
+                if (notification.resolved) return false
+                return (
+                    (orderId &&
+                        String(notification.orderId || '') === orderId) ||
+                    (orderNumber &&
+                        String(notification.orderNumber || '').replace(
+                            /^#/,
+                            '',
+                        ) === orderNumber)
+                )
+            })
         },
         isSplitPayment() {
             return Boolean(
@@ -769,17 +796,45 @@ export default {
                 return this.$router.replace('/pos/start')
             this.checkout = normalizeCheckout(checkout)
             this.checkout.member = null
+            if (this.hasPendingKitchenIssue)
+                this.error =
+                    'Kitchen requested an order update. Return to the order before payment.'
             this.members = loadMembers()
             this.vouchers = loadVouchers()
             if (checkout.voucher?.code) {
                 this.voucherCode = checkout.voucher.code
                 this.applyVoucherCode()
             }
+            window.addEventListener(
+                'pos-notifications:changed',
+                this.syncKitchenNotifications,
+            )
+            window.addEventListener(
+                'storage',
+                this.syncKitchenNotifications,
+            )
         } catch (error) {
             this.$router.replace('/pos/start')
         }
     },
+    beforeUnmount() {
+        window.removeEventListener(
+            'pos-notifications:changed',
+            this.syncKitchenNotifications,
+        )
+        window.removeEventListener('storage', this.syncKitchenNotifications)
+    },
     methods: {
+        syncKitchenNotifications(event) {
+            this.kitchenNotifications = Array.isArray(event?.detail)
+                ? event.detail
+                : loadNotifications()
+            if (this.hasPendingKitchenIssue) {
+                this.showConfirm = false
+                this.error =
+                    'Kitchen requested an order update. Return to the order before payment.'
+            }
+        },
         money(value) {
             return Number(value || 0).toFixed(2)
         },
@@ -1034,6 +1089,9 @@ export default {
         },
         requestPayment() {
             this.error = ''
+            if (this.hasPendingKitchenIssue)
+                return (this.error =
+                    'Kitchen requested an order update. Return to the order before payment.')
             if (this.paymentTotal <= 0)
                 return (this.error =
                     'The payable amount must be greater than RM 0.00.')
@@ -1045,6 +1103,12 @@ export default {
             this.showConfirm = true
         },
         completePayment() {
+            if (this.hasPendingKitchenIssue) {
+                this.showConfirm = false
+                this.error =
+                    'Kitchen requested an order update. Payment is blocked.'
+                return
+            }
             const account = JSON.parse(
                 localStorage.getItem('posfood_active_account') || '{}',
             )

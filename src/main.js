@@ -29,6 +29,7 @@ import './assets/css/components/voucher-print.css'
 
 import './assets/css/pages/checkout.css'
 import './assets/css/pages/login.css'
+import './assets/css/pages/kitchen.css'
 import './assets/css/pages/menu-management.css'
 import './assets/css/pages/memberships.css'
 import './assets/css/pages/order.css'

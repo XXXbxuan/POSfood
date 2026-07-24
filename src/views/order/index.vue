@@ -97,6 +97,26 @@
                     </button>
                 </div>
 
+                <div
+                    v-if="pendingRefundTarget"
+                    class="refund-replacement-banner"
+                >
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    <div>
+                        <strong>Choose a replacement dish</strong>
+                        <span>Replacing {{ pendingRefundTarget.item.name }}</span>
+                        <small v-if="pendingRefundTarget.issue?.reason">
+                            {{ pendingRefundTarget.issue.reason }}
+                        </small>
+                        <small v-if="pendingRefundTarget.issue?.replacement">
+                            Replace with: {{ pendingRefundTarget.issue.replacement }}
+                        </small>
+                    </div>
+                    <button type="button" @click="cancelRefundReplacement">
+                        Cancel
+                    </button>
+                </div>
+
                 <div class="cart-list">
                     <section
                         v-for="(group, groupIndex) in previousOrderGroups"
@@ -114,12 +134,16 @@
                             v-for="(item, itemIndex) in group.items"
                             :key="`${groupIndex}-${itemIndex}-${item.key || item.name}`"
                             class="cart-row-shell"
-                            :class="{ 'is-readonly': !isEditingExistingOrder }"
+                            :class="{
+                                'is-readonly': !isEditingExistingOrder,
+                                'kitchen-issue-row': item.kitchenIssue,
+                            }"
                         >
                             <article
                                 class="cart-line"
                                 :class="{
                                     'readonly-line': !isEditingExistingOrder,
+                                    'kitchen-issue-line': item.kitchenIssue,
                                 }"
                                 @click="
                                     editPreviousItem(
@@ -139,10 +163,26 @@
                                         ></i>
                                         {{ item.remark }}</small
                                     >
+                                    <small
+                                        v-if="item.kitchenIssue"
+                                        class="chef-return-note"
+                                        ><i
+                                            class="fa-solid fa-triangle-exclamation"
+                                        ></i>
+                                        {{ item.kitchenIssue.reason }}</small
+                                    >
                                 </div>
                                 <div class="cart-item-end">
                                     <span>{{ item.qty }}×</span
-                                    ><b>RM {{ formatMoney(item.total) }}</b>
+                                    ><b
+                                        v-if="item.kitchenIssue"
+                                        class="kitchen-issue-label"
+                                        >{{
+                                            issueLabel(item.kitchenIssue)
+                                        }}</b
+                                    ><b v-else
+                                        >RM {{ formatMoney(item.total) }}</b
+                                    >
                                 </div>
                             </article>
                         </div>
@@ -351,6 +391,102 @@
         </transition>
 
         <transition name="modal-fade">
+            <div
+                v-if="refundTarget"
+                class="modal-backdrop"
+                @click.self="closeRefundAction"
+            >
+                <section class="refund-action-modal">
+                    <header>
+                        <span>KITCHEN RETURN</span>
+                        <h2>{{ refundTarget.item.name }}</h2>
+                        <p>{{ refundTarget.issue?.reason }}</p>
+                    </header>
+                    <button
+                        type="button"
+                        class="choose-refund-replacement"
+                        @click="chooseRefundReplacement"
+                    >
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        <span
+                            ><strong>Choose another dish</strong
+                            ><small
+                                >Select a new product from the menu.</small
+                            ></span
+                        >
+                    </button>
+                    <button
+                        type="button"
+                        class="cancel-refund-item"
+                        @click="cancelRefundItem"
+                    >
+                        <i class="fa-regular fa-trash-can"></i>
+                        <span
+                            ><strong>Cancel this dish</strong
+                            ><small
+                                >Remove it and update the payable
+                                amount.</small
+                            ></span
+                        >
+                    </button>
+                    <button type="button" @click="closeRefundAction">
+                        Back
+                    </button>
+                </section>
+            </div>
+        </transition>
+
+        <transition name="modal-fade">
+            <div
+                v-if="showSetExchangePicker"
+                class="modal-backdrop set-exchange-backdrop"
+                @click.self="closeSetExchangePicker"
+            >
+                <section class="set-exchange-modal">
+                    <header>
+                        <span>SET REPLACEMENT</span>
+                        <h2>{{ activeSetSelection?.product?.name || 'Set dish' }}</h2>
+                        <p v-if="activeSetSelectionIssue?.reason">
+                            {{ activeSetSelectionIssue.reason }}
+                        </p>
+                        <small v-if="activeSetSelectionIssue?.replacement">
+                            Replace with: {{ activeSetSelectionIssue.replacement }}
+                        </small>
+                    </header>
+                    <label class="set-exchange-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input
+                            v-model.trim="setExchangeQuery"
+                            type="text"
+                            placeholder="Search replacement dish..."
+                        />
+                    </label>
+                    <div class="set-exchange-list">
+                        <button
+                            v-for="product in exchangeableSetProducts"
+                            :key="product.id"
+                            type="button"
+                            @click="replaceActiveSetSelectionWith(product)"
+                        >
+                            <img v-if="product.image" :src="product.image" :alt="product.name" />
+                            <span>
+                                <strong>{{ product.name }}</strong>
+                                <small>{{ product.category }}</small>
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div v-if="!exchangeableSetProducts.length" class="set-exchange-empty">
+                            No replacement dishes found.
+                        </div>
+                    </div>
+                    <footer>
+                        <button type="button" @click="closeSetExchangePicker">Cancel</button>
+                    </footer>
+                </section>
+            </div>
+        </transition>
+
+        <transition name="modal-fade">
             <div v-if="drawerProduct" class="modal-backdrop">
                 <section
                     class="modifier-modal"
@@ -359,6 +495,15 @@
                     <header class="detail-title">
                         <h2>{{ drawerProduct.name }}</h2>
                     </header>
+                    <button
+                        v-if="showSetExchangeAction"
+                        type="button"
+                        class="detail-exchange-trigger"
+                        aria-label="Exchange set dish"
+                        @click="openSetExchangePicker"
+                    >
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    </button>
                     <button
                         v-if="editingKey || editingGroupIndex !== null"
                         type="button"
@@ -375,6 +520,16 @@
                     >
                         <i class="fa-solid fa-xmark"></i>
                     </button>
+                    <aside
+                        v-if="editingIssue && drawerProduct.type !== 'set'"
+                        class="chef-instruction-panel"
+                    >
+                        <span>CHEF NOTE</span>
+                        <strong>{{ editingIssue.reason || 'Chef returned this dish.' }}</strong>
+                        <p v-if="editingIssue.replacement">
+                            Replace with: {{ editingIssue.replacement }}
+                        </p>
+                    </aside>
                     <SetMealCustomizer
                         v-if="drawerProduct.type === 'set'"
                         :selections="setMealSelections"
@@ -712,6 +867,11 @@ import {
 import { findStaffAccount } from '@/services/pos/staff.js'
 import { loadMenuCatalog } from '@/services/pos/menuCatalog.js'
 import {
+    removeKitchenTicket,
+    upsertKitchenTicket,
+} from '@/services/pos/kitchen.js'
+import { resolveOrderNotifications } from '@/services/pos/notifications.js'
+import {
     productAvailabilityStatus,
     sortProductsByAvailability,
 } from '@/utils/menu.js'
@@ -748,6 +908,13 @@ export default {
             editingKey: '',
             editingGroupIndex: null,
             editingItemIndex: null,
+            refundTarget: null,
+            pendingRefundTarget: null,
+            showSetExchangePicker: false,
+            setExchangeQuery: '',
+            pendingResolvedSelectionIssueIds: [],
+            initialSetIssueSignatures: {},
+            resolvedKitchenIssueIds: [],
             selectedCartKey: '',
             selectedPreviousItem: '',
             previousOrderGroups: [],
@@ -819,6 +986,52 @@ export default {
         },
         orderNumber() {
             return this.orderSetup.orderNo || '#5266'
+        },
+        editingIssue() {
+            if (this.activeSetSelectionIssue) return this.activeSetSelectionIssue
+            if (
+                this.editingGroupIndex === null ||
+                this.editingItemIndex === null
+            )
+                return null
+            const item =
+                this.previousOrderGroups[this.editingGroupIndex]?.items[
+                    this.editingItemIndex
+                ] || null
+            const unresolved = this.unresolvedIssuesForItem(item)
+            return unresolved[0] || item?.kitchenIssue || null
+        },
+        activeSetSelection() {
+            return this.setMealSelections[this.activeSetSelectionIndex] || null
+        },
+        activeSetSelectionIssue() {
+            return this.activeSetSelection?.returnIssue || null
+        },
+        showSetExchangeAction() {
+            return Boolean(
+                this.drawerProduct?.type === 'set' &&
+                    this.activeSetSelectionIssue &&
+                    this.editingGroupIndex !== null &&
+                    this.editingItemIndex !== null,
+            )
+        },
+        exchangeableSetProducts() {
+            const keyword = this.setExchangeQuery.toLowerCase()
+            const activeProductId = this.activeSetSelection?.product?.id
+            return this.products.filter((product) => {
+                if (product.type === 'set') return false
+                if (productAvailabilityStatus(product) !== 'available')
+                    return false
+                if (activeProductId && product.id === activeProductId)
+                    return false
+                return (
+                    !keyword ||
+                    product.name.toLowerCase().includes(keyword) ||
+                    String(product.category || '')
+                        .toLowerCase()
+                        .includes(keyword)
+                )
+            })
         },
         filteredProducts() {
             const keyword = this.searchKeyword.toLowerCase()
@@ -1018,7 +1231,12 @@ export default {
                 qty: 1,
             }
         },
-        buildSetMealSelections(product, savedSelections = []) {
+        buildSetMealSelections(product, savedSelections = [], sourceItem = null) {
+            const selectionIssueMap = new Map(
+                this.unresolvedIssuesForItem(sourceItem)
+                    .filter((issue) => Number.isInteger(issue?.source?.setIndex))
+                    .map((issue) => [issue.source.setIndex, issue]),
+            )
             if (savedSelections.length) {
                 return savedSelections
                     .map((selection, index) => {
@@ -1033,6 +1251,7 @@ export default {
                                 itemProduct,
                                 selection.state,
                             ),
+                            returnIssue: selectionIssueMap.get(index) || null,
                         }
                     })
                     .filter(Boolean)
@@ -1057,11 +1276,16 @@ export default {
                 if (!itemProduct) return []
                 return Array.from(
                     { length: Math.max(1, Number(item.quantity) || 1) },
-                    () => ({
-                        key: `${item.productId}-${sequence++}`,
-                        product: itemProduct,
-                        state: createProductOptionState(itemProduct),
-                    }),
+                    () => {
+                        const nextIndex = sequence++
+                        return {
+                            key: `${item.productId}-${nextIndex}`,
+                            product: itemProduct,
+                            state: createProductOptionState(itemProduct),
+                            returnIssue:
+                                selectionIssueMap.get(nextIndex) || null,
+                        }
+                    },
                 )
             })
         },
@@ -1113,6 +1337,9 @@ export default {
                         this.repairOrderItem(item),
                     )
                     this.baseEditingOrder = draft.baseEditingOrder || null
+                    this.resolvedKitchenIssueIds = [
+                        ...(draft.resolvedKitchenIssueIds || []),
+                    ]
                     this.selectedMember = draft.member || null
                     this.isEditingExistingOrder = Boolean(
                         draft.isEditingExistingOrder,
@@ -1123,6 +1350,9 @@ export default {
                     localStorage.getItem('posfood_editing_order'),
                 )
                 this.baseEditingOrder = editingOrder || null
+                this.resolvedKitchenIssueIds = [
+                    ...(editingOrder?.resolvedKitchenIssueIds || []),
+                ]
                 this.selectedMember = editingOrder?.member || null
                 this.isEditingExistingOrder = Boolean(editingOrder)
                 if (editingOrder?.orderGroups?.length)
@@ -1216,6 +1446,91 @@ export default {
         formatMoney(value) {
             return moneyNumber(value).toFixed(2)
         },
+        issueLabel(issue) {
+            return String(issue?.requestType || '')
+                .toLowerCase()
+                .includes('replacement')
+                ? 'Replacement'
+                : 'Refund'
+        },
+        unresolvedIssuesForItem(item) {
+            const issues = [
+                ...(item?.kitchenIssues || []),
+                ...(item?.kitchenIssue ? [item.kitchenIssue] : []),
+            ].filter(Boolean)
+            return issues.filter(
+                (issue, index, all) =>
+                    !this.resolvedKitchenIssueIds.includes(issue.id) &&
+                    all.findIndex((candidate) => candidate.id === issue.id) === index,
+            )
+        },
+        rememberResolvedIssue(issue) {
+            if (
+                issue?.id &&
+                !this.resolvedKitchenIssueIds.includes(issue.id)
+            )
+                this.resolvedKitchenIssueIds.push(issue.id)
+        },
+        rememberResolvedIssues(issues) {
+            ;(issues || []).forEach((issue) =>
+                this.rememberResolvedIssue(issue),
+            )
+        },
+        normalizedSetSelectionState(state = {}) {
+            const sortValues = (values) =>
+                [...(Array.isArray(values) ? values : [])]
+                    .map((value) => String(value))
+                    .sort((a, b) => a.localeCompare(b))
+            const modifiers = Object.fromEntries(
+                Object.entries(state.modifiers || {})
+                    .sort(([a], [b]) => a.localeCompare(b))
+                    .map(([name, value]) => [name, String(value || '')]),
+            )
+            return {
+                size: String(state.size || ''),
+                ingredients: sortValues(state.ingredients),
+                removedIngredients: sortValues(state.removedIngredients),
+                addons: sortValues(state.addons),
+                modifiers,
+                remark: String(state.remark || '').trim(),
+            }
+        },
+        setSelectionResolutionSignature(selection) {
+            return JSON.stringify({
+                productId: String(selection?.product?.id || ''),
+                state: this.normalizedSetSelectionState(selection?.state),
+            })
+        },
+        rememberInitialSetIssueSignatures() {
+            this.initialSetIssueSignatures = Object.fromEntries(
+                this.setMealSelections
+                    .filter((selection) => selection.returnIssue?.id)
+                    .map((selection) => [
+                        selection.returnIssue.id,
+                        this.setSelectionResolutionSignature(selection),
+                    ]),
+            )
+        },
+        modifiedSetSelectionIssueIds() {
+            return this.setMealSelections
+                .filter(
+                    (selection) =>
+                        selection.returnIssue?.id &&
+                        this.issueLabel(selection.returnIssue) ===
+                            'Replacement',
+                )
+                .filter((selection) => {
+                    const issueId = selection.returnIssue.id
+                    const initialSignature =
+                        this.initialSetIssueSignatures[issueId]
+                    return (
+                        initialSignature &&
+                        initialSignature !==
+                            this.setSelectionResolutionSignature(selection)
+                    )
+                })
+                .map((selection) => selection.returnIssue.id)
+        },
         repairOrderItem(item) {
             const quantity = Math.max(1, Math.min(999, Number(item?.qty) || 1))
             const product = this.products.find(
@@ -1273,14 +1588,17 @@ export default {
         },
         selectProduct(product) {
             if (productAvailabilityStatus(product) !== 'available') return
-            this.editingKey = ''
-            this.editingGroupIndex = null
-            this.editingItemIndex = null
+            if (!this.pendingRefundTarget) {
+                this.editingKey = ''
+                this.editingGroupIndex = null
+                this.editingItemIndex = null
+            }
             this.drawerProduct = product
             this.setMealSelections =
                 product.type === 'set'
                     ? this.buildSetMealSelections(product)
                     : []
+            this.initialSetIssueSignatures = {}
             this.activeSetSelectionIndex = 0
             const optionState = createProductOptionState(product)
             this.drawerState = {
@@ -1423,7 +1741,42 @@ export default {
                 this.cart.push(item)
             }
         },
+        openSetExchangePicker() {
+            if (!this.showSetExchangeAction) return
+            this.setExchangeQuery = ''
+            this.showSetExchangePicker = true
+        },
+        closeSetExchangePicker() {
+            this.showSetExchangePicker = false
+            this.setExchangeQuery = ''
+        },
+        replaceActiveSetSelectionWith(product) {
+            if (!this.activeSetSelection || !product) return
+            const resolvedIssue = this.activeSetSelection.returnIssue || null
+            this.setMealSelections = this.setMealSelections.map((selection, index) =>
+                index === this.activeSetSelectionIndex
+                    ? {
+                          ...selection,
+                          product,
+                          state: createProductOptionState(product),
+                          returnIssue: null,
+                      }
+                    : selection,
+            )
+            if (resolvedIssue?.id)
+                this.pendingResolvedSelectionIssueIds = [
+                    ...new Set([
+                        ...this.pendingResolvedSelectionIssueIds,
+                        resolvedIssue.id,
+                    ]),
+                ]
+            this.closeSetExchangePicker()
+        },
         submitDrawerItem() {
+            const modifiedSelectionIssueIds =
+                this.drawerProduct?.type === 'set'
+                    ? this.modifiedSetSelectionIssueIds()
+                    : []
             const item = this.buildCartItem(
                 this.drawerProduct,
                 this.drawerState,
@@ -1432,11 +1785,47 @@ export default {
                 this.editingGroupIndex !== null &&
                 this.editingItemIndex !== null
             ) {
+                const previousItem =
+                    this.previousOrderGroups[this.editingGroupIndex]?.items[
+                        this.editingItemIndex
+                    ]
+                const previousIssues = this.unresolvedIssuesForItem(previousItem)
+                const resolvedSelectionIssueIds = new Set([
+                    ...this.pendingResolvedSelectionIssueIds,
+                    ...modifiedSelectionIssueIds,
+                ])
+                if (this.pendingRefundTarget) {
+                    this.rememberResolvedIssues(previousIssues)
+                    delete item.kitchenIssue
+                    delete item.kitchenIssues
+                } else if (item.type === 'set') {
+                    const remainingIssues = previousIssues.filter(
+                        (issue) => !resolvedSelectionIssueIds.has(issue.id),
+                    )
+                    const resolvedIssues = previousIssues.filter((issue) =>
+                        resolvedSelectionIssueIds.has(issue.id),
+                    )
+                    if (resolvedIssues.length)
+                        this.rememberResolvedIssues(resolvedIssues)
+                    if (remainingIssues.length) {
+                        item.kitchenIssues = remainingIssues
+                        item.kitchenIssue = remainingIssues[0]
+                    } else {
+                        delete item.kitchenIssue
+                        delete item.kitchenIssues
+                    }
+                } else {
+                    this.rememberResolvedIssues(previousIssues)
+                    delete item.kitchenIssue
+                    delete item.kitchenIssues
+                }
                 this.previousOrderGroups[this.editingGroupIndex].items.splice(
                     this.editingItemIndex,
                     1,
                     item,
                 )
+                this.pendingRefundTarget = null
+                this.pendingResolvedSelectionIssueIds = []
             } else {
                 if (this.editingKey)
                     this.cart = this.cart.filter(
@@ -1447,12 +1836,21 @@ export default {
             this.closeDrawer()
         },
         closeDrawer() {
+            const pendingRefundTarget = this.pendingRefundTarget
             this.drawerProduct = null
             this.setMealSelections = []
             this.activeSetSelectionIndex = 0
+            this.showSetExchangePicker = false
+            this.setExchangeQuery = ''
+            this.pendingResolvedSelectionIssueIds = []
+            this.initialSetIssueSignatures = {}
             this.editingKey = ''
             this.editingGroupIndex = null
             this.editingItemIndex = null
+            if (pendingRefundTarget) {
+                this.editingGroupIndex = pendingRefundTarget.groupIndex
+                this.editingItemIndex = pendingRefundTarget.itemIndex
+            }
             this.drawerState = this.emptyDrawerState()
         },
         removeCartItem(key) {
@@ -1466,7 +1864,47 @@ export default {
             if (!this.isEditingExistingOrder) return
             this.editingGroupIndex = groupIndex
             this.editingItemIndex = itemIndex
+            const unresolvedIssues = this.unresolvedIssuesForItem(item)
+            const firstIssue = unresolvedIssues[0] || item.kitchenIssue || null
+            const hasSetIssue = unresolvedIssues.some((issue) =>
+                Number.isInteger(issue?.source?.setIndex),
+            )
+            if (firstIssue && this.issueLabel(firstIssue) === 'Refund' && !(item.type === 'set' && hasSetIssue)) {
+                this.refundTarget = { item, groupIndex, itemIndex, issue: firstIssue }
+                return
+            }
             this.openItemEditor(item)
+        },
+        closeRefundAction() {
+            this.refundTarget = null
+            if (!this.pendingRefundTarget) {
+                this.editingGroupIndex = null
+                this.editingItemIndex = null
+            }
+        },
+        chooseRefundReplacement() {
+            if (!this.refundTarget) return
+            this.pendingRefundTarget = { ...this.refundTarget }
+            this.refundTarget = null
+        },
+        cancelRefundReplacement() {
+            this.pendingRefundTarget = null
+            this.editingGroupIndex = null
+            this.editingItemIndex = null
+        },
+        cancelRefundItem() {
+            if (!this.refundTarget) return
+            const { item, groupIndex, itemIndex } = this.refundTarget
+            this.rememberResolvedIssues(
+                item.kitchenIssues?.length
+                    ? item.kitchenIssues
+                    : [item.kitchenIssue],
+            )
+            this.removePreviousItem(groupIndex, itemIndex)
+            this.refundTarget = null
+            this.pendingRefundTarget = null
+            this.editingGroupIndex = null
+            this.editingItemIndex = null
         },
         openItemEditor(item) {
             const product = this.products.find(
@@ -1483,9 +1921,16 @@ export default {
                     ? this.buildSetMealSelections(
                           product,
                           item.setSelections || [],
+                          item,
                       )
                     : []
-            this.activeSetSelectionIndex = 0
+            this.rememberInitialSetIssueSignatures()
+            this.activeSetSelectionIndex = Math.max(
+                0,
+                this.setMealSelections.findIndex(
+                    (selection) => Boolean(selection.returnIssue),
+                ),
+            )
             this.drawerState = {
                 size: item.size || '',
                 ingredients: [...(item.ingredients || [])],
@@ -1524,17 +1969,41 @@ export default {
             if (
                 this.editingGroupIndex !== null &&
                 this.editingItemIndex !== null
-            )
+            ) {
+                const previousItem =
+                    this.previousOrderGroups[this.editingGroupIndex]?.items[
+                        this.editingItemIndex
+                    ]
+                this.rememberResolvedIssues(
+                    previousItem?.kitchenIssues?.length
+                        ? previousItem.kitchenIssues
+                        : [previousItem?.kitchenIssue],
+                )
                 this.removePreviousItem(
                     this.editingGroupIndex,
                     this.editingItemIndex,
                 )
-            else if (this.editingKey) this.removeCartItem(this.editingKey)
+            } else if (this.editingKey) this.removeCartItem(this.editingKey)
             this.closeDrawer()
         },
         async confirmOrder() {
-            if (!this.allItems.length) return
+            if (!this.allItems.length) {
+                if (this.isEditingExistingOrder && this.baseEditingOrder)
+                    this.cancelCurrentOrder()
+                return
+            }
             this.orderError = ''
+            const unresolvedKitchenIssues =
+                this.previousOrderGroups.flatMap((group) =>
+                    (group.items || []).flatMap((item) =>
+                        this.unresolvedIssuesForItem(item),
+                    ),
+                )
+            if (unresolvedKitchenIssues.length) {
+                this.orderError =
+                    'Resolve every kitchen return before confirming the order.'
+                return
+            }
             try {
                 this.previousOrderGroups = this.previousOrderGroups.map(
                     (group) => ({
@@ -1582,6 +2051,7 @@ export default {
                         ? { ...this.selectedMember }
                         : null,
                     guests: this.guestCount,
+                    note: this.orderNote,
                     status: 'unpaid',
                     items: fallbackItems,
                     orderGroups,
@@ -1595,6 +2065,9 @@ export default {
                         this.baseEditingOrder?.heldAt ||
                         new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
+                    resolvedKitchenIssueIds: [
+                        ...this.resolvedKitchenIssueIds,
+                    ],
                 }
                 const heldOrders = this.readLocalList('posfood_held_orders')
                 const remaining = this.baseEditingOrder?.id
@@ -1605,6 +2078,7 @@ export default {
                       )
                 const isTakeaway =
                     heldOrder.orderSetup?.orderType === 'Takeaway'
+                upsertKitchenTicket(heldOrder)
                 if (isTakeaway)
                     localStorage.setItem(
                         'posfood_checkout',
@@ -1776,6 +2250,15 @@ export default {
                 heldOrders.find(
                     (order) => order.orderNumber === this.orderNumber,
                 )
+            if (cancelled) {
+                const cancelledOrderNumber =
+                    cancelled.orderNumber || this.orderNumber
+                resolveOrderNotifications(
+                    cancelled.id,
+                    cancelledOrderNumber,
+                )
+                removeKitchenTicket(cancelled.id, cancelledOrderNumber)
+            }
             localStorage.setItem(
                 'posfood_held_orders',
                 JSON.stringify(

@@ -2477,3 +2477,323 @@
     background: #fff;
     box-shadow: none;
 }
+.order-page .kitchen-issue-row {
+    margin: 0.35rem 0.45rem;
+    overflow: hidden;
+    border: 1px solid #e24a43;
+    border-radius: 0.7rem;
+    background: #fff0ef;
+}
+
+.order-page .kitchen-issue-line {
+    background: #fff0ef;
+}
+
+.order-page .chef-return-note {
+    display: block;
+    margin-top: 0.35rem;
+    color: #a3332e;
+    font-weight: 800;
+}
+
+.order-page .kitchen-issue-label {
+    color: #d93d36;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+}
+
+.order-page .refund-replacement-banner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0.55rem 0.7rem 0;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #ef6a62;
+    border-radius: 0.65rem;
+    background: #fff0ef;
+    color: #9e332e;
+}
+
+.order-page .refund-replacement-banner strong,
+.order-page .refund-replacement-banner span {
+    display: block;
+}
+
+.order-page .refund-replacement-banner span {
+    margin-top: 0.12rem;
+    font-size: 0.64rem;
+}
+
+.order-page .refund-replacement-banner button {
+    min-height: 2.2rem;
+    padding: 0 0.65rem;
+    border: 1px solid #dc3e37;
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #dc3e37;
+    font-weight: 800;
+}
+
+.order-page .refund-action-modal {
+    width: min(28rem, 92vw);
+    display: grid;
+    gap: 0.65rem;
+    padding: 1.2rem;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.5rem 4rem rgba(23, 24, 38, 0.3);
+}
+
+.order-page .refund-action-modal header span {
+    color: #dc3e37;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+}
+
+.order-page .refund-action-modal header h2 {
+    margin: 0.25rem 0;
+}
+
+.order-page .refund-action-modal header p {
+    margin: 0;
+    color: #9a4a46;
+    font-size: 0.75rem;
+}
+
+.order-page .refund-action-modal > button {
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem;
+    border: 1px solid #dedfe2;
+    border-radius: 0.65rem;
+    background: #fff;
+    text-align: left;
+}
+
+.order-page .refund-action-modal > button > i {
+    width: 2.25rem;
+    color: #fc8019;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.order-page .refund-action-modal > button span,
+.order-page .refund-action-modal > button small {
+    display: block;
+}
+
+.order-page .refund-action-modal > button small {
+    margin-top: 0.15rem;
+    color: #8c9098;
+}
+
+.order-page .refund-action-modal .cancel-refund-item {
+    border-color: #ef9a95;
+    color: #d73d36;
+}
+
+.order-page .chef-instruction-panel {
+    position: static;
+    width: auto;
+    box-sizing: border-box;
+    margin: 0 0 1rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid #ef6a62;
+    border-radius: 0.7rem;
+    background: #fff0ef;
+    color: #8f2e29;
+    box-shadow: 0 0.55rem 1.4rem rgba(44, 18, 17, 0.1);
+}
+
+.order-page .chef-instruction-panel span,
+.order-page .chef-instruction-panel strong,
+.order-page .chef-instruction-panel p {
+    display: block;
+}
+
+.order-page .chef-instruction-panel span {
+    color: #d83d36;
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+}
+
+.order-page .chef-instruction-panel strong {
+    margin-top: 0.35rem;
+}
+
+.order-page .chef-instruction-panel p {
+    margin: 0.45rem 0 0;
+    font-size: 0.72rem;
+}
+
+.order-page .set-exchange-backdrop {
+    z-index: 46;
+}
+
+.order-page .detail-exchange-trigger {
+    position: absolute;
+    top: 1rem;
+    right: 7.45rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.7rem;
+    height: 2.7rem;
+    border: 1px solid #ffd8ad;
+    border-radius: 50%;
+    background: #fff6ec;
+    color: #fc8019;
+}
+
+.order-page .detail-exchange-trigger:hover {
+    border-color: #fc8019;
+    background: #fff0df;
+}
+
+.order-page .refund-replacement-banner small {
+    display: block;
+    margin-top: 0.16rem;
+    font-size: 0.62rem;
+}
+
+.order-page .set-exchange-modal {
+    width: min(32rem, calc(100vw - 2rem));
+    max-height: min(40rem, calc(100vh - 2rem));
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.2rem;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.2rem 3rem rgba(16, 20, 31, 0.18);
+}
+
+.order-page .set-exchange-modal header span,
+.order-page .set-exchange-modal header h2,
+.order-page .set-exchange-modal header p,
+.order-page .set-exchange-modal header small {
+    display: block;
+}
+
+.order-page .set-exchange-modal header span {
+    color: #fc8019;
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+}
+
+.order-page .set-exchange-modal header h2 {
+    margin: 0.35rem 0 0;
+}
+
+.order-page .set-exchange-modal header p,
+.order-page .set-exchange-modal header small {
+    margin-top: 0.28rem;
+    color: #747785;
+    font-size: 0.74rem;
+}
+
+.order-page .set-exchange-search {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.8rem;
+    padding: 0 0.85rem;
+    border: 1px solid #ececef;
+    border-radius: 0.7rem;
+    background: #fafafa;
+    color: #8c9098;
+}
+
+.order-page .set-exchange-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+}
+
+.order-page .set-exchange-list {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    overflow-y: auto;
+}
+
+.order-page .set-exchange-list > button {
+    min-height: 4rem;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem;
+    border: 1px solid #ececef;
+    border-radius: 0.8rem;
+    background: #fafafa;
+    text-align: left;
+}
+
+.order-page .set-exchange-list > button:hover {
+    border-color: #fc8019;
+    background: #fff5eb;
+}
+
+.order-page .set-exchange-list > button img {
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain;
+    border-radius: 0.6rem;
+    background: #fff;
+}
+
+.order-page .set-exchange-list > button span {
+    min-width: 0;
+}
+
+.order-page .set-exchange-list > button strong,
+.order-page .set-exchange-list > button small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.order-page .set-exchange-list > button small {
+    margin-top: 0.2rem;
+    color: #858894;
+}
+
+.order-page .set-exchange-list > button i {
+    color: #b0b2bb;
+}
+
+.order-page .set-exchange-empty {
+    padding: 1rem;
+    border: 1px dashed #dbdde3;
+    border-radius: 0.8rem;
+    color: #8c9098;
+    text-align: center;
+}
+
+.order-page .set-exchange-modal footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.order-page .set-exchange-modal footer button {
+    min-height: 2.7rem;
+    padding: 0 1rem;
+    border: 1px solid #dbdde3;
+    border-radius: 0.7rem;
+    background: #fff;
+    font-weight: 800;
+}
+
+.order-page .set-order-modal .detail-exchange-trigger { top: 1.8rem; }

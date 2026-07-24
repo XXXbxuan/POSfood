@@ -6,26 +6,48 @@
                 <small>Choose each dish to set its options.</small>
             </header>
             <button
-                v-for="(selection, index) in selections"
-                :key="selection.key"
+                v-for="entry in orderedSelections"
+                :key="entry.selection.key"
                 type="button"
-                :class="{ active: index === activeIndex }"
-                @click="$emit('update:activeIndex', index)"
+                :class="{
+                    active: entry.index === activeIndex,
+                    'has-return-issue': Boolean(entry.selection.returnIssue),
+                    'active-return-issue':
+                        entry.index === activeIndex &&
+                        Boolean(entry.selection.returnIssue),
+                }"
+                @click="$emit('update:activeIndex', entry.index)"
             >
                 <img
-                    v-if="selection.product.image"
-                    :src="selection.product.image"
-                    :alt="selection.product.name"
+                    v-if="entry.selection.product.image"
+                    :src="entry.selection.product.image"
+                    :alt="entry.selection.product.name"
                 />
-                <span>
-                    <strong>{{ selection.product.name }}</strong>
-                    <small>{{ selectionSummary(selection) }}</small>
+                <span class="set-item-copy">
+                    <span class="set-item-title-row">
+                        <strong>{{ entry.selection.product.name }}</strong>
+                        <em v-if="entry.selection.returnIssue">
+                            {{ issueBadge(entry.selection.returnIssue) }}
+                        </em>
+                    </span>
+                    <small>{{ selectionSummary(entry.selection) }}</small>
                 </span>
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
         </aside>
 
         <section v-if="activeSelection" class="set-meal-dish-options">
+            <aside
+                v-if="activeSelection.returnIssue"
+                class="set-return-note-panel"
+            >
+                <span>{{ issueBadge(activeSelection.returnIssue) }}</span>
+                <strong>{{ issueReason(activeSelection.returnIssue) }}</strong>
+                <p v-if="activeSelection.returnIssue.replacement">
+                    Replace with: {{ activeSelection.returnIssue.replacement }}
+                </p>
+            </aside>
+
             <header>
                 <div>
                     <span>{{ activeSelection.product.category }}</span>
@@ -176,6 +198,15 @@ export default {
         activeSelection() {
             return this.selections[this.activeIndex] || null
         },
+        orderedSelections() {
+            return this.selections
+                .map((selection, index) => ({ selection, index }))
+                .sort((a, b) => {
+                    const aPriority = a.selection.returnIssue ? 0 : 1
+                    const bPriority = b.selection.returnIssue ? 0 : 1
+                    return aPriority - bPriority || a.index - b.index
+                })
+        },
     },
     methods: {
         money(value) {
@@ -186,6 +217,19 @@ export default {
                 productOptionLines(selection.product, selection.state).join(
                     ' · ',
                 ) || 'Regular'
+            )
+        },
+        issueBadge(issue) {
+            return String(issue?.requestType || '')
+                .toLowerCase()
+                .includes('replacement')
+                ? 'Replacement'
+                : 'Return'
+        },
+        issueReason(issue) {
+            return (
+                String(issue?.reason || '').trim() ||
+                'Chef returned this dish.'
             )
         },
         updateSelection(nextState) {

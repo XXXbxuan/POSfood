@@ -68,22 +68,33 @@
     background: #fff;
 }
 
-.set-meal-dish-list button span {
+.set-meal-dish-list .set-item-copy {
     min-width: 0;
 }
 
-.set-meal-dish-list button span strong,
-.set-meal-dish-list button span small {
-    display: block;
+.set-meal-dish-list .set-item-title-row {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.55rem;
+}
+
+.set-meal-dish-list .set-item-title-row strong {
+    min-width: 0;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.set-meal-dish-list button span small {
+.set-meal-dish-list .set-item-copy > small {
+    display: block;
     margin-top: 0.25rem;
+    overflow: hidden;
     color: #858894;
     font-size: 0.62rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .set-meal-dish-list button > i {
@@ -196,4 +207,64 @@
     .set-meal-dish-list {
         max-height: 13rem;
     }
+}
+
+.set-meal-dish-list > button.has-return-issue {
+    border-color: #ef6a62;
+    background: #fff4f3;
+}
+
+.set-meal-dish-list > button.active-return-issue {
+    border-color: #d83d36;
+    background: #ffeceb;
+    box-shadow: inset 0 0 0 0.02rem rgba(216, 61, 54, 0.14);
+}
+
+.set-meal-dish-list .set-item-title-row em {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.16rem 0.46rem;
+    border-radius: 999px;
+    background: #fee1de;
+    color: #d83d36;
+    font-size: 0.56rem;
+    font-style: normal;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.set-return-note-panel {
+    display: grid;
+    gap: 0.28rem;
+    margin-bottom: 0.85rem;
+    padding: 0.8rem 0.9rem;
+    border: 0.08rem solid #ef6a62;
+    border-radius: 0.7rem;
+    background: #fff0ef;
+    color: #8f2e29;
+    box-shadow: 0 0.5rem 1.25rem rgba(44, 18, 17, 0.08);
+}
+
+.set-return-note-panel span {
+    color: #d83d36;
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.set-return-note-panel strong {
+    font-size: 0.78rem;
+    line-height: 1.35;
+}
+
+.set-return-note-panel p {
+    margin: 0;
+    color: #a3332e;
+    font-size: 0.68rem;
+    line-height: 1.35;
 }

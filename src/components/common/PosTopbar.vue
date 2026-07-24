@@ -141,6 +141,11 @@ import {
     setCurrentMember,
 } from '@/services/pos/memberships.js'
 import MemberFormFields from '@/components/membership/MemberFormFields.vue'
+import {
+    normalizePermissionRole,
+    readActiveAccount,
+    roleHome,
+} from '@/services/pos/permissions.js'
 
 export default {
     name: 'PosTopbar',
@@ -200,8 +205,9 @@ export default {
             window.dispatchEvent(new CustomEvent('pos-sidebar:open'))
         },
         goHome() {
-            if (this.$route.path !== '/pos/start')
-                this.$router.push('/pos/start')
+            const activeAccount = readActiveAccount()
+            const home = roleHome(normalizePermissionRole(activeAccount?.role))
+            if (this.$route.path !== home) this.$router.push(home)
         },
         clearOrderDraft() {
             localStorage.removeItem('posfood_order_draft')

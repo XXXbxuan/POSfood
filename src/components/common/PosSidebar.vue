@@ -39,138 +39,17 @@
                 ><span>Logout</span>
             </button>
         </aside>
-
-        <section v-if="showStaffManagement" class="staff-management-layer">
-            <header class="staff-management-layer-header">
-                <div>
-                    <span>ADMIN MANAGEMENT</span>
-                    <h1>Staff management</h1>
-                </div>
-                <div>
-                    <button type="button" class="staff-add-button" @click="openStaffCreate">
-                        <i class="fa-solid fa-user-plus"></i>Add staff
-                    </button>
-                    <button
-                        type="button"
-                        class="staff-management-close"
-                        aria-label="Close staff management"
-                        @click="closeStaffManagement"
-                    >
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            </header>
-
-            <div class="staff-management-content">
-                <nav class="staff-role-filters">
-                    <button
-                        v-for="role in ['All', ...staffRoles]"
-                        :key="role"
-                        type="button"
-                        :class="{ active: staffRoleFilter === role }"
-                        @click="staffRoleFilter = role"
-                    >
-                        {{ role }}
-                    </button>
-                </nav>
-
-                <section class="staff-list">
-                    <article
-                        v-for="staff in filteredStaffAccounts"
-                        :key="staff.employeeId"
-                    >
-                        <span class="staff-list-avatar">{{ staffInitials(staff.name) }}</span>
-                        <div class="staff-list-identity">
-                            <strong>{{ staff.name }}</strong>
-                            <small>{{ staff.employeeId }}</small>
-                        </div>
-                        <span class="staff-role-badge" :class="staff.role.toLowerCase()">
-                            {{ staff.role }}
-                        </span>
-                        <span class="staff-status" :class="staff.status">
-                            {{ staff.status }}
-                        </span>
-                        <button
-                            type="button"
-                            class="staff-edit-button"
-                            :disabled="!canEditStaff(staff)"
-                            @click="openStaffEdit(staff)"
-                        >
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                    </article>
-                </section>
-            </div>
-
-            <div
-                v-if="showStaffEditor"
-                class="module-modal-backdrop staff-editor-backdrop"
-                @click.self="closeStaffEditor"
-            >
-                <section class="staff-editor-modal" role="dialog" aria-modal="true">
-                    <header>
-                        <div>
-                            <span>STAFF ACCOUNT</span>
-                            <h2>{{ editingStaffId ? 'Edit staff' : 'Add staff' }}</h2>
-                        </div>
-                        <button type="button" aria-label="Close" @click="closeStaffEditor">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </header>
-                    <form @submit.prevent="saveStaffAccount">
-                        <label>
-                            <span>Staff name</span>
-                            <input v-model.trim="staffForm.name" type="text" placeholder="Full name" />
-                        </label>
-                        <label>
-                            <span>Staff ID</span>
-                            <input :value="staffForm.employeeId" type="text" readonly />
-                        </label>
-                        <label>
-                            <span>Role</span>
-                            <select v-model="staffForm.role">
-                                <option v-for="role in availableStaffRoles" :key="role">{{ role }}</option>
-                            </select>
-                        </label>
-                        <label>
-                            <span>Status</span>
-                            <select v-model="staffForm.status">
-                                <option value="active">Active</option>
-                                <option value="disabled">Disabled</option>
-                            </select>
-                        </label>
-                        <label>
-                            <span>Password</span>
-                            <input v-model="staffForm.password" type="password" placeholder="At least 6 characters" />
-                        </label>
-                        <label>
-                            <span>4-digit PIN</span>
-                            <input
-                                v-model="staffForm.pin"
-                                type="password"
-                                inputmode="numeric"
-                                maxlength="4"
-                                placeholder="0000"
-                            />
-                        </label>
-                        <p v-if="staffFormError" class="staff-form-error">{{ staffFormError }}</p>
-                        <footer>
-                            <button type="button" @click="closeStaffEditor">Cancel</button>
-                            <button type="submit">Save staff</button>
-                        </footer>
-                    </form>
-                </section>
-            </div>
-        </section>
     </div>
 </template>
+
 <script>
 import {
-    STAFF_ROLES,
-    loadStaffAccounts,
-    nextEmployeeId,
-    saveStaffAccounts,
-} from '@/services/pos/staff.js'
+    PERMISSIONS,
+    hasPermission,
+    normalizePermissionRole,
+    readActiveAccount,
+    roleHome,
+} from '@/services/pos/permissions.js'
 
 export default {
     name: 'PosSidebar',
@@ -178,97 +57,81 @@ export default {
     data() {
         return {
             isOpen: false,
-            showStaffManagement: false,
-            showStaffEditor: false,
-            editingStaffId: '',
-            staffAccounts: [],
-            staffRoles: STAFF_ROLES,
-            staffRoleFilter: 'All',
-            staffFormError: '',
-            staffForm: {
-                name: '',
-                employeeId: '',
-                role: 'Kitchen',
-                status: 'active',
-                password: '',
-                pin: '',
-            },
             items: [
-                { label: 'Home', icon: 'fa-house', route: '/pos/start' },
+                {
+                    label: 'Home',
+                    icon: 'fa-house',
+                    route: '/pos/start',
+                    permission: PERMISSIONS.VIEW_POS,
+                },
                 {
                     label: 'History',
                     icon: 'fa-clock-rotate-left',
                     route: '/pos/transactions',
+                    permission: PERMISSIONS.VIEW_TRANSACTIONS,
                 },
-                { label: 'Menu', icon: 'fa-utensils', route: '/pos/menu' },
+                {
+                    label: 'Menu',
+                    icon: 'fa-utensils',
+                    route: '/pos/menu',
+                    permission: PERMISSIONS.MANAGE_MENU,
+                },
                 {
                     label: 'Membership',
                     icon: 'fa-address-card',
                     route: '/pos/memberships',
+                    permission: PERMISSIONS.MANAGE_MEMBERS,
                 },
                 {
                     label: 'Vouchers',
                     icon: 'fa-ticket',
                     route: '/pos/vouchers',
+                    permission: PERMISSIONS.MANAGE_VOUCHERS,
                 },
                 {
                     label: 'Reports',
                     icon: 'fa-chart-simple',
                     route: '/pos/reports',
+                    permission: PERMISSIONS.VIEW_REPORTS,
                 },
                 {
                     label: 'Staff',
                     icon: 'fa-users-gear',
-                    action: 'staff',
-                    roles: ['Superadmin', 'Admin'],
+                    route: '/pos/staff',
+                    permission: PERMISSIONS.MANAGE_STAFF,
+                },
+                {
+                    label: 'Kitchen',
+                    icon: 'fa-kitchen-set',
+                    route: '/pos/kitchen',
+                    permission: PERMISSIONS.VIEW_KITCHEN,
                 },
             ],
         }
     },
     computed: {
         activeAccount() {
-            try {
-                return (
-                    JSON.parse(localStorage.getItem('posfood_active_account'))
-                        || {}
-                )
-            } catch (error) {
-                return {}
-            }
+            return readActiveAccount() || {}
         },
         accountName() {
-            return this.activeAccount.name || 'Admin'
+            return this.activeAccount.name || 'Staff'
         },
         accountRole() {
-            if (this.activeAccount.employeeId === 'EMP001') return 'Superadmin'
-            return this.activeAccount.role || 'Kitchen'
+            return normalizePermissionRole(this.activeAccount.role)
         },
         visibleItems() {
-            return this.items.filter(
-                (item) =>
-                    !item.roles || item.roles.includes(this.accountRole),
-            )
-        },
-        availableStaffRoles() {
-            return this.accountRole === 'Superadmin'
-                ? this.staffRoles
-                : ['Kitchen']
-        },
-        filteredStaffAccounts() {
-            return this.staffAccounts.filter(
-                (staff) =>
-                    this.staffRoleFilter === 'All' ||
-                    staff.role === this.staffRoleFilter,
+            return this.items.filter((item) =>
+                hasPermission(this.accountRole, item.permission),
             )
         },
         initials() {
             return (
                 this.accountName
                     .split(' ')
-                    .map((v) => v[0])
+                    .map((value) => value[0])
                     .join('')
                     .slice(0, 2)
-                    .toUpperCase() || 'AT'
+                    .toUpperCase() || 'ST'
             )
         },
     },
@@ -284,104 +147,12 @@ export default {
         },
         goHome() {
             this.isOpen = false
-            if (this.$route.path !== '/pos/start')
-                this.$router.push('/pos/start')
+            const home = roleHome(this.accountRole)
+            if (this.$route.path !== home) this.$router.push(home)
         },
         navigate(item) {
             this.isOpen = false
-            if (item.action === 'staff') {
-                this.openStaffManagement()
-                return
-            }
             if (this.$route.path !== item.route) this.$router.push(item.route)
-        },
-        emptyStaffForm() {
-            return {
-                name: '',
-                employeeId: '',
-                role: 'Kitchen',
-                status: 'active',
-                password: '',
-                pin: '',
-            }
-        },
-        staffInitials(name) {
-            return String(name || '')
-                .split(' ')
-                .map((part) => part[0])
-                .join('')
-                .slice(0, 2)
-                .toUpperCase()
-        },
-        openStaffManagement() {
-            if (!['Superadmin', 'Admin'].includes(this.accountRole)) return
-            this.staffAccounts = loadStaffAccounts()
-            this.staffRoleFilter = 'All'
-            this.showStaffManagement = true
-        },
-        closeStaffManagement() {
-            this.showStaffManagement = false
-            this.closeStaffEditor()
-        },
-        canEditStaff(staff) {
-            return this.accountRole === 'Superadmin' || staff.role === 'Kitchen'
-        },
-        openStaffCreate() {
-            this.editingStaffId = ''
-            this.staffFormError = ''
-            this.staffForm = {
-                ...this.emptyStaffForm(),
-                employeeId: nextEmployeeId(this.staffAccounts),
-                role: this.availableStaffRoles.includes('Kitchen')
-                    ? 'Kitchen'
-                    : this.availableStaffRoles[0],
-            }
-            this.showStaffEditor = true
-        },
-        openStaffEdit(staff) {
-            if (!this.canEditStaff(staff)) return
-            this.editingStaffId = staff.employeeId
-            this.staffFormError = ''
-            this.staffForm = { ...staff }
-            this.showStaffEditor = true
-        },
-        closeStaffEditor() {
-            this.showStaffEditor = false
-            this.editingStaffId = ''
-            this.staffFormError = ''
-        },
-        saveStaffAccount() {
-            if (!this.staffForm.name || !this.staffForm.password || !this.staffForm.pin) {
-                this.staffFormError = 'Please complete every field.'
-                return
-            }
-            if (this.staffForm.password.length < 6) {
-                this.staffFormError = 'Password must contain at least 6 characters.'
-                return
-            }
-            if (!/^\d{4}$/.test(this.staffForm.pin)) {
-                this.staffFormError = 'PIN must be exactly 4 digits.'
-                return
-            }
-            if (!this.availableStaffRoles.includes(this.staffForm.role)) {
-                this.staffFormError = 'You cannot assign this role.'
-                return
-            }
-            const staff = { ...this.staffForm }
-            const accounts = this.editingStaffId
-                ? this.staffAccounts.map((account) =>
-                      account.employeeId === this.editingStaffId
-                          ? staff
-                          : account,
-                  )
-                : [...this.staffAccounts, staff]
-            try {
-                this.staffAccounts = saveStaffAccounts(accounts)
-            } catch (error) {
-                this.staffFormError = 'Unable to save staff account.'
-                return
-            }
-            this.closeStaffEditor()
         },
         lockSession() {
             this.isOpen = false
