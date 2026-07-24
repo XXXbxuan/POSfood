@@ -49,7 +49,7 @@
 .staff-editor-modal > header span,
 .staff-permissions-panel > header span {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
@@ -62,7 +62,7 @@
 .staff-management-header p {
     margin: 0;
     color: #858992;
-    font-size: 0.84rem;
+    font-size: 1.04rem;
 }
 
 .staff-summary-grid {
@@ -88,7 +88,7 @@
     align-items: center;
     gap: 0.55rem;
     color: #858992;
-    font-size: 0.77rem;
+    font-size: 0.97rem;
     font-weight: 800;
 }
 
@@ -238,7 +238,7 @@
 
 .staff-list-identity strong {
     overflow: hidden;
-    font-size: 0.92rem;
+    font-size: 1.12rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -246,13 +246,13 @@
 .staff-list-identity small {
     margin-top: 0.17rem;
     color: #92959d;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .staff-list-identity .staff-last-login {
     margin-top: 0.35rem;
     color: #b0b2b8;
-    font-size: 0.64rem;
+    font-size: 0.84rem;
 }
 
 .staff-role-badge,
@@ -260,7 +260,7 @@
     justify-self: start;
     padding: 0.35rem 0.65rem;
     border-radius: 2rem;
-    font-size: 0.67rem;
+    font-size: 0.87rem;
     font-weight: 900;
     text-transform: capitalize;
 }
@@ -294,7 +294,7 @@
     border-radius: 50%;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.85rem;
+    font-size: 1.05rem;
 }
 
 .staff-empty {
@@ -321,7 +321,7 @@
 }
 
 .staff-empty small {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .staff-editor-backdrop {
@@ -393,7 +393,7 @@
 .staff-account-fields label > span {
     display: block;
     margin-bottom: 0.35rem;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 800;
 }
 
@@ -431,7 +431,7 @@
     border-radius: 0.6rem;
     background: #fff7f0;
     color: #7c6b5d;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     line-height: 1.45;
 }
 
@@ -462,7 +462,7 @@
 
 .staff-permissions-panel > header small {
     color: #92959d;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .staff-permissions-scroll {
@@ -510,14 +510,14 @@
 }
 
 .staff-permission-page strong {
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .staff-permission-page small {
     margin-top: 0.2rem;
     overflow: hidden;
     color: #979aa2;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -526,7 +526,7 @@
     display: block;
     margin-bottom: 0.32rem;
     color: #858992;
-    font-size: 0.61rem;
+    font-size: 0.81rem;
     font-weight: 800;
 }
 
@@ -547,7 +547,7 @@
     border: 0;
     background: #fff;
     color: #8a8d95;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
@@ -577,7 +577,7 @@
     border-top: 1px solid #f5cbc8;
     background: #fff2f1;
     color: #d9433b;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 800;
 }
 
@@ -743,21 +743,21 @@
 }
 
 .staff-permission-open-copy strong {
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .staff-permission-open-copy small {
     margin-top: 0.2rem;
     overflow: hidden;
     color: #92959d;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .staff-permission-open > i {
     color: #fc8019;
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .staff-permissions-backdrop {

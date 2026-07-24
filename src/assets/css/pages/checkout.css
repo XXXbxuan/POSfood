@@ -58,7 +58,7 @@
 
 .checkout-popup-page .payment-drawer-header span {
     color: #fc8019;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -71,7 +71,7 @@
 .checkout-popup-page .payment-drawer-header p {
     margin: 0.25rem 0 0;
     color: #858992;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 800;
 }
 
@@ -101,7 +101,7 @@
     border-radius: 50%;
     background: #fff;
     color: #9699a1;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .checkout-popup-page .payment-member-button.active {
@@ -184,7 +184,7 @@
     grid-column: 1 / -1;
     margin: -0.15rem 0 0;
     color: #d63d35;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 800;
 }
 
@@ -220,7 +220,7 @@
     border-radius: 0.5rem;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .checkout-popup-page .voucher-section-heading div {
@@ -232,12 +232,12 @@
 
 .checkout-popup-page .voucher-section-heading strong {
     color: #20212c;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .checkout-popup-page .voucher-section-heading span {
     color: #9699a1;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
     font-weight: 800;
     text-transform: uppercase;
 }
@@ -254,7 +254,7 @@
 
 .checkout-popup-page .member-voucher-heading span {
     color: #fc8019;
-    font-size: 0.64rem;
+    font-size: 0.84rem;
     font-weight: 900;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -263,7 +263,7 @@
 .checkout-popup-page .member-voucher-heading small {
     overflow: hidden;
     color: #737680;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 800;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -292,7 +292,7 @@
 
 .checkout-popup-page .member-voucher-list button span {
     overflow: hidden;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -300,12 +300,12 @@
 
 .checkout-popup-page .member-voucher-list button strong {
     color: #fc8019;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .checkout-popup-page .member-voucher-list button i {
     color: transparent;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .checkout-popup-page .member-voucher-list button.active {
@@ -324,7 +324,7 @@
     border: 1px dashed #d9dade;
     border-radius: 0.55rem;
     color: #858992;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     text-align: center;
 }
 
@@ -345,8 +345,8 @@
 }
 
 .checkout-popup-page .checkout-voucher-list-trigger span { display: grid; gap: 0.15rem; }
-.checkout-popup-page .checkout-voucher-list-trigger strong { font-size: 0.76rem; }
-.checkout-popup-page .checkout-voucher-list-trigger small { color: #858992; font-size: 0.64rem; }
+.checkout-popup-page .checkout-voucher-list-trigger strong { font-size: 0.96rem; }
+.checkout-popup-page .checkout-voucher-list-trigger small { color: #858992; font-size: 0.84rem; }
 .checkout-popup-page .checkout-voucher-list-trigger > i { color: #fc8019; }
 
 .checkout-voucher-option { position: relative; }
@@ -359,7 +359,7 @@
     padding-top: 0.5rem;
     border-top: 1px solid #d8dade;
     color: #d83b36;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 800;
 }
 
@@ -416,7 +416,7 @@
     min-height: 2.8rem;
     padding: 0 0.8rem;
     border-radius: 0.5rem;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
@@ -460,18 +460,18 @@
 
 .checkout-popup-page .applied-voucher-row span {
     color: #fc8019;
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     font-weight: 900;
 }
 
 .checkout-popup-page .applied-voucher-row strong {
     margin-top: 0.1rem;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .checkout-popup-page .applied-voucher-row b {
     color: #fc8019;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .checkout-popup-page .applied-voucher-row button {
@@ -486,7 +486,7 @@
 .checkout-popup-page .voucher-validation-error {
     margin: 0.45rem 0 0;
     color: #c43e34;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
 }
 
@@ -531,7 +531,7 @@
 .checkout-member-change-modal p {
     margin: 0.35rem 0 0;
     color: #777b84;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .checkout-member-change-modal footer {
@@ -587,7 +587,7 @@
 
 .checkout-member-picker-modal > header span {
     color: #fc8019;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -645,7 +645,7 @@
     border: 0;
     background: transparent;
     color: #fc8019;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -665,7 +665,7 @@
 
 .checkout-member-register-form label {
     color: #42444d;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -692,7 +692,7 @@
 .checkout-member-register-form > p {
     margin: 0;
     color: #d63d35;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
@@ -745,7 +745,7 @@
     border-radius: 50%;
     background: #fc8019;
     color: #fff;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -758,7 +758,7 @@
 
 .checkout-member-results > button strong {
     overflow: hidden;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -766,12 +766,12 @@
 .checkout-member-results > button small {
     margin-top: 0.15rem;
     color: #8b8e97;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
 }
 
 .checkout-member-results > button b {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .checkout-member-results > p {
@@ -780,7 +780,7 @@
     border: 1px dashed #dedfe2;
     border-radius: 0.65rem;
     color: #858992;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     text-align: center;
 }
 
@@ -833,7 +833,7 @@
 .checkout-popup-page .cash-entry-row label,
 .checkout-popup-page .bank-fields label {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -863,7 +863,7 @@
 
 .checkout-popup-page .change-card span {
     color: #777b84;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
 }
 
@@ -894,7 +894,7 @@
 
 .checkout-popup-page .quick-cash-grid button small {
     color: #9699a1;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .checkout-popup-page .quick-cash-grid button strong {
@@ -912,7 +912,7 @@
 .checkout-popup-page .cash-help {
     margin: 0.8rem 0 0;
     color: #8d9098;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     text-align: center;
 }
 
@@ -974,7 +974,7 @@
 }
 
 .checkout-popup-page .wallet-provider-grid button strong {
-    font-size: 0.76rem;
+    font-size: 0.96rem;
 }
 
 .checkout-popup-page .wallet-provider-grid button.active {
@@ -995,7 +995,7 @@
     border-radius: 50%;
     background: #fff;
     color: transparent;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
 }
 
 .checkout-popup-page .wallet-provider-grid button.active .wallet-tick {
@@ -1044,7 +1044,7 @@
     border-radius: 0.25rem;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     font-weight: 900;
 }
 
@@ -1061,7 +1061,7 @@
     flex: 0 0 auto;
     margin: 0.55rem 0 0;
     color: #c43e34;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -1132,7 +1132,7 @@
 
 .checkout-popup-page .confirm-payment p {
     color: #92949b;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     line-height: 1.55;
 }
 
@@ -1140,7 +1140,7 @@
     display: block;
     margin-top: 0.5rem;
     color: #fc8019;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 800;
 }
 
@@ -1194,7 +1194,7 @@
 .checkout-popup-page .payment-success-card p {
     margin: 0.35rem 0;
     color: #838790;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
     line-height: 1.55;
 }
 
@@ -1294,7 +1294,7 @@
 
 .checkout-popup-page .receipt-popup > header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }

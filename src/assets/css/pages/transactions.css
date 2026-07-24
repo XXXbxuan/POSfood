@@ -47,7 +47,7 @@
 
 .transactions-page .topbar > div span {
     color: #92949b;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
 }
 
 .transactions-page .sidebar {
@@ -64,7 +64,7 @@
     border-radius: 0.65rem;
     background: #fff;
     color: #92949b;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
 }
 
@@ -120,11 +120,11 @@
 .transactions-page .page-title p {
     margin: 0;
     color: #92949b;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .transactions-page .page-title > div > span {
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -202,19 +202,19 @@
 
 .transactions-page .transaction-copy span {
     color: #fc8019;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
 .transactions-page .transaction-copy h3 {
     margin: 0.12rem 0;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .transactions-page .transaction-copy small,
 .transactions-page .item-preview span {
     color: #92949b;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
 }
 
 .transactions-page .item-preview span {
@@ -226,7 +226,7 @@
 }
 
 .transactions-page .item-preview strong {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .transactions-page .transaction-end {
@@ -239,7 +239,7 @@
 .transactions-page .status {
     padding: 0.3rem 0.55rem;
     border-radius: 2rem;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
 }
 
@@ -315,7 +315,7 @@
 
 .transactions-page .modal-header span {
     color: #fc8019;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
@@ -350,14 +350,14 @@
 
 .transactions-page .product-details h3 {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: 1.05rem;
 }
 
 .transactions-page .product-details p,
 .transactions-page .product-details small {
     margin: 0.2rem 0 0;
     color: #92949b;
-    font-size: 0.67rem;
+    font-size: 0.87rem;
 }
 
 .transactions-page .product-details small {
@@ -390,7 +390,7 @@
     justify-content: space-between;
     padding: 0.55rem 0;
     border-bottom: 1px dashed #ddd;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .transactions-page .receipt-line span {
@@ -576,7 +576,7 @@
 .transactions-page .transaction-cancel-modal p {
     margin: 0 0 1.2rem;
     color: #92949b;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
 }
 
 .transactions-page .transaction-cancel-modal footer {
@@ -738,7 +738,7 @@
 
 .transactions-page .transaction-pagination span {
     color: #92949b;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .transactions-page .transaction-pagination strong {
@@ -1150,13 +1150,13 @@
 
 .transactions-page .history-payment-group > header span {
     color: #7557c5;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
 .transactions-page .history-payment-group > header strong {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .transactions-page .history-payment-group article {
@@ -1209,7 +1209,7 @@
     gap: 0.35rem;
     margin-right: 0.15rem;
     color: #777c85;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 800;
     white-space: nowrap;
 }
@@ -1315,12 +1315,12 @@
 
 .transactions-page .history-order-summary span {
     color: #8e929a;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
     font-weight: 800;
 }
 
 .transactions-page .history-order-summary strong {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     white-space: nowrap;
 }
 
@@ -1331,7 +1331,7 @@
 
 .transactions-page .history-order-summary > div:first-child strong {
     color: #fc8019;
-    font-size: 0.84rem;
+    font-size: 1.04rem;
 }
 
 @media (max-width: 43.75em) {
@@ -1345,7 +1345,7 @@
 
     .transactions-page .checkout-time {
         max-width: 6.4rem;
-        font-size: 0.58rem;
+        font-size: 0.78rem;
     }
 
     .transactions-page .receipt-arrow,
@@ -1372,7 +1372,7 @@
     top: 2.6rem;
     left: 1.35rem;
     margin: 0;
-    font-size: 0.74rem;
+    font-size: 0.94rem;
 }
 
 .transactions-page .product-details {
@@ -1404,6 +1404,6 @@
         top: 1.45rem;
         left: 1rem;
         max-width: 8rem;
-        font-size: 0.64rem;
+        font-size: 0.84rem;
     }
 }

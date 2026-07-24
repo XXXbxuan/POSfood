@@ -50,12 +50,12 @@
 }
 
 .dashboard-page .dashboard-top-title strong {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .dashboard-page .dashboard-top-title span {
     color: #9699a1;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .dashboard-page .dashboard-workspace {
@@ -76,7 +76,7 @@
 .dashboard-page .order-action-modal header span,
 .dashboard-page .split-order-modal header span {
     color: #fc8019;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
@@ -90,7 +90,7 @@
 .dashboard-page .split-order-modal header p {
     margin: 0;
     color: #92959e;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .dashboard-page .compact-heading > strong {
@@ -98,7 +98,7 @@
     border-radius: 2rem;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .dashboard-page .service-switcher {
@@ -151,13 +151,13 @@
 }
 
 .dashboard-page .service-label strong {
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .dashboard-page .service-label span {
     justify-self: end;
     color: #9a9da5;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .service-option.active {
@@ -205,7 +205,7 @@
 .dashboard-page .service-content-heading p {
     margin: 0.15rem 0 0;
     color: #9699a1;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
 }
 
 .dashboard-page .table-legend {
@@ -213,7 +213,7 @@
     align-items: center;
     gap: 1rem;
     color: #858992;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .table-legend span {
@@ -256,7 +256,7 @@
     border-radius: 0.5rem;
     background: #fc8019;
     color: #fff;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
 }
 
@@ -305,7 +305,7 @@
 
 .dashboard-page .simple-order-copy small {
     color: #a0a2a9;
-    font-size: 0.56rem;
+    font-size: 0.76rem;
     font-weight: 900;
 }
 
@@ -320,7 +320,7 @@
     border-radius: 0.28rem;
     background: #f2efff;
     color: #7557c5;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
     font-weight: 900;
 }
 
@@ -335,13 +335,13 @@
 
 .dashboard-page .simple-order-meta span {
     color: #9598a0;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .simple-order-meta strong {
     margin-top: 0.35rem;
     color: #fc8019;
-    font-size: 0.85rem;
+    font-size: 1.05rem;
 }
 
 .dashboard-page .simple-takeaway-card > i {
@@ -376,7 +376,7 @@
 .dashboard-page .empty-dashboard p {
     margin: 0;
     color: #9699a1;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .dashboard-page .empty-dashboard button {
@@ -447,7 +447,7 @@
     border-radius: 0.3rem;
     background: #f2efff;
     color: #7557c5;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .action-order-items {
@@ -480,17 +480,17 @@
 .dashboard-page .action-order-items span {
     margin-top: 0.15rem;
     color: #999ca4;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
 }
 
 .dashboard-page .action-order-items b {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .dashboard-page .action-order-items em {
     min-width: 4.7rem;
     color: #fc8019;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-style: normal;
     font-weight: 900;
     text-align: right;
@@ -506,7 +506,7 @@
 }
 
 .dashboard-page .action-total span {
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     font-weight: 800;
 }
 
@@ -626,14 +626,14 @@
 
 .dashboard-page .split-choice-list b {
     color: #fc8019;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .dashboard-page .split-error {
     margin: 0;
     padding: 0 1.25rem;
     color: #ef4444;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .dashboard-page .split-order-modal > footer {
@@ -652,7 +652,7 @@
 
 .dashboard-page .split-order-modal > footer span {
     color: #9699a1;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .split-order-modal > footer button {
@@ -756,7 +756,7 @@
 
 .dashboard-page .table-bill-modal > header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
 }
 
@@ -792,12 +792,12 @@
 .dashboard-page .table-bill-modal > button span {
     margin-top: 0.15rem;
     color: #9699a1;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
 }
 
 .dashboard-page .table-bill-modal > button b {
     color: #fc8019;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .dashboard-page .dashboard-tabs {
@@ -818,7 +818,7 @@
     border-radius: 0.48rem;
     background: transparent;
     color: #7f838c;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -864,7 +864,7 @@
 .dashboard-page .lane-title h3,
 .dashboard-page .list-view-heading h3 {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .dashboard-page .lane-title span,
@@ -872,7 +872,7 @@
     display: block;
     margin: 0.08rem 0 0;
     color: #9699a1;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
 }
 
 .dashboard-page .lane-actions {
@@ -897,7 +897,7 @@
     border-radius: 0.45rem;
     background: #fc8019;
     color: #fff;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
@@ -960,12 +960,12 @@
 
 .dashboard-page .simple-order-location small {
     color: #9a9da5;
-    font-size: 0.52rem;
+    font-size: 0.72rem;
 }
 
 .dashboard-page .simple-order-location strong {
     margin-top: 0.15rem;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .dashboard-page .simple-order-card > .fa-chevron-right {
@@ -1027,7 +1027,7 @@
 
 .dashboard-page .takeaway-list > button > span {
     color: #8e929a;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .dashboard-page .takeaway-list > button > strong {
@@ -1047,7 +1047,7 @@
     display: flex;
     gap: 0.8rem;
     color: #858992;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .table-legend span {
@@ -1182,7 +1182,7 @@
 }
 
 .dashboard-page .simple-order-copy h3 {
-    font-size: 0.92rem;
+    font-size: 1.12rem;
 }
 
 .dashboard-page .simple-order-location strong {
@@ -1197,11 +1197,11 @@
 .dashboard-page .simple-order-meta span,
 .dashboard-page .simple-order-copy small,
 .dashboard-page .simple-order-location small {
-    font-size: 0.52rem;
+    font-size: 0.72rem;
 }
 
 .dashboard-page .simple-order-copy span {
-    font-size: 0.56rem;
+    font-size: 0.76rem;
 }
 
 .dashboard-page .split-drawer-layer {
@@ -1236,7 +1236,7 @@
 
 .dashboard-page .split-bills-drawer > header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.07em;
 }
@@ -1287,13 +1287,13 @@
     border-radius: 0.3rem;
     background: #f2efff;
     color: #7557c5;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
 }
 
 .dashboard-page .split-bill-box > header strong {
     color: #8d9098;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .split-bill-box > header > b {
@@ -1323,22 +1323,22 @@
 }
 
 .dashboard-page .split-bill-box > article strong {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .dashboard-page .split-bill-box > article small {
     margin-top: 0.1rem;
     color: #999ca4;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .dashboard-page .split-bill-box > article span {
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .split-bill-box > article > b {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .dashboard-page .split-bill-box > footer {
@@ -1470,7 +1470,7 @@
     justify-content: center;
     background: #7d858f;
     color: #fff;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.04em;
 }
@@ -1495,7 +1495,7 @@
     border-radius: 0.28rem;
     background: #f2efff;
     color: #7557c5;
-    font-size: 0.56rem;
+    font-size: 0.76rem;
     font-weight: 900;
 }
 
@@ -1548,7 +1548,7 @@
     border-radius: 0.48rem;
     background: transparent;
     color: #7f838c;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -1587,7 +1587,7 @@
     border-bottom: 1px solid #ececee;
     background: #fffaf6;
     color: #737780;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 700;
 }
 
@@ -1618,7 +1618,7 @@
 
 .dashboard-page .table-picker-modal > header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -1643,7 +1643,7 @@
     border-radius: 0.6rem;
     background: #fff8f1;
     color: #fc8019;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
 }
 
@@ -1743,20 +1743,20 @@
     border-radius: 0.28rem;
     background: #f2efff;
     color: #7557c5;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 900;
 }
 
 .dashboard-page .takeaway-list-card > div strong {
     color: #858992;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .takeaway-list-card p {
     overflow: hidden;
     margin: 0;
     color: #777b84;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1837,7 +1837,7 @@
     border-radius: 0.45rem;
     background: #f3f3f4;
     color: #747881;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     white-space: nowrap;
 }
@@ -1902,13 +1902,13 @@
 }
 
 .dashboard-page .inline-split-items strong {
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .dashboard-page .inline-split-items small {
     margin-top: 0.15rem;
     color: #979aa2;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .dashboard-page .inline-split-items b {
@@ -2040,14 +2040,14 @@
     border: 0;
     background: transparent;
     color: #59606b;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 900;
     cursor: pointer;
 }
 
 .dashboard-page .split-selection-group > header strong {
     color: #8a8e96;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .dashboard-page .split-group-check {
@@ -2182,7 +2182,7 @@
     border-top: 1px solid #f0f0f1;
     background: #fffaf6;
     color: #737780;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 700;
 }
 
@@ -2249,7 +2249,7 @@
 
 .dashboard-page .table-admin-panel > header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -2297,13 +2297,13 @@
 }
 
 .dashboard-page .table-admin-actions strong {
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .dashboard-page .table-admin-actions small {
     margin-top: 0.15rem;
     color: #8d9199;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .table-admin-actions > button > i:last-child {
@@ -2324,7 +2324,7 @@
     border: 0;
     background: transparent;
     color: #727781;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
 }
 
@@ -2332,7 +2332,7 @@
     display: block;
     margin-bottom: 0.8rem;
     color: #5c6068;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -2353,7 +2353,7 @@
 .dashboard-page .table-admin-error {
     margin: 0.25rem 0 0.75rem;
     color: #df3d3d;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
 }
 
@@ -2383,7 +2383,7 @@
 .dashboard-page .table-admin-choose > p {
     margin: 0 0 0.7rem;
     color: #777b84;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .dashboard-page .manage-table-list {
@@ -2417,13 +2417,13 @@
 }
 
 .dashboard-page .manage-table-list strong {
-    font-size: 0.85rem;
+    font-size: 1.05rem;
 }
 
 .dashboard-page .manage-table-list small {
     margin-top: 0.12rem;
     color: #8f939b;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .dashboard-page .manage-table-list i {
@@ -2440,7 +2440,7 @@
 .dashboard-page .table-admin-confirm p {
     margin: 0.05rem 0 0.65rem;
     color: #555a62;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
 }
 
@@ -2457,7 +2457,7 @@
     background: #171826;
     color: #fff;
     box-shadow: 0 0.8rem 2rem rgba(23, 24, 38, 0.22);
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 800;
 }
 
@@ -2579,11 +2579,11 @@
     flex: 0 0 2.1rem;
     width: 2.1rem;
     height: 2.1rem;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .dashboard-page .table-workspace-modal .table-admin-actions > button > strong {
-    font-size: 0.73rem;
+    font-size: 0.93rem;
 }
 
 .dashboard-page .table-workspace-modal.management-select-mode {
@@ -2658,7 +2658,7 @@
 .dashboard-page .table-confirm-modal p {
     margin: 0.5rem 0 1.15rem;
     color: #7d818a;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .dashboard-page .table-confirm-modal footer {
@@ -2688,7 +2688,7 @@
     border-color: #fc8019;
     background: #fff8f1;
     color: #fc8019;
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .dashboard-page .table-confirm-modal footer .seat-choice-button:hover {
@@ -2746,7 +2746,7 @@
     border-radius: 0.55rem;
     background: #fff;
     color: #fc8019;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -2774,7 +2774,7 @@
     align-items: center;
     gap: 0.32rem;
     color: #7f848d;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 800;
 }
 
@@ -2801,7 +2801,7 @@
 
 .dashboard-page .table-action-menu > header span {
     color: #fc8019;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 0.07em;
 }
@@ -2869,7 +2869,7 @@
 
 .dashboard-page .dine-zoom-modal > header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -2883,7 +2883,7 @@
     display: block;
     margin-top: 0.18rem;
     color: #8e929a;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .dashboard-page .dine-zoom-grid {
@@ -2959,7 +2959,7 @@
 /* Stronger price hierarchy inside the order action popup. */
 
 .dashboard-page .action-order-items article em {
-    font-size: 0.86rem;
+    font-size: 1.06rem;
 }
 
 .dashboard-page .action-total {
@@ -2971,7 +2971,7 @@
 }
 
 .dashboard-page .action-total span {
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .dashboard-page .action-total strong {
@@ -3024,7 +3024,7 @@
     grid-column: 2 / -1;
     margin: -0.2rem 0 0;
     color: #a13732;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 700;
 }
 
@@ -3083,7 +3083,7 @@
         flex-basis: 1.75rem;
         width: 1.75rem;
         height: 1.9rem;
-        font-size: 0.78rem;
+        font-size: 0.98rem;
     }
 
     .dashboard-page
@@ -3092,7 +3092,7 @@
         > button
         > strong {
         min-width: 0;
-        font-size: 0.65rem;
+        font-size: 0.85rem;
         white-space: nowrap;
     }
 
@@ -3118,7 +3118,7 @@
         height: 2.15rem;
         min-width: 5rem;
         padding: 0 0.6rem;
-        font-size: 0.64rem;
+        font-size: 0.84rem;
     }
 
     .dashboard-page .dashboard-workspace .lane-row-shell {
@@ -3140,13 +3140,13 @@
 
     .dashboard-page .dashboard-workspace .card-order-number {
         height: 1.4rem;
-        font-size: 0.86rem;
+        font-size: 1.06rem;
     }
 
     .dashboard-page .dashboard-workspace .card-split-label {
         top: 1.55rem;
         left: 0.6rem;
-        font-size: 0.52rem;
+        font-size: 0.72rem;
     }
 
     .dashboard-page .dashboard-workspace .dine-lane .card-table-number {
@@ -3161,7 +3161,7 @@
     .dashboard-page .dashboard-workspace .card-updated-time {
         left: 0.75rem;
         bottom: 0.5rem;
-        font-size: 0.75rem;
+        font-size: 0.95rem;
     }
 
     .dashboard-page
@@ -3228,7 +3228,7 @@
 
     .dashboard-page .lane-left-tools i,
     .dashboard-page .lane-order-action i {
-        font-size: 0.78rem;
+        font-size: 0.98rem;
     }
 
     .dashboard-page .dine-zoom-grid {
@@ -3264,7 +3264,7 @@
     border-radius: 50%;
     background: #d9433b;
     color: #fff;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
     font-weight: 900;
 }
 
@@ -3296,7 +3296,7 @@
 
 .dashboard-page .cashier-notification-panel header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
@@ -3321,7 +3321,7 @@
     gap: 0.5rem;
     padding: 3rem 1rem;
     color: #92959d;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .dashboard-page .cashier-notification-panel .empty i {
@@ -3355,21 +3355,21 @@
 
 .dashboard-page .cashier-notification-panel article span {
     color: #d9433b;
-    font-size: 0.61rem;
+    font-size: 0.81rem;
     font-weight: 900;
     text-transform: uppercase;
 }
 
 .dashboard-page .cashier-notification-panel article strong {
     margin-top: 0.2rem;
-    font-size: 0.74rem;
+    font-size: 0.94rem;
 }
 
 .dashboard-page .cashier-notification-panel article p,
 .dashboard-page .cashier-notification-panel article small {
     margin: 0.25rem 0 0;
     color: #777b84;
-    font-size: 0.67rem;
+    font-size: 0.87rem;
 }
 
 .dashboard-page .cashier-notification-panel article button {
@@ -3379,6 +3379,6 @@
     border-radius: 0.5rem;
     background: #fff;
     color: #fc8019;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 900;
 }

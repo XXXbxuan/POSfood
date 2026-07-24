@@ -37,7 +37,7 @@
 .set-meal-dish-list > header small {
     margin-top: 0.2rem;
     color: #858894;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
 }
 
 .set-meal-dish-list > button {
@@ -92,7 +92,7 @@
     margin-top: 0.25rem;
     overflow: hidden;
     color: #858894;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -123,7 +123,7 @@
 
 .set-meal-dish-options > header span {
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
 }
 
@@ -150,7 +150,7 @@
 .set-option-group > strong {
     width: 100%;
     margin-bottom: 0.1rem;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .set-option-group > button {
@@ -174,7 +174,7 @@
 
 .set-option-group button small {
     color: #fc8019;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
 }
 
@@ -182,7 +182,7 @@
     display: grid;
     gap: 0.45rem;
     padding-top: 0.8rem;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -229,7 +229,7 @@
     border-radius: 999px;
     background: #fee1de;
     color: #d83d36;
-    font-size: 0.56rem;
+    font-size: 0.76rem;
     font-style: normal;
     font-weight: 900;
     letter-spacing: 0.03em;
@@ -251,20 +251,20 @@
 
 .set-return-note-panel span {
     color: #d83d36;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
 .set-return-note-panel strong {
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     line-height: 1.35;
 }
 
 .set-return-note-panel p {
     margin: 0;
     color: #a3332e;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     line-height: 1.35;
 }

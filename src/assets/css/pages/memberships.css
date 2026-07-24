@@ -25,7 +25,7 @@
 .module-editor-modal > header span,
 .member-profile-title > div > span {
     color: var(--pos-color-accent);
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
     letter-spacing: 0.07em;
 }
@@ -51,7 +51,7 @@
 .module-heading p {
     margin: 0.2rem 0 0;
     color: var(--pos-color-muted);
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .module-search {
@@ -137,7 +137,7 @@
 
 .member-summary-grid span {
     color: var(--pos-color-muted);
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .member-summary-grid strong {
@@ -182,7 +182,7 @@
     border-radius: 0.48rem;
     background: transparent;
     color: var(--pos-color-muted);
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -231,7 +231,7 @@
     border-radius: 50%;
     background: var(--pos-color-accent);
     color: #fff;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -239,7 +239,7 @@
     width: 3.45rem;
     height: 3.45rem;
     flex-basis: 3.45rem;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .member-list-copy {
@@ -256,20 +256,20 @@
     margin-top: 0.18rem;
     overflow: hidden;
     color: var(--pos-color-muted);
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .member-points {
     color: var(--pos-color-accent);
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
 }
 
 .member-list-row > i {
     color: #b1b3b8;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .module-empty-state,
@@ -292,7 +292,7 @@
 
 .module-empty-state small,
 .empty-detail small {
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .member-detail-card {
@@ -331,7 +331,7 @@
 
 .member-profile-points span {
     color: var(--pos-color-accent);
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -375,7 +375,7 @@
 
 .member-profile-title small {
     color: var(--pos-color-muted);
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .module-icon-button {
@@ -422,7 +422,7 @@
 
 .member-order-summary span {
     color: var(--pos-color-muted);
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .member-order-summary strong {
@@ -464,7 +464,7 @@
 
 .member-voucher-summary span {
     color: var(--pos-color-muted);
-    font-size: 0.84rem;
+    font-size: 1.04rem;
 }
 
 .member-voucher-summary strong {
@@ -492,7 +492,7 @@
 
 .member-detail-stats span {
     color: var(--pos-color-muted);
-    font-size: 0.84rem;
+    font-size: 1.04rem;
 }
 
 .member-detail-stats strong {
@@ -529,12 +529,12 @@
     align-items: center;
     gap: 0.4rem;
     color: var(--pos-color-muted);
-    font-size: 0.86rem;
+    font-size: 1.06rem;
 }
 
 .member-contact-grid dt i {
     color: var(--pos-color-accent);
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .member-contact-grid dd {
@@ -559,7 +559,7 @@
 }
 
 .member-owned-vouchers > header strong {
-    font-size: 0.92rem;
+    font-size: 1.12rem;
 }
 
 .member-owned-vouchers > header span {
@@ -568,7 +568,7 @@
     border-radius: 1rem;
     background: var(--pos-color-accent-soft);
     color: var(--pos-color-accent);
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
     text-align: center;
 }
@@ -602,20 +602,20 @@
 
 .member-owned-vouchers button strong {
     overflow: hidden;
-    font-size: 0.85rem;
+    font-size: 1.05rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .member-owned-vouchers button b {
     color: var(--pos-color-accent);
-    font-size: 0.86rem;
+    font-size: 1.06rem;
     white-space: nowrap;
 }
 
 .member-owned-vouchers > small {
     color: var(--pos-color-muted);
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .member-history-section {
@@ -638,7 +638,7 @@
     border-radius: 1rem;
     background: var(--pos-color-accent-soft);
     color: var(--pos-color-accent);
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     text-align: center;
 }
 
@@ -661,7 +661,7 @@
 .member-history-empty {
     margin-top: 0.15rem;
     color: var(--pos-color-muted);
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .member-orders-modal {
@@ -685,7 +685,7 @@
 
 .member-orders-modal > header span {
     color: var(--pos-color-accent);
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -731,7 +731,7 @@
 .member-orders-list small {
     margin-top: 0.15rem;
     color: var(--pos-color-muted);
-    font-size: 0.65rem;
+    font-size: 0.85rem;
 }
 
 .member-orders-list b {
@@ -802,7 +802,7 @@
 
 .member-voucher-list-modal > header span {
     color: var(--pos-color-accent);
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
@@ -855,8 +855,8 @@
 .member-voucher-detail-list > button > strong { font-size: 1rem; }
 .member-voucher-detail-list span small,
 .member-voucher-detail-list span b { display: block; }
-.member-voucher-detail-list span small { color: var(--pos-color-muted); font-size: 0.66rem; }
-.member-voucher-detail-list span b { margin-top: 0.2rem; font-size: 0.76rem; }
+.member-voucher-detail-list span small { color: var(--pos-color-muted); font-size: 0.86rem; }
+.member-voucher-detail-list span b { margin-top: 0.2rem; font-size: 0.96rem; }
 .member-voucher-detail-list em { color: var(--pos-color-accent); font-style: normal; font-weight: 900; }
 .member-voucher-detail-list > button > i { color: var(--pos-color-accent); }
 .member-voucher-detail-list > p { margin: 2rem 0; color: var(--pos-color-muted); text-align: center; }
@@ -896,7 +896,7 @@
 .member-status-confirm-modal p {
     margin: 0;
     color: var(--pos-color-muted);
-    font-size: 0.85rem;
+    font-size: 1.05rem;
 }
 
 .member-status-confirm-modal footer {
@@ -941,18 +941,18 @@
 }
 
 .member-editor-modal .module-form-grid label {
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .member-editor-modal .module-form-grid input,
 .member-editor-modal .module-form-grid select {
     height: 3.5rem;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .member-editor-modal .module-form-grid textarea {
     min-height: 6.5rem;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .module-editor-modal > header {
@@ -995,7 +995,7 @@
 .module-form-grid label {
     display: block;
     color: #42444d;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
 }
 
@@ -1044,7 +1044,7 @@
 .module-form-error {
     margin: 0 1.2rem 0.8rem;
     color: var(--pos-color-danger);
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 

@@ -28,7 +28,7 @@
     border-radius: 0.5rem;
     background: transparent;
     color: var(--pos-color-muted);
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
     white-space: nowrap;
 }
@@ -39,7 +39,7 @@
     border-radius: 1rem;
     background: #f0f0f1;
     color: #7f828a;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .voucher-filter-bar button.active {
@@ -158,7 +158,7 @@
     border-radius: 1rem;
     background: #eaf8ed;
     color: var(--pos-color-success);
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
 }
 
@@ -214,12 +214,12 @@
 
 .voucher-card dt {
     color: var(--pos-color-muted);
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .voucher-card dd {
     margin: 0;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
     font-weight: 900;
     text-align: right;
 }
@@ -256,7 +256,7 @@
     border-radius: 0.3rem;
     background: var(--pos-color-accent-soft);
     color: var(--pos-color-accent);
-    font-size: 0.64rem;
+    font-size: 0.84rem;
     font-weight: 900;
     white-space: nowrap;
 }
@@ -269,7 +269,7 @@
     padding-top: 0.8rem;
     border-top: 1px solid var(--pos-color-border);
     color: var(--pos-color-muted);
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .voucher-card > footer i {
@@ -281,7 +281,7 @@
     align-items: center;
     gap: 0.3rem;
     color: #171826;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
@@ -290,13 +290,13 @@
     align-items: center;
     gap: 0.3rem;
     color: #171826;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
 .voucher-usage-stat > span {
     color: #171826;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
@@ -315,7 +315,7 @@
     background: #effaf2;
     box-shadow: 0 0.75rem 2rem rgba(23, 24, 38, 0.16);
     color: #15803d;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
 }
 
@@ -354,14 +354,14 @@
 .voucher-empty-state p {
     margin: 0 0 1rem;
     color: var(--pos-color-muted);
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .module-form-grid label > small {
     display: block;
     margin-top: 0.3rem;
     color: var(--pos-color-muted);
-    font-size: 0.56rem;
+    font-size: 0.76rem;
     font-weight: 400;
 }
 
@@ -385,7 +385,7 @@
     border-radius: 0.5rem;
     background: #fff;
     color: #737680;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
 }
 
@@ -422,13 +422,13 @@
 }
 
 .voucher-switch-row strong {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .voucher-switch-row small {
     margin-top: 0.15rem;
     color: var(--pos-color-muted);
-    font-size: 0.6rem;
+    font-size: 0.8rem;
 }
 
 @media (max-width: 62em) {

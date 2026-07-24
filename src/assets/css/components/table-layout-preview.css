@@ -33,7 +33,7 @@
     border-radius: 0.65rem;
     background: #fff;
     color: #fc8019;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     box-shadow: 0 0.3rem 0.9rem rgba(23, 24, 38, 0.12);
 }
 
@@ -211,7 +211,7 @@
 }
 
 .inline-layout-empty strong {
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 @media print {

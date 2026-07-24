@@ -23,7 +23,7 @@
 
 .qr-zoom-backdrop .qr-zoom-modal > span {
     color: #fc8019;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -62,19 +62,19 @@
     border-radius: 0.3rem;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 900;
 }
 
 .qr-zoom-backdrop .qr-zoom-modal > strong {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .qr-zoom-backdrop .qr-zoom-modal p {
     margin: 0.3rem 0 0;
     color: #92949b;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .qr-zoom-backdrop .qr-zoom-close {

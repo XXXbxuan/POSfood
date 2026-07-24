@@ -91,7 +91,7 @@
     outline: 0;
     background: transparent;
     color: #171826;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .order-page .empty-cart {
@@ -129,19 +129,19 @@
 
 .order-page .order-identity span {
     color: #92949b;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 800;
 }
 
 .order-page .order-identity strong {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .order-page .order-type {
     flex: 1;
     overflow: hidden;
     color: #171826;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     text-align: right;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -159,7 +159,7 @@
     border-bottom: 1px solid transparent;
     background: transparent;
     color: #171826;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
     transition:
         color 0.18s ease,
@@ -206,7 +206,7 @@
 }
 
 .order-page .order-switcher strong {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     text-align: center;
     white-space: nowrap;
 }
@@ -306,7 +306,7 @@
 .order-page .guest-popover > span {
     display: block;
     margin-bottom: 0.65rem;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
@@ -333,7 +333,7 @@
 }
 
 .order-page .note-popover label {
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     font-weight: 900;
 }
 
@@ -410,7 +410,7 @@
     border: 0;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -452,7 +452,7 @@
 
 .order-page .cart-line h3 {
     margin: 0;
-    font-size: 0.86rem;
+    font-size: 1.06rem;
     line-height: 1.2;
 }
 
@@ -472,7 +472,7 @@
     display: block;
     margin-top: 0.25rem;
     color: #fc8019;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
 }
 
 .order-page .cart-item-end {
@@ -484,7 +484,7 @@
     display: block;
     margin-bottom: 0.2rem;
     color: #92949b;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
 }
 
@@ -520,11 +520,11 @@
 .order-page .cart-line p {
     margin: 0.18rem 0 0;
     color: #92949b;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .order-page .cart-line b {
-    font-size: 0.86rem;
+    font-size: 1.06rem;
 }
 
 .order-page .summary-toggle {
@@ -548,7 +548,7 @@
 }
 
 .order-page .summary-toggle .payable span {
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 700;
 }
 
@@ -574,7 +574,7 @@
     justify-content: space-between;
     margin-bottom: 0.45rem;
     color: #92949b;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 800;
 }
 
@@ -586,7 +586,7 @@
     border-radius: 0.45rem;
     background: #fff2e8;
     color: #8c4b10;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .order-page .order-note-preview span {
@@ -635,7 +635,7 @@
 .order-page .order-submit-error {
     margin: 0;
     color: #dc3c32;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
     line-height: 1.35;
     text-align: center;
@@ -750,7 +750,7 @@
     border-radius: 2rem;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .order-page .detail-price strong {
@@ -814,7 +814,7 @@
 .order-page .detail-note > span {
     display: block;
     margin-bottom: 0.55rem;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
@@ -874,7 +874,7 @@
 .order-page .detail-checks > span {
     display: block;
     margin-bottom: 0.55rem;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
@@ -883,7 +883,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .order-page .detail-checks input {
@@ -926,7 +926,7 @@
 .order-page .detail-note span {
     display: block;
     margin-bottom: 0.45rem;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
@@ -1007,7 +1007,7 @@
 
 .order-page .detail-basic .detail-sizes button i {
     color: #92949b;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .order-page .detail-basic .detail-sizes button.active {
@@ -1022,7 +1022,7 @@
 .order-page .detail-basic .detail-sizes button small {
     margin-left: auto;
     color: #fc8019;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .order-page .close-modal {
@@ -1123,7 +1123,7 @@
     display: block;
     margin-top: 0.45rem;
     color: #92949b;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 700;
 }
 
@@ -1283,7 +1283,7 @@
 .order-page .payment-eyebrow {
     margin: 0;
     color: #fc8019;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -1425,7 +1425,7 @@
 .order-page .pin-card p {
     margin: 0.35rem 0 0.8rem;
     color: #92949b;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .order-page .pin-boxes {
@@ -1553,7 +1553,7 @@
     justify-content: space-between;
     padding: 0.1rem 0.15rem 0.5rem;
     color: #7d858f;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 0.04em;
 }
@@ -1617,7 +1617,7 @@
 .order-page .confirm-cancel-modal p {
     margin: 0.5rem 0 1.3rem;
     color: #92949b;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     line-height: 1.55;
 }
 
@@ -1717,7 +1717,7 @@
 
 .order-page .guest-popover > span {
     color: #fc8019;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
 }
@@ -1835,7 +1835,7 @@
 .order-page .item-action-modal > span {
     display: block;
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.07em;
 }
@@ -1847,7 +1847,7 @@
 .order-page .item-action-modal p {
     margin: 0 0 1rem;
     color: #92949b;
-    font-size: 0.74rem;
+    font-size: 0.94rem;
 }
 
 .order-page .item-action-modal > div {
@@ -1967,7 +1967,7 @@
 .order-page .sidebar-controller .pos-sidebar nav button span,
 .order-page .sidebar-controller .logout-button span {
     display: inline;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .order-page .modifier-modal.set-order-modal {
@@ -2017,7 +2017,7 @@
     border: 0;
     background: transparent;
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .order-page .guest-stepper > button:disabled {
@@ -2031,7 +2031,7 @@
     justify-content: center;
     gap: 0.4rem;
     padding: 0 0.25rem;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .order-page .detail-delete-trigger {
@@ -2107,7 +2107,7 @@
 }
 
 .order-page .order-member-chip > i {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .order-page .order-member-chip span,
@@ -2118,14 +2118,14 @@
 }
 
 .order-page .order-member-chip small {
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     letter-spacing: 0.04em;
 }
 
 .order-page .order-member-chip strong {
     max-width: 7rem;
     overflow: hidden;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -2153,7 +2153,7 @@
 .order-page .order-member-modal > header span,
 .order-page .order-quick-register > span {
     color: #fc8019;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 0.07em;
 }
@@ -2232,7 +2232,7 @@
     border-radius: 50%;
     background: #fc8019;
     color: #fff;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -2249,12 +2249,12 @@
 .order-page .order-member-results small {
     margin-top: 0.15rem;
     color: #8e9199;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .order-page .order-member-results b {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .order-page .order-member-results > button > i {
@@ -2278,7 +2278,7 @@
 }
 
 .order-page .order-member-empty small {
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .order-page .order-quick-register {
@@ -2356,14 +2356,14 @@
     border: 0;
     background: #fc8019;
     color: #fff;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
 .order-page .order-quick-register p {
     margin: 0.45rem 0 0;
     color: #d6453d;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
 }
 
@@ -2379,7 +2379,7 @@
     min-height: 2.7rem;
     padding: 0 0.9rem;
     border-radius: 0.5rem;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -2419,7 +2419,7 @@
 
 .order-page .order-table-trigger i {
     color: #fc8019;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
 }
 
 .order-page .order-table-menu {
@@ -2498,7 +2498,7 @@
 
 .order-page .kitchen-issue-label {
     color: #d93d36;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     text-transform: uppercase;
 }
 
@@ -2522,7 +2522,7 @@
 
 .order-page .refund-replacement-banner span {
     margin-top: 0.12rem;
-    font-size: 0.64rem;
+    font-size: 0.84rem;
 }
 
 .order-page .refund-replacement-banner button {
@@ -2547,7 +2547,7 @@
 
 .order-page .refund-action-modal header span {
     color: #dc3e37;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     letter-spacing: 0.07em;
 }
@@ -2559,7 +2559,7 @@
 .order-page .refund-action-modal header p {
     margin: 0;
     color: #9a4a46;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .order-page .refund-action-modal > button {
@@ -2617,7 +2617,7 @@
 
 .order-page .chef-instruction-panel span {
     color: #d83d36;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.07em;
 }
@@ -2628,7 +2628,7 @@
 
 .order-page .chef-instruction-panel p {
     margin: 0.45rem 0 0;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .order-page .set-exchange-backdrop {
@@ -2658,7 +2658,7 @@
 .order-page .refund-replacement-banner small {
     display: block;
     margin-top: 0.16rem;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .order-page .set-exchange-modal {
@@ -2682,7 +2682,7 @@
 
 .order-page .set-exchange-modal header span {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -2695,7 +2695,7 @@
 .order-page .set-exchange-modal header small {
     margin-top: 0.28rem;
     color: #747785;
-    font-size: 0.74rem;
+    font-size: 0.94rem;
 }
 
 .order-page .set-exchange-search {

@@ -114,7 +114,7 @@
 .sidebar-controller .profile-card > i {
     width: auto;
     color: #b0b2b8;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .sidebar-controller .profile-card.active > i {
@@ -131,7 +131,7 @@
     margin-top: 0.15rem;
     overflow: hidden;
     color: #90939b;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -147,7 +147,7 @@
     border-radius: 50%;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 

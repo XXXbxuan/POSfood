@@ -8,7 +8,7 @@
 .voucher-editor-header p {
     margin: 0.25rem 0 0;
     color: var(--pos-color-muted);
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .voucher-editor-header-actions {
@@ -62,7 +62,7 @@
 .voucher-delete-confirm-layer p {
     margin: 0;
     color: var(--pos-color-muted);
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .voucher-delete-confirm-layer footer {
@@ -154,13 +154,13 @@
 
 .voucher-basic-grid > label,
 .voucher-status-field legend {
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .voucher-basic-grid > label > input,
 .voucher-basic-grid > label > select {
     height: 3.5rem;
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .voucher-affix-input {
@@ -179,7 +179,7 @@
 .voucher-editor-modal .voucher-affix-input input {
     width: min(10rem, 100%);
     height: 3.3rem;
-    font-size: 0.82rem;
+    font-size: 1.02rem;
     flex: 0 1 auto;
     margin: 0;
     padding: 0;
@@ -194,7 +194,7 @@
 
 .voucher-affix-input strong {
     color: var(--pos-color-accent);
-    font-size: 0.8rem;
+    font-size: 1rem;
     white-space: nowrap;
 }
 
@@ -234,7 +234,7 @@
     border: 0;
     background: #fff;
     font-weight: 900;
-    font-size: 0.82rem;
+    font-size: 1.02rem;
     text-align: center;
 }
 
@@ -267,7 +267,7 @@
 .voucher-status-field legend {
     margin-bottom: 0.4rem;
     color: #42444d;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
 }
 
@@ -283,7 +283,7 @@
     border-radius: 0.6rem;
     background: #fff;
     color: #7c7f88;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 900;
 }
 
@@ -343,7 +343,7 @@
 .voucher-range-inputs label {
     min-width: 0;
     color: #42444d;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     font-weight: 900;
 }
 
@@ -356,7 +356,7 @@
     border-radius: 0.6rem;
     background: #fff;
     outline: 0;
-    font-size: 0.88rem;
+    font-size: 1.08rem;
     font-weight: 900;
 }
 
@@ -369,7 +369,7 @@
     display: grid;
     place-items: center;
     color: var(--pos-color-accent);
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -380,7 +380,7 @@
 .voucher-editor-modal .voucher-choice-group > div > button {
     min-height: 3.2rem;
     padding: 0 1.05rem;
-    font-size: 0.86rem;
+    font-size: 1.06rem;
 }
 
 .voucher-editor-modal .weekday-choices button {
@@ -394,7 +394,7 @@
     gap: 0.4rem;
     margin-bottom: 0.45rem;
     color: #42444d;
-    font-size: 0.86rem;
+    font-size: 1.06rem;
 }
 
 .voucher-choice-group .voucher-select-all {
@@ -428,7 +428,7 @@
 }
 
 .voucher-product-rule > header strong {
-    font-size: 0.84rem;
+    font-size: 1.04rem;
 }
 
 .voucher-product-rule > header span {
@@ -436,7 +436,7 @@
     border-radius: 0.35rem;
     background: var(--pos-color-accent-soft);
     color: var(--pos-color-accent);
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -481,13 +481,13 @@
 }
 
 .voucher-product-picker-trigger strong {
-    font-size: 0.84rem;
+    font-size: 1.04rem;
 }
 
 .voucher-product-picker-trigger small {
     margin-top: 0.2rem;
     color: var(--pos-color-muted);
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .voucher-product-picker-trigger > i {
@@ -525,7 +525,7 @@
 
 .voucher-product-picker-modal > header span {
     color: var(--pos-color-accent);
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -559,7 +559,7 @@
     border-radius: 1.2rem;
     background: #f3f3f4;
     color: #737680;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     white-space: nowrap;
 }
@@ -633,13 +633,13 @@
 }
 
 .voucher-product-grid strong {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .voucher-product-grid small {
     margin-top: 0.2rem;
     color: var(--pos-color-muted);
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .voucher-product-picker-modal > footer {
@@ -652,7 +652,7 @@
 
 .voucher-product-picker-modal > footer span {
     color: var(--pos-color-muted);
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -720,7 +720,7 @@
 .voucher-wizard-footer > span {
     flex: 1;
     color: var(--pos-color-muted);
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     font-weight: 900;
     text-align: center;
 }

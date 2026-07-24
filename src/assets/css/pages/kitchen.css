@@ -34,7 +34,7 @@
 .kitchen-heading span,
 .kitchen-modal-header > div > span {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
@@ -48,7 +48,7 @@
 .kitchen-empty-state span {
     margin: 0.3rem 0 0;
     color: #858992;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .kitchen-heading-summary {
@@ -72,7 +72,7 @@
 
 .kitchen-heading-summary span {
     color: #858992;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     letter-spacing: 0;
 }
 
@@ -103,7 +103,7 @@
     place-items: center;
     border-radius: 50%;
     background: #f0f0f2;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .kitchen-status-tabs button.active {
@@ -188,13 +188,13 @@
 
 .kitchen-order-number {
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 900;
 }
 
 .kitchen-ticket-title {
     color: #171826;
-    font-size: 0.92rem;
+    font-size: 1.12rem;
     font-weight: 900;
 }
 
@@ -209,7 +209,7 @@
     align-items: center;
     gap: 0.25rem;
     color: #8b8f97;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 700;
     white-space: nowrap;
 }
@@ -224,7 +224,7 @@
     border-radius: 2rem;
     background: #f3f3f4;
     color: #777b84;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 800;
 }
 
@@ -238,7 +238,7 @@
     padding: 0.65rem 1rem;
     background: #fff8e8;
     color: #8d6813;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 700;
 }
 
@@ -255,7 +255,7 @@
     display: block;
     padding: 0;
     border: 0;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
     font-weight: 700;
 }
 
@@ -264,7 +264,7 @@
     padding: 0.55rem 0 0.25rem;
     border-bottom: 0;
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -276,7 +276,7 @@
 
 .kitchen-ticket-items li > i:first-child {
     color: #fc8019;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .kitchen-ticket-items li.done {
@@ -316,13 +316,13 @@
 }
 
 .kitchen-progress-copy strong {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .kitchen-progress-copy small {
     margin-top: 0.1rem;
     color: #df6a22;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
 }
 
 .kitchen-progress-track {
@@ -451,7 +451,7 @@
     margin-top: 0.22rem;
     overflow: hidden;
     color: #8a8d95;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -459,7 +459,7 @@
 
 .kitchen-ticket-dish-state {
     justify-self: end;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
     letter-spacing: 0.04em;
 }
@@ -556,7 +556,7 @@
     align-items: center;
     gap: 0.35rem;
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -629,7 +629,7 @@
     display: grid;
     place-items: center;
     color: #15733a;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 900;
     pointer-events: none;
 }
@@ -685,7 +685,7 @@
 .kitchen-modal-header p {
     margin: 0;
     color: #858992;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .kitchen-modal-header .kitchen-modal-close,
@@ -767,7 +767,7 @@
     display: block;
     padding: 0.35rem 0.25rem 0.1rem;
     color: #fc8019;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -825,7 +825,7 @@
     border-radius: 0.3rem;
     background: rgba(255, 255, 255, 0.9);
     color: #777b84;
-    font-size: 0.52rem;
+    font-size: 0.72rem;
     font-weight: 900;
 }
 
@@ -836,7 +836,7 @@
     place-items: center;
     background: rgba(20, 22, 28, 0.72);
     color: #fff;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     font-weight: 900;
     letter-spacing: 0.06em;
 }
@@ -846,12 +846,12 @@
     padding: 0.18rem 0.28rem;
     border-radius: 0.3rem;
     background: #fc8019;
-    font-size: 0.52rem;
+    font-size: 0.72rem;
 }
 
 .kitchen-rail-item > span.returned {
     background: rgba(179, 44, 37, 0.82);
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .kitchen-set-toggle {
@@ -862,7 +862,7 @@
     border-radius: 0.3rem;
     background: rgba(255, 242, 232, 0.95);
     color: #fc8019;
-    font-size: 0.5rem;
+    font-size: 0.7rem;
 }
 
 .kitchen-set-dish-list {
@@ -905,7 +905,7 @@
 .kitchen-set-dish-list span {
     overflow: hidden;
     padding-right: 0.1rem;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     font-weight: 800;
     line-height: 1.25;
 }
@@ -926,7 +926,7 @@
     padding: 0.12rem 0.26rem;
     border-radius: 0.3rem;
     color: #fff;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     letter-spacing: 0.04em;
 }
 
@@ -994,7 +994,7 @@
     border-radius: 2rem;
     background: #f0f0f2;
     color: #858992;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     font-weight: 900;
 }
 
@@ -1021,7 +1021,7 @@
 .kitchen-detail-copy > p {
     margin: 0;
     color: #858992;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .kitchen-detail-grid {
@@ -1043,7 +1043,7 @@
     display: block;
     margin-bottom: 0.35rem;
     color: #92959d;
-    font-size: 0.63rem;
+    font-size: 0.83rem;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -1051,7 +1051,7 @@
 .kitchen-detail-section strong {
     display: block;
     overflow-wrap: anywhere;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     line-height: 1.45;
 }
 
@@ -1078,7 +1078,7 @@
     border-radius: 0.7rem;
     background: #08ae37;
     color: #fff;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 900;
 }
 
@@ -1109,7 +1109,7 @@
 .kitchen-return-request-summary small {
     display: block;
     margin: 0.35rem 0 0;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .kitchen-return-backdrop {
@@ -1150,7 +1150,7 @@
 
 .kitchen-return-dialog header span {
     color: #d43d35;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
@@ -1163,7 +1163,7 @@
 .kitchen-return-dialog header p {
     margin: 0;
     color: #858992;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
 }
 
 .kitchen-return-dishes {
@@ -1263,7 +1263,7 @@
     border-radius: 50%;
     background: #fc8019;
     color: #fff;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .kitchen-return-set-picker {
@@ -1307,7 +1307,7 @@
 
 .kitchen-return-dishes strong {
     overflow: hidden;
-    font-size: 0.86rem;
+    font-size: 1.06rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1315,7 +1315,7 @@
 .kitchen-return-dishes small {
     margin-top: 0.18rem;
     color: #92959d;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .kitchen-return-types {
@@ -1348,7 +1348,7 @@
 .kitchen-return-field span {
     display: block;
     margin-bottom: 0.35rem;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
     font-weight: 900;
 }
 
@@ -1378,7 +1378,7 @@
     margin: 0;
     padding: 0 1.2rem 0.8rem;
     color: #d43d35;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 800;
 }
 
@@ -1442,7 +1442,7 @@
 
 .kitchen-return-set-modal > header span {
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
@@ -1455,7 +1455,7 @@
 .kitchen-return-set-modal > header p {
     margin: 0;
     color: #858992;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .kitchen-return-set-modal > header button {
@@ -1493,18 +1493,18 @@
 }
 
 .kitchen-return-select-all strong {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .kitchen-return-select-all small {
     margin-top: 0.15rem;
     color: #858992;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .kitchen-return-select-all > b {
     color: #fc8019;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
 }
 
 .kitchen-return-set-options {
@@ -1559,7 +1559,7 @@
 
 .kitchen-return-set-options strong {
     overflow: hidden;
-    font-size: 0.86rem;
+    font-size: 1.06rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1567,7 +1567,7 @@
 .kitchen-return-set-options small {
     margin-top: 0.15rem;
     color: #858992;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .kitchen-return-set-modal > footer {
@@ -1628,7 +1628,7 @@ html.tablet-keyboard-open
     display: grid;
     place-items: center;
     color: #15733a;
-    font-size: 0.86rem;
+    font-size: 1.06rem;
     pointer-events: none;
 }
 
@@ -1647,7 +1647,7 @@ html.tablet-keyboard-open
     display: block;
     margin-top: 0.45rem;
     color: #858992;
-    font-size: 0.66rem;
+    font-size: 0.86rem;
     text-align: center;
 }
 
@@ -1766,7 +1766,7 @@ html.tablet-keyboard-open
 .kitchen-redo-confirm-dialog p {
     margin: 0.65rem 0 1.25rem;
     color: #858992;
-    font-size: 0.78rem;
+    font-size: 0.98rem;
     line-height: 1.55;
 }
 

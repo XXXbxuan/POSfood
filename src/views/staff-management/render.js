@@ -452,16 +452,7 @@ function render() {
                         },
                         [icon('fa-user-plus'), 'Add staff'],
                     ),
-                    h(
-                        'button',
-                        {
-                            type: 'button',
-                            class: 'staff-management-close',
-                            'aria-label': 'Close staff management',
-                            onClick: () => ctx.$router.push('/pos/start'),
-                        },
-                        [icon('fa-xmark')],
-                    ),
+
                 ],
             },
         ),

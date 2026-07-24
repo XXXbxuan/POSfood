@@ -58,7 +58,7 @@
     border-radius: 0.45rem;
     background: #fff;
     color: #777b84;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 850;
 }
 
@@ -111,7 +111,7 @@
 .reporting-page .chart-summary-strip span,
 .reporting-page .chart-summary-strip small {
     color: #888c94;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .reporting-page .chart-summary-strip strong {
@@ -183,7 +183,7 @@
 
 .reporting-page .category-pie small {
     color: #8a8e96;
-    font-size: 0.56rem;
+    font-size: 0.76rem;
 }
 
 .reporting-page .category-legend {
@@ -214,13 +214,13 @@
 
 .reporting-page .category-legend span,
 .reporting-page .category-legend strong {
-    font-size: 0.67rem;
+    font-size: 0.87rem;
 }
 
 .reporting-page .category-legend small {
     grid-column: 2;
     color: #8d9199;
-    font-size: 0.54rem;
+    font-size: 0.74rem;
 }
 
 .reporting-page .category-bars {
@@ -239,7 +239,7 @@
 
 .reporting-page .category-bars span,
 .reporting-page .category-bars strong {
-    font-size: 0.64rem;
+    font-size: 0.84rem;
 }
 
 .reporting-page .category-bars > div > div {
@@ -312,7 +312,7 @@
 
 .reporting-page .reporting-stats span {
     color: #888c94;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 800;
 }
 
@@ -381,18 +381,18 @@
 
 .reporting-page .report-card > header span {
     color: #fc8019;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
     font-weight: 900;
 }
 
 .reporting-page .report-card h3 {
     margin: 0.08rem 0;
-    font-size: 0.92rem;
+    font-size: 1.12rem;
 }
 
 .reporting-page .report-card > header > strong {
     color: #fc8019;
-    font-size: 0.95rem;
+    font-size: 1.15rem;
 }
 
 .reporting-page .sales-card {
@@ -441,7 +441,7 @@
 .reporting-page .chart-column small {
     align-self: end;
     color: #8d9199;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
 }
 
 .reporting-page .service-card {
@@ -477,7 +477,7 @@
 }
 
 .reporting-page .service-list span {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 850;
 }
 
@@ -489,7 +489,7 @@
 
 .reporting-page .service-list small {
     color: #8d9199;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .reporting-page .secondary-grid .report-card {
@@ -512,7 +512,7 @@
     grid-column: 1/3;
     display: flex;
     justify-content: space-between;
-    font-size: 0.67rem;
+    font-size: 0.87rem;
 }
 
 .reporting-page .progress {
@@ -531,7 +531,7 @@
 
 .reporting-page .payment-list small {
     color: #858991;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
     text-align: right;
 }
 
@@ -561,7 +561,7 @@
     border-radius: 0.4rem;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
 }
 
@@ -574,17 +574,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .reporting-page .items-card li small {
     display: block;
     color: #8d9199;
-    font-size: 0.54rem;
+    font-size: 0.74rem;
 }
 
 .reporting-page .items-card li b {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .reporting-page .report-empty {
@@ -595,7 +595,7 @@
     justify-content: center;
     gap: 0.45rem;
     color: #a0a4ac;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .reporting-page .report-empty i {
@@ -804,7 +804,7 @@
     border-radius: 0.5rem;
     background: #fff;
     color: #737780;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 850;
 }
 
@@ -818,7 +818,7 @@
     border: 1px solid #e2e3e5;
     border-radius: 0.7rem;
     background: #fff;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 850;
 }
 
@@ -858,7 +858,7 @@
     border-radius: 0.45rem;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 900;
 }
 
@@ -880,7 +880,7 @@
 
 .reporting-page .performance-copy small {
     color: #fc8019;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 900;
 }
 
@@ -889,13 +889,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .reporting-page .performance-copy p {
     margin: 0;
     color: #888c94;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .reporting-page .performance-total {
@@ -910,13 +910,13 @@
 
 .reporting-page .performance-total strong {
     color: #fc8019;
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .reporting-page .performance-total small {
     margin-top: 0.12rem;
     color: #91959d;
-    font-size: 0.52rem;
+    font-size: 0.72rem;
 }
 
 .reporting-page .performance-card > i {
@@ -943,7 +943,7 @@
 
 .reporting-page .product-report-empty p {
     margin: 0;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
 }
 
 .reporting-page .product-detail-backdrop {
@@ -977,7 +977,7 @@
 
 .reporting-page .product-detail-modal > header span {
     color: #fc8019;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
 }
 
@@ -1035,7 +1035,7 @@
 
 .reporting-page .product-detail-summary small {
     color: #898d95;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
 }
 
 .reporting-page .product-detail-summary strong {
@@ -1072,12 +1072,12 @@
 
 .reporting-page .product-detail-stats span {
     color: #898d95;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 .reporting-page .product-detail-stats strong {
     margin-top: 0.15rem;
-    font-size: 0.85rem;
+    font-size: 1.05rem;
 }
 
 .reporting-page .product-trend-card {
@@ -1096,12 +1096,12 @@
 
 .reporting-page .product-trend-card h3 {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .reporting-page .product-trend-card > header strong {
     color: #fc8019;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .reporting-page .product-trend {
@@ -1139,7 +1139,7 @@
 
 .reporting-page .product-trend small {
     color: #8c9098;
-    font-size: 0.5rem;
+    font-size: 0.7rem;
 }
 
 .reporting-page .product-detail-lists {
@@ -1156,7 +1156,7 @@
 
 .reporting-page .product-detail-lists h3 {
     margin: 0 0 0.4rem;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .reporting-page .product-detail-lists article > div {
@@ -1164,13 +1164,13 @@
     justify-content: space-between;
     padding: 0.25rem 0;
     border-top: 1px solid #f0f0f1;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
 }
 
 .reporting-page .product-detail-lists p {
     margin: 0.5rem 0 0;
     color: #969aa2;
-    font-size: 0.58rem;
+    font-size: 0.78rem;
 }
 
 @media (max-width: 68.75em) {
@@ -1318,12 +1318,12 @@
 
 .reporting-page .overview-kpi span {
     color: #888c94;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 800;
 }
 
 .reporting-page .overview-kpi strong {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
 }
 
 .reporting-page .net-sales-kpi {
@@ -1380,7 +1380,7 @@
 
 .reporting-page .histogram-card-header > strong {
     color: #fc8019;
-    font-size: 0.95rem;
+    font-size: 1.15rem;
 }
 
 .reporting-page .histogram-card-header {
@@ -1456,7 +1456,7 @@
 
 .reporting-page .histogram-mode-switch span {
     color: #242632;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 900;
     text-align: center;
 }
@@ -1550,7 +1550,7 @@
 
 .reporting-page .chart-detail-modal > header span {
     color: #fc8019;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 900;
 }
 
@@ -1610,7 +1610,7 @@
 
 .reporting-page .category-bars.enlarged span,
 .reporting-page .category-bars.enlarged strong {
-    font-size: 0.85rem;
+    font-size: 1.05rem;
 }
 
 .reporting-page .category-bars.enlarged > div > div {

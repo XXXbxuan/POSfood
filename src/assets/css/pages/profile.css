@@ -13,7 +13,7 @@
 }
 
 .staff-profile-topbar-title {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 900;
 }
 
@@ -62,7 +62,7 @@
     border-radius: 0.65rem;
     background: #fff;
     color: #171826;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
     font-weight: 900;
 }
 
@@ -134,7 +134,7 @@
     border-radius: 50%;
     background: #fc8019;
     color: #fff;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }
 
 .staff-profile-identity h2 {
@@ -145,7 +145,7 @@
 .staff-profile-identity > p {
     margin: 0;
     color: #8a8d95;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
 }
 
@@ -161,7 +161,7 @@
     border-radius: 0.6rem;
     background: #fff7f0;
     color: #fc8019;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
@@ -187,14 +187,14 @@
 
 .staff-profile-readonly dt {
     color: #8a8d95;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     font-weight: 800;
 }
 
 .staff-profile-readonly dd {
     margin: 0;
     color: #171826;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
 }
 
@@ -253,7 +253,7 @@
 .staff-profile-form-section header p {
     margin: 0.2rem 0 0;
     color: #8a8d95;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
 }
 
 .staff-profile-fields {
@@ -274,7 +274,7 @@
     display: block;
     margin-bottom: 0.42rem;
     color: #30313a;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
     font-weight: 900;
 }
 
@@ -301,7 +301,7 @@
     flex: none;
     color: #fc8019;
     text-align: center;
-    font-size: 0.92rem;
+    font-size: 1.12rem;
 }
 
 .staff-profile-field input {
@@ -312,7 +312,7 @@
     background: transparent;
     color: #171826;
     font: inherit;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .staff-profile-field div > button {
@@ -323,7 +323,7 @@
     border-radius: 50%;
     background: #fff2e8;
     color: #fc8019;
-    font-size: 0.82rem;
+    font-size: 1.02rem;
 }
 
 .staff-profile-message {
@@ -334,7 +334,7 @@
     margin: 0 1rem 0.65rem;
     padding: 0.58rem 0.75rem;
     border-radius: 0.62rem;
-    font-size: 0.68rem;
+    font-size: 0.88rem;
     font-weight: 800;
 }
 
@@ -362,7 +362,7 @@
 .staff-profile-actions button {
     min-height: 3rem;
     border-radius: 0.62rem;
-    font-size: 0.76rem;
+    font-size: 0.96rem;
     font-weight: 900;
 }
 

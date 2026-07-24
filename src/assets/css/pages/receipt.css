@@ -28,7 +28,7 @@
 }
 
 .receipt-page .remaining-note span {
-    font-size: 0.72rem;
+    font-size: 0.92rem;
     font-weight: 800;
 }
 
@@ -67,7 +67,7 @@
 
 .receipt-page .continue {
     padding: 0 0.6rem;
-    font-size: 0.72rem;
+    font-size: 0.92rem;
 }
 
 .receipt-page .print {
