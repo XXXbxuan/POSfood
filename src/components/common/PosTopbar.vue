@@ -20,7 +20,6 @@
                 Restro <span>POS</span>
             </h1>
         </div>
-        <div class="header-center"><slot name="center"></slot></div>
         <div class="header-actions">
             <slot name="actions">
                 <button

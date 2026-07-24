@@ -55,9 +55,7 @@
     color: #fc8019;
 }
 
-.pos-topbar .header-center {
-    min-width: 0;
-}
+
 
 .pos-topbar .header-actions {
     min-width: 0;
@@ -109,9 +107,6 @@
         padding: 0.7rem 0.75rem;
     }
 
-    .pos-topbar .header-center {
-        display: none;
-    }
 
     .pos-topbar h1 {
         font-size: 1.15rem;

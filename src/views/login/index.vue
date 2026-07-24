@@ -99,7 +99,12 @@
 
                     <section v-else class="login-pin-lock">
                         <div class="login-pin-photo">
-                            {{ accountInitials }}
+                            <img
+                                v-if="pendingAccount?.profileImage"
+                                :src="pendingAccount.profileImage"
+                                :alt="pendingAccount.name"
+                            />
+                            <span v-else>{{ accountInitials }}</span>
                         </div>
                         <h2>{{ pendingAccount?.name }}</h2>
                         <p class="login-pin-role">

@@ -220,6 +220,13 @@
     font-weight: 900;
 }
 
+.staff-list-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+}
+
 .staff-list-identity {
     min-width: 0;
 }

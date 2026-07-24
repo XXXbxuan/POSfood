@@ -90,14 +90,35 @@
 }
 
 .sidebar-controller .profile-card {
-    display: flex;
+    width: 100%;
+    min-height: 4.2rem;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 0.65rem;
     padding: 0.8rem;
+    border: 1px solid transparent;
     border-radius: 0.75rem;
     background: #f6f6f7;
     color: #171826;
+    text-align: left;
+}
+
+.sidebar-controller .profile-card:hover,
+.sidebar-controller .profile-card.active {
+    border-color: #ffc18c;
+    background: #fff2e8;
+}
+
+.sidebar-controller .profile-card > i {
+    width: auto;
+    color: #b0b2b8;
+    font-size: 0.75rem;
+}
+
+.sidebar-controller .profile-card.active > i {
+    color: #fc8019;
 }
 
 .sidebar-controller .profile-card strong,
@@ -122,11 +143,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     border-radius: 50%;
     background: #fff2e8;
     color: #fc8019;
     font-size: 0.75rem;
     font-weight: 900;
+}
+
+.sidebar-controller .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .sidebar-controller .lock-button {

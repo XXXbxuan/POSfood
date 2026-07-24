@@ -8,6 +8,9 @@ const DEFAULT_SUPERADMIN = {
     employeeId: 'EMP001',
     password: 'restro123',
     pin: '1234',
+    phone: '',
+    email: '',
+    profileImage: '',
     role: 'Superadmin',
     status: 'active',
 }
@@ -26,6 +29,9 @@ function normalizeStaff(account = {}) {
         employeeId: String(account.employeeId || '').trim().toUpperCase(),
         password: String(account.password || ''),
         pin: String(account.pin || ''),
+        phone: String(account.phone || '').trim(),
+        email: String(account.email || account.gmail || '').trim(),
+        profileImage: String(account.profileImage || ''),
         role: normalizeRole(account.role),
         status: account.status === 'disabled' ? 'disabled' : 'active',
         permissions: normalizeStaffPermissions(
@@ -82,6 +88,83 @@ function findStaffAccount(employeeId) {
     return loadStaffAccounts().find((account) => account.employeeId === id)
 }
 
+function updateStaffProfile(employeeId, changes = {}) {
+    const id = String(employeeId || '').trim().toUpperCase()
+    const accounts = loadStaffAccounts()
+    const index = accounts.findIndex((account) => account.employeeId === id)
+    if (index < 0) return null
+
+    const current = accounts[index]
+    const updated = normalizeStaff({
+        ...current,
+        name:
+            changes.name === undefined
+                ? current.name
+                : String(changes.name || '').trim(),
+        phone:
+            changes.phone === undefined
+                ? current.phone
+                : String(changes.phone || '').trim(),
+        email:
+            changes.email === undefined
+                ? current.email
+                : String(changes.email || '').trim(),
+        password:
+            changes.password === undefined
+                ? current.password
+                : String(changes.password || ''),
+        pin:
+            changes.pin === undefined
+                ? current.pin
+                : String(changes.pin || ''),
+        profileImage:
+            changes.profileImage === undefined
+                ? current.profileImage
+                : String(changes.profileImage || ''),
+        employeeId: current.employeeId,
+        role: current.role,
+        status: current.status,
+        permissions: current.permissions,
+        lastLoginAt: current.lastLoginAt,
+    })
+
+    accounts[index] = updated
+    saveStaffAccounts(accounts)
+
+    let activeAccount = null
+    try {
+        activeAccount = JSON.parse(
+            localStorage.getItem('posfood_active_account'),
+        )
+    } catch (error) {
+        activeAccount = null
+    }
+
+    if (
+        String(activeAccount?.employeeId || '').toUpperCase() ===
+        updated.employeeId
+    ) {
+        const nextActiveAccount = {
+            ...activeAccount,
+            name: updated.name,
+            employeeId: updated.employeeId,
+            role: updated.role,
+            profileImage: updated.profileImage,
+        }
+        localStorage.setItem(
+            'posfood_active_account',
+            JSON.stringify(nextActiveAccount),
+        )
+        window.dispatchEvent(
+            new CustomEvent('pos-profile:changed', {
+                detail: updated,
+            }),
+        )
+    }
+
+    return updated
+}
+
 function nextEmployeeId(accounts = loadStaffAccounts()) {
     const highest = accounts.reduce((value, account) => {
         const number = Number(account.employeeId.replace(/\D/g, '')) || 0
@@ -104,4 +187,5 @@ export {
     normalizeRole,
     recordStaffLogin,
     saveStaffAccounts,
+    updateStaffProfile,
 }

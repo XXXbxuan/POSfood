@@ -36,7 +36,12 @@ function renderStaffRow(ctx, staff) {
             h(
                 'span',
                 { class: 'staff-list-avatar' },
-                ctx.staffInitials(staff.name),
+                staff.profileImage
+                    ? h('img', {
+                          src: staff.profileImage,
+                          alt: staff.name,
+                      })
+                    : ctx.staffInitials(staff.name),
             ),
             h('span', { class: 'staff-list-identity' }, [
                 h('strong', staff.name),

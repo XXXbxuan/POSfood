@@ -24,13 +24,26 @@
                 </button>
             </nav>
             <div class="sidebar-spacer"></div>
-            <div class="profile-card">
-                <div class="avatar">{{ initials }}</div>
+            <button
+                type="button"
+                class="profile-card"
+                :class="{ active: active === 'Profile' }"
+                @click="openProfile"
+            >
+                <div class="avatar">
+                    <img
+                        v-if="profileImage"
+                        :src="profileImage"
+                        :alt="accountName"
+                    />
+                    <span v-else>{{ initials }}</span>
+                </div>
                 <div>
                     <strong>{{ accountName }}</strong
                     ><small>{{ accountRole }}</small>
                 </div>
-            </div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
             <button type="button" class="lock-button" @click="lockSession">
                 <i class="fa-solid fa-lock"></i><span>Lock</span>
             </button>
@@ -50,6 +63,7 @@ import {
     readActiveAccount,
     roleHome,
 } from '@/services/pos/permissions.js'
+import { findStaffAccount } from '@/services/pos/staff.js'
 
 export default {
     name: 'PosSidebar',
@@ -57,6 +71,7 @@ export default {
     data() {
         return {
             isOpen: false,
+            accountVersion: 0,
             items: [
                 {
                     label: 'Home',
@@ -111,13 +126,21 @@ export default {
     },
     computed: {
         activeAccount() {
-            return readActiveAccount() || {}
+            this.accountVersion
+            const activeAccount = readActiveAccount() || {}
+            return (
+                findStaffAccount(activeAccount.employeeId) ||
+                activeAccount
+            )
         },
         accountName() {
             return this.activeAccount.name || 'Staff'
         },
         accountRole() {
             return normalizePermissionRole(this.activeAccount.role)
+        },
+        profileImage() {
+            return this.activeAccount.profileImage || ''
         },
         visibleItems() {
             return this.items.filter((item) =>
@@ -137,13 +160,27 @@ export default {
     },
     mounted() {
         window.addEventListener('pos-sidebar:open', this.openSidebar)
+        window.addEventListener('pos-profile:changed', this.refreshAccount)
+        window.addEventListener('pos-staff:changed', this.refreshAccount)
+        window.addEventListener('storage', this.refreshAccount)
     },
     beforeUnmount() {
         window.removeEventListener('pos-sidebar:open', this.openSidebar)
+        window.removeEventListener('pos-profile:changed', this.refreshAccount)
+        window.removeEventListener('pos-staff:changed', this.refreshAccount)
+        window.removeEventListener('storage', this.refreshAccount)
     },
     methods: {
         openSidebar() {
             this.isOpen = true
+        },
+        refreshAccount() {
+            this.accountVersion += 1
+        },
+        openProfile() {
+            this.isOpen = false
+            if (this.$route.path !== '/pos/profile')
+                this.$router.push('/pos/profile')
         },
         goHome() {
             this.isOpen = false

@@ -122,6 +122,16 @@ const mainRoutes = [
         },
     },
     {
+        path: '/pos/profile',
+        name: 'POSStaffProfile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: {
+            title: 'POSfood My Profile',
+            sidebar: 'Profile',
+            allowAllStaff: true,
+        },
+    },
+    {
         path: '/pos/kitchen',
         name: 'POSKitchen',
         component: POSKitchen,
@@ -163,6 +173,7 @@ router.beforeEach((to) => {
     }
 
     const activeRole = normalizePermissionRole(storedAccount.role)
+    if (to.meta.allowAllStaff) return
     if (!hasPermission(activeRole, to.meta.permission)) {
         return {
             path: roleHome(activeRole),

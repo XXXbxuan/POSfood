@@ -221,7 +221,7 @@ export default {
             this.raisedElement?.classList.remove('keyboard-raised-popup')
             this.raisedElement =
                 target.closest(
-                    '.modal-backdrop, .module-modal-backdrop, .menu-admin-backdrop, .confirm-backdrop, .checkout-payment-backdrop, .dashboard-backdrop, .topbar-member-backdrop, .voucher-print-backdrop, .camera-backdrop',
+                    '.modal-backdrop, .module-modal-backdrop, .menu-admin-backdrop, .confirm-backdrop, .checkout-payment-backdrop, .dashboard-backdrop, .topbar-member-backdrop, .voucher-print-backdrop, .camera-backdrop, .staff-profile-page',
                 ) || target.closest('.login-panel')
             this.raisedElement?.classList.add('keyboard-raised-popup')
         },
@@ -239,8 +239,15 @@ export default {
         },
         revealTarget() {
             if (!this.target || !this.$refs.keyboard) return
-            let container = this.target.parentElement
-            while (container && container !== document.body) {
+            const profileSection = this.target.closest(
+                '.staff-profile-form-section',
+            )
+            let container = profileSection || this.target.parentElement
+            while (
+                !profileSection &&
+                container &&
+                container !== document.body
+            ) {
                 const overflow = getComputedStyle(container).overflowY
                 if (
                     /(auto|scroll)/.test(overflow) &&
