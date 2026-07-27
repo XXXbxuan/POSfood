@@ -1,7 +1,0 @@
-node_modules/
-dist/
-.agents/
-.codex/
-__MACOSX/
-**/.DS_Store
-*.log
