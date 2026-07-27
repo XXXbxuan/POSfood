@@ -46,6 +46,20 @@
                     >
                         {{ filter }}<span>{{ statusCount(filter) }}</span>
                     </button>
+
+                    <span class="voucher-filter-spacer"></span>
+
+                    <button
+                        v-if="showBulkPrintButton"
+                        type="button"
+                        class="voucher-filter-print"
+                        :disabled="!activeVouchers.length"
+                        aria-label="Print all active vouchers"
+                        title="Print all active vouchers"
+                        @click="openActiveVoucherPrint"
+                    >
+                        <i class="fa-solid fa-print"></i>
+                    </button>
                 </nav>
 
                 <section
@@ -218,6 +232,13 @@
             @close="closeVoucherPrint"
         />
 
+        <VoucherBulkPrintModal
+            v-if="bulkPrintVouchers.length"
+            :vouchers="bulkPrintVouchers"
+            :auto-print="true"
+            @close="closeActiveVoucherPrint"
+        />
+
         <transition name="voucher-toast">
             <p v-if="copyFeedback" class="voucher-copy-toast" role="status">
                 <i class="fa-solid fa-circle-check"></i>
@@ -231,6 +252,7 @@
 import PosTopbar from '@/components/common/PosTopbar.vue'
 import VoucherEditorModal from '@/components/voucher/VoucherEditorModal.vue'
 import VoucherPrintModal from '@/components/voucher/VoucherPrintModal.vue'
+import VoucherBulkPrintModal from '@/components/voucher/VoucherBulkPrintModal.vue'
 import { loadMenuCatalog } from '@/services/pos/menuCatalog.js'
 import {
     deleteVoucher,
@@ -246,6 +268,7 @@ export default {
         PosTopbar,
         VoucherEditorModal,
         VoucherPrintModal,
+        VoucherBulkPrintModal,
     },
     data() {
         const catalog = loadMenuCatalog()
@@ -266,6 +289,7 @@ export default {
             copyFeedback: '',
             copyFeedbackTimer: null,
             printVoucher: null,
+            bulkPrintVouchers: [],
             services: ['Dine In', 'Takeaway'],
             categories: catalog.categories || [],
             menuProducts: catalog.products || [],
@@ -281,6 +305,14 @@ export default {
         }
     },
     computed: {
+        activeVouchers() {
+            return this.vouchers.filter(
+                (voucher) => voucherStatus(voucher) === 'Active',
+            )
+        },
+        showBulkPrintButton() {
+            return ['All', 'Active'].includes(this.activeFilter)
+        },
         emptyStateTitle() {
             return this.activeFilter === 'All'
                 ? 'No vouchers found'
@@ -366,6 +398,19 @@ export default {
         },
         closeVoucherPrint() {
             this.printVoucher = null
+        },
+        openActiveVoucherPrint() {
+            if (!this.activeVouchers.length) {
+                this.showCopyFeedback('No active vouchers to print')
+                return
+            }
+
+            this.bulkPrintVouchers = this.activeVouchers.map((voucher) => ({
+                ...voucher,
+            }))
+        },
+        closeActiveVoucherPrint() {
+            this.bulkPrintVouchers = []
         },
         closeEditor() {
             this.showEditor = false

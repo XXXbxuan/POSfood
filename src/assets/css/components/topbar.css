@@ -33,8 +33,8 @@
     position: absolute;
     top: 50%;
     left: 0;
-    width: 2.15rem;
-    height: 3.4rem;
+    width: 2.50rem;
+    height: 4.4rem;
     display: grid;
     place-items: center;
     padding: 0;
@@ -63,6 +63,104 @@
     align-items: center;
     justify-content: flex-end;
     gap: 0.65rem;
+}
+
+.pos-topbar .topbar-center {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.language-switcher {
+    position: relative;
+    z-index: 20;
+}
+
+.language-switcher-trigger {
+    min-width: 10.9rem;
+    height: 2.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0 0.8rem;
+    border: 1px solid #e0e3e7;
+    border-radius: 0.65rem;
+    color: #424650;
+    background: #fff;
+    font: inherit;
+    font-weight: 800;
+    box-shadow: 0 0.18rem 0.45rem rgba(23, 24, 38, 0.04);
+}
+
+.language-switcher-trigger > i:first-child {
+    color: #fc8019;
+}
+
+.language-switcher-trigger > i:last-child {
+    color: #8c919a;
+    font-size: 0.72rem;
+}
+
+.language-switcher-menu {
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    right: 0;
+    width: 100%;
+    padding: 0.35rem;
+    border: 1px solid #e0e3e7;
+    border-radius: 0.7rem;
+    background: #fff;
+    box-shadow: 0 0.8rem 1.8rem rgba(23, 24, 38, 0.16);
+}
+
+.language-switcher-menu button {
+    width: 100%;
+    min-height: 2.45rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 0.65rem;
+    border: 0;
+    border-radius: 0.45rem;
+    color: #353944;
+    background: transparent;
+    font: inherit;
+    font-weight: 700;
+    text-align: left;
+}
+
+.language-switcher-menu button:hover,
+.language-switcher-menu button.active {
+    color: #fc8019;
+    background: #fff2e8;
+}
+
+.language-switcher-menu i {
+    font-size: 0.78rem;
+}
+
+.language-switcher-trigger:focus-visible,
+.language-switcher-menu button:focus-visible {
+    border: 0;
+    outline: 0;
+    box-shadow: 0 0 0 0.18rem rgba(252, 128, 25, 0.2);
+}
+
+.language-entry-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0.45rem 0;
+}
+
+.language-entry-nav button {
+    padding: 0.35rem 0.55rem;
+    border: 1px solid #e1e2e5;
+    border-radius: 0.4rem;
+    background: #fff;
 }
 
 .pos-topbar .order-action {

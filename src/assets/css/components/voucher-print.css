@@ -147,3 +147,61 @@
     color: #fc8019;
     font-size: 1.35rem;
 }
+/* Append to: src/assets/css/components/voucher-print.css */
+
+.voucher-bulk-print-modal {
+    max-height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+}
+
+.voucher-bulk-print-modal > header small {
+    display: block;
+    margin-top: 0.2rem;
+    color: #8b8f97;
+    font-size: 0.82rem;
+}
+
+.voucher-bulk-print-preview {
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1.25rem;
+    background: #f4f4f5;
+}
+
+.voucher-bulk-print-sheet {
+    display: grid;
+    gap: 2rem;
+}
+
+.voucher-bulk-print-sheet .voucher-print-sheet {
+    width: 100%;
+    margin: 0;
+}
+
+@media print {
+    .pos-print-root.voucher-ticket-print .voucher-bulk-print-sheet {
+        width: 24cm;
+        display: grid;
+        gap: 1.8cm;
+        margin: 0;
+        padding: 0;
+    }
+
+    .pos-print-root.voucher-ticket-print .voucher-bulk-print-ticket {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .pos-print-root.voucher-ticket-print
+        .voucher-bulk-print-ticket:nth-child(2n) {
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .pos-print-root.voucher-ticket-print
+        .voucher-bulk-print-ticket:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+}

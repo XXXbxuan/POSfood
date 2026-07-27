@@ -11,15 +11,11 @@ import {
     returnKitchenItems,
     startKitchenItem,
     startKitchenSetSelection,
+    undoKitchenItem,
+    undoKitchenSetItem,
+    undoKitchenSetSelection,
 } from '@/services/pos/kitchen.js'
 import { render } from './render.js'
-
-const KITCHEN_STATUS_PRIORITY = {
-    returned: 0,
-    preparing: 1,
-    queued: 2,
-    done: 3,
-}
 
 function kitchenItemStatus(item) {
     if (
@@ -36,10 +32,10 @@ function sortedKitchenEntries(items, statusGetter = kitchenItemStatus) {
     return (items || [])
         .map((item, originalIndex) => ({ item, originalIndex }))
         .sort((a, b) => {
-            const statusDifference =
-                (KITCHEN_STATUS_PRIORITY[statusGetter(a.item)] ?? 2) -
-                (KITCHEN_STATUS_PRIORITY[statusGetter(b.item)] ?? 2)
-            return statusDifference || a.originalIndex - b.originalIndex
+            const aReturned = statusGetter(a.item) === 'returned'
+            const bReturned = statusGetter(b.item) === 'returned'
+            if (aReturned !== bReturned) return aReturned ? -1 : 1
+            return a.originalIndex - b.originalIndex
         })
 }
 
@@ -59,6 +55,8 @@ export default {
             slideValue: 0,
             ticketSlideValues: {},
             ticketSetExpanded: {},
+            undoTarget: null,
+            undoSlideValue: 0,
             showReturnDialog: false,
             showRedoConfirm: false,
             redoConfirmType: '',
@@ -198,6 +196,7 @@ export default {
         },
         setTab(tab) {
             this.activeTab = tab
+            this.cancelUndo()
             this.closeTicket()
         },
         orderLocation(ticket) {
@@ -496,6 +495,80 @@ export default {
                 ticket.id === updated.id ? updated : ticket,
             )
             return updated
+        },
+        isUndoTarget(ticketId, itemId, type, setIndex = null) {
+            if (!this.undoTarget) return false
+            return (
+                this.undoTarget.ticketId === ticketId &&
+                this.undoTarget.itemId === itemId &&
+                this.undoTarget.type === type &&
+                this.undoTarget.setIndex === setIndex
+            )
+        },
+        beginUndo(ticketId, itemId, type, setIndex = null) {
+            if (!ticketId || !itemId) return
+            this.undoTarget = {
+                ticketId,
+                itemId,
+                type,
+                setIndex,
+            }
+            this.undoSlideValue = 0
+        },
+        setUndoSlideValue(value) {
+            this.undoSlideValue = Math.max(
+                0,
+                Math.min(100, Number(value || 0)),
+            )
+        },
+        cancelUndo() {
+            this.undoTarget = null
+            this.undoSlideValue = 0
+        },
+        handleUndoSlideRelease() {
+            if (this.undoSlideValue >= 95) this.confirmUndo()
+            else this.undoSlideValue = 0
+        },
+        confirmUndo() {
+            const target = this.undoTarget
+            if (!target) return
+
+            let updated = null
+            if (target.type === 'set') {
+                updated = undoKitchenSetItem(
+                    target.ticketId,
+                    target.itemId,
+                )
+            } else if (target.type === 'set-selection') {
+                updated = undoKitchenSetSelection(
+                    target.ticketId,
+                    target.itemId,
+                    target.setIndex,
+                )
+            } else {
+                updated = undoKitchenItem(
+                    target.ticketId,
+                    target.itemId,
+                )
+            }
+
+            if (updated) {
+                this.updateTicketState(updated)
+                if (
+                    target.type === 'set' ||
+                    target.type === 'set-selection'
+                ) {
+                    const key = this.ticketSetKey(
+                        target.ticketId,
+                        target.itemId,
+                    )
+                    this.ticketSetExpanded = {
+                        ...this.ticketSetExpanded,
+                        [key]: true,
+                    }
+                }
+            }
+            this.cancelUndo()
         },
         quickCompleteItem(ticket, item) {
             if (

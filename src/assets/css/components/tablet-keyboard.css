@@ -23,15 +23,15 @@
 
 .tablet-keyboard > header span {
     color: #fc8019;
-    font-size: 0.65rem;
+    font-size: 0.95rem;
     font-weight: 900;
     letter-spacing: 0.08em;
 }
 
 .tablet-keyboard > header button {
-    min-width: 2.2rem;
-    width: 2.2rem;
-    height: 2.2rem;
+    min-width: 3.2rem;
+    width: 3.2rem;
+    height: 3.2rem;
     min-height: 2.2rem;
     flex: 0 0 2.2rem;
     border: 0;
@@ -69,14 +69,14 @@
 
 .tablet-keyboard button {
     min-width: 0;
-    min-height: 3rem;
+    min-height: 4.2rem;
     flex: 1;
     border: 1px solid #dfe0e3;
     border-radius: 0.55rem;
     background: #fff;
     color: #171826;
     font: inherit;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 800;
     box-shadow: 0 0.15rem 0.25rem rgba(23, 24, 38, 0.06);
 }

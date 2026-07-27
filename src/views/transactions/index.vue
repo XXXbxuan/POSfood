@@ -300,7 +300,7 @@ export default {
             selectedTransaction: null,
             detailPage: 0,
             currentPage: 1,
-            pageSize: 6,
+            pageSize: 5,
             typeFilters: ['All', 'Dine In', 'Takeaway'],
             transactions: [],
         }

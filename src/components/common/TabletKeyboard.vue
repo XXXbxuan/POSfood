@@ -51,7 +51,13 @@
                 >
                     <i class="fa-solid fa-arrow-up"></i>
                 </button>
-                <button v-for="key in row" :key="key" type="button" @click="pressLetter(key)">
+                <button
+                    v-for="key in row"
+                    :key="key"
+                    type="button"
+                    data-i18n-ignore="true"
+                    @click="pressLetter(key)"
+                >
                     {{ displayedKey(key) }}
                 </button>
                 <button

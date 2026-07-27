@@ -51,9 +51,10 @@
 .sidebar-controller .pos-sidebar nav {
     min-height: 0;
     display: grid;
-    gap: 0.55rem;
+    gap: 0.95rem;
     overflow-y: auto;
     overscroll-behavior: contain;
+    padding-bottom: 2rem;
 }
 
 .sidebar-controller .pos-sidebar nav button,

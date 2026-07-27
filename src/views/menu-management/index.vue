@@ -21,7 +21,7 @@
                         :class="{ active: selectedCategory === category }"
                         @click="selectedCategory = category"
                     >
-                        {{ category }}
+                        {{ localizedCategoryName(category) }}
                     </button>
                     <button
                         type="button"
@@ -79,7 +79,7 @@
                         type="button"
                         class="simple-menu-card"
                         :data-sort-id="product.id"
-                        :aria-label="`${product.name}, hold for one second to move`"
+                        :aria-label="`${localizedProductName(product)}, hold for one second to move`"
                         :class="productStatus(product)"
                         @click="handleProductClick(product)"
                     >
@@ -89,11 +89,11 @@
                                 muted: productStatus(product) !== 'available',
                             }"
                             :src="product.image"
-                            :alt="product.name"
+                            :alt="localizedProductName(product)"
                         /><span v-else class="card-photo-empty"
                             ><i class="fa-regular fa-image"></i></span
                         ><small>{{ productCardEyebrow(product) }}</small>
-                        <h3>{{ product.name }}</h3>
+                        <h3>{{ localizedProductName(product) }}</h3>
                         <strong>RM {{ money(product.price) }}</strong
                         ><span class="card-status">{{
                             statusLabel(product)
@@ -124,6 +124,10 @@
                             @click="
                                 groupEditor = {
                                     name: '',
+                                    nameMode: 'single',
+                                    nameTranslations: newLocalizedName(),
+                                    languageIndex: 0,
+                                    editingOptions: true,
                                     options: [{ name: '', price: 0 }],
                                 }
                             "
@@ -199,7 +203,7 @@
                                     type="button"
                                     @click="startFieldEdit('name')"
                                 >
-                                    {{ detailProduct.name }}</button
+                                    {{ localizedProductName(detailProduct) }}</button
                                 ><button
                                     type="button"
                                     class="product-price-field"
@@ -234,7 +238,7 @@
                                                 : 'fa-regular fa-circle'
                                         "
                                     ></i>
-                                    {{ category }}
+                                    {{ localizedCategoryName(category) }}
                                 </button>
                                 <button
                                     type="button"
@@ -454,7 +458,7 @@
                                 />
                                 <span>
                                     <strong>
-                                        {{ setItemProduct(item.productId)?.name }}
+                                        {{ localizedProductName(setItemProduct(item.productId)) }}
                                     </strong>
                                     <small>Qty {{ item.quantity }}</small>
                                 </span>
@@ -506,7 +510,7 @@
                         <h2>
                             {{
                                 setPickerProduct
-                                    ? setPickerProduct.name
+                                    ? localizedProductName(setPickerProduct)
                                     : 'Choose menu items'
                             }}
                         </h2>
@@ -545,7 +549,7 @@
                                 />
                                 <span>
                                     <strong>
-                                        {{ setItemProduct(item.productId)?.name }}
+                                        {{ localizedProductName(setItemProduct(item.productId)) }}
                                     </strong>
                                     <small>Qty {{ item.quantity }}</small>
                                 </span>
@@ -596,7 +600,7 @@
                                 :class="{ active: setPickerCategory === category }"
                                 @click="setPickerCategory = category"
                             >
-                                {{ category }}
+                                {{ localizedCategoryName(category) }}
                             </button>
                         </nav>
                         <div class="set-picker-product-grid">
@@ -614,7 +618,7 @@
                                 <span v-else class="set-picker-photo-empty">
                                     <i class="fa-regular fa-image"></i>
                                 </span>
-                                <strong>{{ product.name }}</strong>
+                                <strong>{{ localizedProductName(product) }}</strong>
                                 <small>RM {{ money(product.price) }}</small>
                             </button>
                         </div>
@@ -630,7 +634,7 @@
                             <i v-else class="fa-regular fa-image"></i>
                         </div>
                         <span>{{ setPickerProduct.category }}</span>
-                        <h3>{{ setPickerProduct.name }}</h3>
+                                <h3>{{ localizedProductName(setPickerProduct) }}</h3>
                         <strong>RM {{ money(setPickerProduct.price) }}</strong>
                         <div class="set-picker-quantity">
                             <button
@@ -788,16 +792,16 @@
         </div>
 
         <div
-            v-if="showCategoryInput"
+            v-if="categoryEditor"
             class="menu-admin-backdrop edit-layer"
-            @click.self="showCategoryInput = false"
+            @click.self="categoryEditor = null"
         >
             <form class="small-edit-modal" @submit.prevent="addCategory">
                 <button
                     type="button"
                     class="modal-x"
                     aria-label="Close"
-                    @click="showCategoryInput = false"
+                    @click="categoryEditor = null"
                 >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -805,21 +809,49 @@
                     <span>NEW</span>
                     <h2>Add category</h2>
                 </header>
-                <label
-                    >Category name<input
+                <div class="language-choice-row">
+                    <button
+                        type="button"
+                        :class="{ active: categoryEditor.mode === 'single' }"
+                        @click="setCategoryNameMode('single')"
+                    >
+                        {{ $t('singleLanguage', 'Single language') }}
+                    </button>
+                    <button
+                        type="button"
+                        :class="{ active: categoryEditor.mode === 'multiple' }"
+                        @click="setCategoryNameMode('multiple')"
+                    >
+                        {{ $t('multipleLanguages', 'Multiple languages') }}
+                    </button>
+                </div>
+                <template v-if="categoryEditor.mode === 'multiple'">
+                    <strong class="language-current-label">{{ languageLabel(categoryEditor.languageIndex) }}</strong>
+                    <label>Category name<input
                         ref="categoryInput"
-                        v-model.trim="newCategory"
+                        v-model.trim="categoryEditor.translations[currentCategoryLanguage]"
                         maxlength="24"
                         placeholder="e.g. Seasonal"
                         required
-                /></label>
-                <footer>
-                    <button type="button" @click="showCategoryInput = false">
-                        Cancel</button
-                    ><button type="submit" class="complete-edit">
-                        Complete
-                    </button>
-                </footer>
+                    /></label>
+                    <div class="language-entry-nav">
+                        <button type="button" class="language-nav-button" :disabled="categoryEditor.languageIndex === 0" @click="moveCategoryLanguage(-1)">{{ $t('previous', 'Previous') }}</button>
+                        <button v-if="categoryEditor.languageIndex < languages.length - 1" type="button" class="language-nav-button language-next-button" @click="moveCategoryLanguage(1)">{{ $t('next', 'Next') }}</button>
+                        <button v-else type="submit" class="language-nav-button language-done-button">{{ $t('done', 'Done') }}</button>
+                    </div>
+                </template>
+                <template v-else>
+                    <label>Category name<input
+                        ref="categoryInput"
+                        v-model.trim="categoryEditor.value"
+                        maxlength="24"
+                        placeholder="e.g. Seasonal"
+                        required
+                    /></label>
+                    <div class="language-entry-nav language-entry-nav-bottom language-single-complete-nav">
+                        <button type="submit" class="language-nav-button language-done-button">{{ $t('complete', 'Complete') }}</button>
+                    </div>
+                </template>
             </form>
         </div>
 
@@ -849,7 +881,7 @@
                         :class="{ active: categoryDeleteTarget === category }"
                         @click="categoryDeleteTarget = category"
                     >
-                        <strong>{{ category }}</strong
+                        <strong>{{ localizedCategoryName(category) }}</strong
                         ><span>{{ categoryProductCount(category) }} dishes</span
                         ><i class="fa-solid fa-check"></i>
                     </button>
@@ -905,7 +937,7 @@
             class="menu-admin-backdrop edit-layer"
             @click.self="fieldEditor = null"
         >
-            <form class="small-edit-modal" @submit.prevent="completeFieldEdit">
+            <form class="small-edit-modal language-editor-modal" @submit.prevent="completeFieldEdit">
                 <button
                     type="button"
                     class="modal-x"
@@ -914,16 +946,32 @@
                 >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
-                <header>
-                    <span>EDIT</span>
-                    <h2>{{ fieldEditor.label }}</h2>
-                </header>
-                <select
-                    v-if="fieldEditor.field === 'category'"
+                <template v-if="fieldEditor.field === 'name'">
+                    <div class="language-choice-row">
+                        <button type="button" :class="{ active: fieldEditor.mode === 'single' }" @click="setFieldNameMode('single')">{{ $t('singleLanguage', 'Single language') }}</button>
+                        <button type="button" :class="{ active: fieldEditor.mode === 'multiple' }" @click="setFieldNameMode('multiple')">{{ $t('multipleLanguages', 'Multiple languages') }}</button>
+                    </div>
+                    <template v-if="fieldEditor.mode === 'multiple'">
+                        <strong class="language-current-label">{{ languageLabel(fieldEditor.languageIndex) }}</strong>
+                        <input v-model.trim="fieldEditor.translations[currentNameLanguage]" required />
+                        <div class="language-entry-nav">
+                            <button type="button" class="language-nav-button" :disabled="fieldEditor.languageIndex === 0" @click="moveNameLanguage(-1)">{{ $t('previous', 'Previous') }}</button>
+                            <button v-if="fieldEditor.languageIndex < languages.length - 1" type="button" class="language-nav-button language-next-button" @click="moveNameLanguage(1)">{{ $t('next', 'Next') }}</button>
+                            <button v-else type="button" class="language-nav-button language-done-button" @click="completeFieldEdit">Done</button>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <input v-model.trim="fieldEditor.value" required />
+                        <div class="language-entry-nav language-entry-nav-bottom language-single-complete-nav">
+                            <button type="button" class="language-nav-button language-done-button" @click="completeFieldEdit">Complete</button>
+                        </div>
+                    </template>
+                </template><select
+                    v-else-if="fieldEditor.field === 'category'"
                     v-model="fieldEditor.value"
                 >
                     <option v-for="category in categories" :key="category">
-                        {{ category }}
+                        {{ localizedCategoryName(category) }}
                     </option></select
                 ><textarea
                     v-else-if="fieldEditor.field === 'description'"
@@ -938,13 +986,6 @@
                     :min="fieldEditor.field === 'price' ? '0' : undefined"
                     required
                 />
-                <footer>
-                    <button type="button" @click="fieldEditor = null">
-                        Cancel</button
-                    ><button type="submit" class="complete-edit">
-                        Complete
-                    </button>
-                </footer>
             </form>
         </div>
 
@@ -996,7 +1037,7 @@
             class="menu-admin-backdrop edit-layer"
             @click.self="groupEditor = null"
         >
-            <form class="small-edit-modal" @submit.prevent="completeGroupEdit">
+            <form class="small-edit-modal language-editor-modal" @submit.prevent="completeGroupEdit">
                 <button
                     type="button"
                     class="modal-x"
@@ -1005,16 +1046,21 @@
                 >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
-                <header>
-                    <span>NEW</span>
-                    <h2>Option category</h2>
-                </header>
-                <label
-                    >Category name<input
-                        v-model.trim="groupEditor.name"
-                        placeholder="e.g. Spice level"
-                        required
-                /></label>
+                <div class="language-choice-row">
+                    <button type="button" :class="{ active: groupEditor.nameMode === 'single' }" @click="setGroupNameMode('single')">{{ $t('singleLanguage', 'Single language') }}</button>
+                    <button type="button" :class="{ active: groupEditor.nameMode === 'multiple' }" @click="setGroupNameMode('multiple')">{{ $t('multipleLanguages', 'Multiple languages') }}</button>
+                </div>
+                <input v-if="groupEditor.nameMode === 'single'" v-model.trim="groupEditor.name" placeholder="e.g. Spice level" required />
+                <template v-else-if="!groupEditor.editingOptions">
+                    <strong class="language-current-label">{{ languageLabel(groupEditor.languageIndex) }}</strong>
+                    <input v-model.trim="groupEditor.nameTranslations[currentGroupLanguage]" placeholder="e.g. Spice level" required />
+                    <div class="language-entry-nav language-entry-nav-bottom">
+                        <button type="button" class="language-nav-button" :disabled="groupEditor.languageIndex === 0" @click="moveGroupLanguage(-1)">{{ $t('previous', 'Previous') }}</button>
+                        <button v-if="groupEditor.languageIndex < languages.length - 1" type="button" class="language-nav-button language-next-button" @click="moveGroupLanguage(1)">{{ $t('next', 'Next') }}</button>
+                        <button v-else type="button" class="language-nav-button language-next-button" @click="openGroupOptions">Next</button>
+                    </div>
+                </template>
+                <template v-if="groupEditor.nameMode === 'single' || groupEditor.editingOptions">
                 <div class="group-option-labels">
                     <span>Option</span><span>Extra price (RM)</span>
                 </div>
@@ -1051,13 +1097,14 @@
                         −
                     </button>
                 </div>
-                <footer>
-                    <button type="button" @click="groupEditor = null">
-                        Cancel</button
-                    ><button type="submit" class="complete-edit">
-                        Complete
-                    </button>
-                </footer>
+                <div v-if="groupEditor.nameMode === 'multiple'" class="language-entry-nav language-entry-nav-bottom group-complete-nav">
+                    <button type="button" class="language-nav-button" @click="backToGroupLanguage">{{ $t('previous', 'Previous') }}</button>
+                    <button type="button" class="language-nav-button language-done-button" @click="completeGroupEdit">Complete</button>
+                </div>
+                <div v-else class="language-entry-nav language-entry-nav-bottom language-single-complete-nav">
+                    <button type="button" class="language-nav-button language-done-button" @click="completeGroupEdit">Complete</button>
+                </div>
+                </template>
             </form>
         </div>
 
@@ -1178,18 +1225,20 @@ import {
     sortProductsByAvailability,
 } from '@/utils/menu.js'
 import { safeMenuPrice, validMenuPrice } from '@/utils/money.js'
+import { LANGUAGES, localizedName, makeLocalizedName } from '@/system/language'
 export default {
     name: 'POSMenuManagement',
     components: { PosTopbar },
     data() {
         const catalog = loadMenuCatalog()
         return {
+            languages: LANGUAGES,
             categories: catalog.categories,
             products: catalog.products,
             keyword: '',
             selectedCategory: 'All',
-            showCategoryInput: false,
-            newCategory: '',
+            categoryTranslations: catalog.categoryTranslations,
+            categoryEditor: null,
             categoryDeletePicker: false,
             categoryDeleteTarget: '',
             categoryDeleteConfirm: false,
@@ -1216,13 +1265,25 @@ export default {
         }
     },
     computed: {
+        currentCategoryLanguage() {
+            return (
+                LANGUAGES[this.categoryEditor?.languageIndex || 0]?.code ||
+                'en'
+            )
+        },
+        currentNameLanguage() {
+            return LANGUAGES[this.fieldEditor?.languageIndex || 0]?.code || 'en'
+        },
+        currentGroupLanguage() {
+            return LANGUAGES[this.groupEditor?.languageIndex || 0]?.code || 'en'
+        },
         filteredProducts() {
             const search = this.keyword.toLowerCase()
             const products = this.products.filter(
                 (product) =>
                     (this.selectedCategory === 'All' ||
                         product.category === this.selectedCategory) &&
-                    (!search || product.name.toLowerCase().includes(search)),
+                    (!search || this.localizedProductName(product).toLowerCase().includes(search)),
             )
             return sortProductsByAvailability(products)
         },
@@ -1289,6 +1350,59 @@ export default {
         clearTimeout(this.toastTimer)
     },
     methods: {
+        localizedProductName(product) {
+            return localizedName(product?.nameTranslations, product?.name || '')
+        },
+        localizedCategoryName(category) {
+            return localizedName(
+                this.categoryTranslations?.[category],
+                category || '',
+            )
+        },
+        newLocalizedName() {
+            return makeLocalizedName()
+        },
+        languageLabel(index) {
+            return LANGUAGES[index]?.label || LANGUAGES[0].label
+        },
+        moveNameLanguage(delta) {
+            const nextIndex = this.fieldEditor.languageIndex + delta
+            if (nextIndex >= 0 && nextIndex < LANGUAGES.length)
+                this.fieldEditor.languageIndex = nextIndex
+        },
+        moveCategoryLanguage(delta) {
+            const code = this.currentCategoryLanguage
+            if (!this.categoryEditor.translations[code]?.trim())
+                return this.showToast('Enter the category name first.')
+            const nextIndex = this.categoryEditor.languageIndex + delta
+            if (nextIndex >= 0 && nextIndex < LANGUAGES.length)
+                this.categoryEditor.languageIndex = nextIndex
+        },
+        setCategoryNameMode(mode) {
+            this.categoryEditor.mode = mode
+            this.categoryEditor.languageIndex = 0
+        },
+        moveGroupLanguage(delta) {
+            const nextIndex = this.groupEditor.languageIndex + delta
+            if (nextIndex >= 0 && nextIndex < LANGUAGES.length)
+                this.groupEditor.languageIndex = nextIndex
+        },
+        setFieldNameMode(mode) {
+            this.fieldEditor.mode = mode
+            this.fieldEditor.languageIndex = 0
+        },
+        setGroupNameMode(mode) {
+            this.groupEditor.nameMode = mode
+            this.groupEditor.languageIndex = 0
+            this.groupEditor.editingOptions = mode === 'single'
+        },
+        openGroupOptions() {
+            this.groupEditor.editingOptions = true
+        },
+        backToGroupLanguage() {
+            this.groupEditor.editingOptions = false
+            this.groupEditor.languageIndex = LANGUAGES.length - 1
+        },
         handleAddCard() {
             if (this.selectedCategory === 'Sets') this.createSetMeal()
             else this.createProduct()
@@ -1308,7 +1422,11 @@ export default {
         },
         persist(message, force = false) {
             if (force || !this.isCreatingProduct)
-                saveMenuCatalog(this.categories, this.products)
+                saveMenuCatalog(
+                    this.categories,
+                    this.products,
+                    this.categoryTranslations,
+                )
             if (message) this.showToast(message)
         },
         showToast(message) {
@@ -1337,11 +1455,27 @@ export default {
             this.persist(`${movedProduct.name} position was saved.`)
         },
         showCategoryField() {
-            this.showCategoryInput = true
+            this.categoryEditor = {
+                mode: 'single',
+                value: '',
+                translations: makeLocalizedName(),
+                languageIndex: 0,
+            }
             this.$nextTick(() => this.$refs.categoryInput?.focus())
         },
         addCategory() {
-            const name = this.newCategory.trim()
+            const editor = this.categoryEditor
+            if (!editor) return
+            const translations =
+                editor.mode === 'multiple'
+                    ? { ...editor.translations }
+                    : makeLocalizedName(editor.value.trim())
+            if (
+                editor.mode === 'multiple' &&
+                LANGUAGES.some((language) => !translations[language.code]?.trim())
+            )
+                return this.showToast('Complete all language names first.')
+            const name = translations.en.trim()
             if (!name) return
             if (
                 this.categories.some(
@@ -1350,9 +1484,9 @@ export default {
             )
                 return this.showToast('This category already exists.')
             this.categories.push(name)
+            this.categoryTranslations[name] = translations
             this.selectedCategory = name
-            this.newCategory = ''
-            this.showCategoryInput = false
+            this.categoryEditor = null
             this.persist(`${name} category was added.`)
         },
         categoryProductCount(category) {
@@ -1392,6 +1526,7 @@ export default {
                 })
             }
             this.categories = remaining
+            delete this.categoryTranslations[target]
             if (this.selectedCategory === target)
                 this.selectedCategory = destination || 'All'
             this.categoryDeleteConfirm = false
@@ -1406,6 +1541,8 @@ export default {
             const product = {
                 id: `dish-${Date.now()}`,
                 name: '',
+                nameMode: 'single',
+                nameTranslations: makeLocalizedName(),
                 category,
                 description: '',
                 price: 0,
@@ -1489,7 +1626,11 @@ export default {
             this.products = this.products.filter(
                 (product) => product.id !== this.setEditor.id,
             )
-            saveMenuCatalog(this.categories, this.products)
+            saveMenuCatalog(
+                this.categories,
+                this.products,
+                this.categoryTranslations,
+            )
             this.clearSetMealEditor()
             this.showToast(`${deletedName} was deleted.`)
         },
@@ -1598,7 +1739,11 @@ export default {
                 this.products.splice(index, 1, setProduct)
             } else this.products.unshift(setProduct)
 
-            saveMenuCatalog(this.categories, this.products)
+            saveMenuCatalog(
+                this.categories,
+                this.products,
+                this.categoryTranslations,
+            )
             this.selectedCategory = 'Sets'
             this.clearSetMealEditor()
             this.showToast(`${setProduct.name} was saved.`)
@@ -1632,6 +1777,8 @@ export default {
             if (!this.isDraftReady) return
             const name = this.detailProduct.name.trim()
             this.detailProduct.name = name
+            if (!this.detailProduct.nameTranslations?.en)
+                this.detailProduct.nameTranslations = makeLocalizedName(name)
             this.persist(`${name} was added.`, true)
             this.newProductId = ''
             this.newProductSnapshot = ''
@@ -1640,7 +1787,11 @@ export default {
         discardNewProduct() {
             const id = this.newProductId
             this.products = this.products.filter((product) => product.id !== id)
-            saveMenuCatalog(this.categories, this.products)
+            saveMenuCatalog(
+                this.categories,
+                this.products,
+                this.categoryTranslations,
+            )
             this.newProductId = ''
             this.newProductSnapshot = ''
             this.closeDetail()
@@ -1656,6 +1807,12 @@ export default {
                 field,
                 label: labels[field],
                 value: this.detailProduct[field] ?? '',
+                mode: this.detailProduct.nameMode || 'single',
+                translations: {
+                    ...makeLocalizedName(this.detailProduct.name || ''),
+                    ...(this.detailProduct.nameTranslations || {}),
+                },
+                languageIndex: 0,
             }
         },
         completeFieldEdit() {
@@ -1665,7 +1822,22 @@ export default {
                     0,
                     Number(editor.value) || 0,
                 )
-            else
+            else if (editor.field === 'name') {
+                if (editor.mode === 'multiple') {
+                    this.detailProduct.nameMode = 'multiple'
+                    this.detailProduct.nameTranslations = { ...editor.translations }
+                    this.detailProduct.name =
+                        editor.translations.en ||
+                        editor.translations.cn ||
+                        editor.translations.bm ||
+                        editor.translations['zh-CN'] ||
+                        editor.translations.ms
+                } else {
+                    this.detailProduct.nameMode = 'single'
+                    this.detailProduct.name = String(editor.value || '').trim()
+                    this.detailProduct.nameTranslations = makeLocalizedName(this.detailProduct.name)
+                }
+            } else
                 this.detailProduct[editor.field] = String(
                     editor.value || '',
                 ).trim()
@@ -1700,7 +1872,7 @@ export default {
             ;(product.modifierGroups || []).forEach((group, index) =>
                 groups.push({
                     key: `modifier:${index}`,
-                    label: group.name,
+                    label: localizedName(group.nameTranslations, group.name),
                     items: group.options || [],
                     priced: true,
                     custom: true,
@@ -1798,7 +1970,19 @@ export default {
             this.detailProduct.modifierGroups ||
                 (this.detailProduct.modifierGroups = [])
             this.detailProduct.modifierGroups.push({
-                name: editor.name,
+                name: editor.nameMode === 'multiple'
+                    ? (
+                          editor.nameTranslations.en ||
+                          editor.nameTranslations.cn ||
+                          editor.nameTranslations.bm ||
+                          editor.nameTranslations['zh-CN'] ||
+                          editor.nameTranslations.ms
+                      )
+                    : editor.name,
+                nameMode: editor.nameMode,
+                nameTranslations: editor.nameMode === 'multiple'
+                    ? { ...editor.nameTranslations }
+                    : makeLocalizedName(editor.name),
                 options,
             })
             this.groupEditor = null

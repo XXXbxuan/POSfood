@@ -396,6 +396,82 @@ function completeKitchenTicket(ticketId) {
     })
 }
 
+function undoKitchenItem(ticketId, itemId) {
+    return updateTicket(ticketId, (ticket) => {
+        ticket.status = 'preparing'
+        ticket.completedAt = ''
+        ticket.items = ticket.items.map((item) =>
+            item.id === itemId
+                ? {
+                      ...item,
+                      kitchenStatus: 'queued',
+                      startedAt: '',
+                      completedAt: '',
+                  }
+                : item,
+        )
+        return ticket
+    })
+}
+
+function undoKitchenSetItem(ticketId, itemId) {
+    return updateTicket(ticketId, (ticket) => {
+        ticket.status = 'preparing'
+        ticket.completedAt = ''
+        ticket.items = ticket.items.map((item) => {
+            if (item.id !== itemId) return item
+            return {
+                ...item,
+                kitchenStatus: 'queued',
+                startedAt: '',
+                completedAt: '',
+                setSelections: (item.setSelections || []).map(
+                    (selection) => ({
+                        ...selection,
+                        kitchenStatus: 'queued',
+                        startedAt: '',
+                        completedAt: '',
+                    }),
+                ),
+            }
+        })
+        return ticket
+    })
+}
+
+function undoKitchenSetSelection(ticketId, itemId, setIndex) {
+    return updateTicket(ticketId, (ticket) => {
+        ticket.status = 'preparing'
+        ticket.completedAt = ''
+        ticket.items = ticket.items.map((item) => {
+            if (item.id !== itemId) return item
+            const setSelections = (item.setSelections || []).map(
+                (selection, index) =>
+                    index === setIndex
+                        ? {
+                              ...selection,
+                              kitchenStatus: 'queued',
+                              startedAt: '',
+                              completedAt: '',
+                          }
+                        : selection,
+            )
+            const allQueued =
+                setSelections.length > 0 &&
+                setSelections.every(
+                    (selection) => selection.kitchenStatus === 'queued',
+                )
+            return {
+                ...item,
+                setSelections,
+                kitchenStatus: allQueued ? 'queued' : 'preparing',
+                completedAt: '',
+            }
+        })
+        return ticket
+    })
+}
+
 function redoKitchenItem(ticketId, itemId) {
     return updateTicket(ticketId, (ticket) => {
         ticket.status = 'preparing'
@@ -579,5 +655,8 @@ export {
     returnKitchenItems,
     startKitchenItem,
     startKitchenSetSelection,
+    undoKitchenItem,
+    undoKitchenSetItem,
+    undoKitchenSetSelection,
     upsertKitchenTicket,
 }

@@ -82,7 +82,7 @@
 }
 
 .login-page .login-pin-form {
-    padding: 1.6rem 2.4rem;
+    padding: 1.5rem 2.4rem;
 }
 
 .login-page .login-pin-form h1 {
@@ -274,7 +274,7 @@
 }
 
 .login-page .login-pin-pad button {
-    height: 3.4rem;
+    height: 3.5rem;
     border: 1px solid #ececec;
     border-radius: 0.4rem;
     background: #fff;
@@ -512,4 +512,40 @@
     .login-page .demo-hint {
         text-align: center;
     }
+}
+
+
+.login-language-switcher {
+    position: fixed;
+    top: 1.1rem;
+    right: 1.1rem;
+    z-index: 12;
+    height: 2.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 0.6rem;
+    background: rgba(23, 24, 38, 0.72);
+    color: #fff;
+    backdrop-filter: blur(0.6rem);
+}
+
+.login-language-switcher i {
+    color: #fc8019;
+}
+
+.login-language-switcher select {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 800;
+}
+
+.login-language-switcher option {
+    color: #171826;
+    background: #fff;
 }

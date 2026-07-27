@@ -297,8 +297,8 @@
 }
 
 .menu-admin-page .inspector-close {
-    width: 2.55rem;
-    height: 2.55rem;
+    width: 2.80rem;
+    height: 2.80rem;
     border: 0;
     border-radius: 50%;
     background: #fff2e8;
@@ -421,7 +421,7 @@
 
 .menu-admin-page .option-chip,
 .menu-admin-page .option-add {
-    min-height: 2.25rem;
+    min-height: 2.5rem;
     padding: 0.35rem 0.65rem;
     border: 1px solid #e1e3e6;
     border-radius: 0.45rem;
@@ -464,15 +464,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.55rem;
+    gap: 1rem;
     padding: 0.8rem 0.55rem;
     border-left: 1px solid #ececef;
     background: #fafafa;
 }
 
 .menu-admin-page .inspector-actions button {
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     display: grid;
     place-items: center;
     border: 1px solid #e0e2e5;
@@ -666,8 +666,8 @@
     }
 
     .menu-admin-page .inspector-actions button {
-        width: 2.8rem;
-        height: 2.8rem;
+        width: 3.4rem;
+        height: 3.4rem;
     }
 }
 
@@ -1518,17 +1518,21 @@
 }
 
 .menu-admin-page .product-category-choices > div {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .menu-admin-page .product-category-choices button {
     min-width: 0;
-    min-height: 2.35rem;
-    padding: 0.4rem 0.5rem;
+    min-height: 2.65rem;
+    padding: 0.4rem 0.55rem;
     overflow: hidden;
-    font-size: 0.82rem;
+    font-size: 0.9rem;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.menu-admin-page .product-category-choices button > i {
+    flex: 0 0 auto;
 }
 
 .menu-admin-page .set-meal-editor {
@@ -2136,7 +2140,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1.75fr) minmax(5.5rem, 0.75fr) 2.8rem;
     gap: 0.45rem;
-    margin-top: 0.8rem;
+    margin-top: 2.8rem;
     color: #555963;
     font-size: 0.85rem;
     font-weight: 850;
@@ -2164,4 +2168,108 @@
     background: #fff2e8;
     color: #fc8019;
     font-size: 1.1rem;
+}
+
+/* Compact language editor: the two modes stay visible for tablet use. */
+.menu-admin-page .language-choice-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+    margin-bottom: 2.65rem;
+    padding-right: 0;
+}
+
+.menu-admin-page .language-choice-row button {
+    min-height: 2.8rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid #dfe1e4;
+    border-radius: 0.55rem;
+    background: #fff;
+    color: #171826;
+    font: inherit;
+    font-weight: 850;
+}
+
+.menu-admin-page .language-choice-row button.active {
+    border-color: #fc8019;
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.menu-admin-page .language-entry-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 1.1rem;
+    margin: 2.45rem 0 0.1rem;
+}
+
+.menu-admin-page .language-entry-nav .language-nav-button:first-child {
+    justify-self: start;
+}
+
+.menu-admin-page .language-entry-nav .language-nav-button:last-child {
+    justify-self: end;
+}
+
+.menu-admin-page .language-nav-button {
+    min-width: 8.25rem;
+    min-height: 3.45rem;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid #dfe1e4;
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #171826;
+    font: inherit;
+    font-weight: 700;
+}
+
+.menu-admin-page .language-nav-button:disabled {
+    border-color: #edf0f2;
+    color: #b8bec6;
+    background: #f7f8f9;
+    cursor: not-allowed;
+}
+
+.menu-admin-page .language-next-button {
+    border-color: #fc8019;
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.menu-admin-page .language-done-button {
+    border-color: #09ae35;
+    background: #09ae35;
+    color: #fff;
+}
+
+.menu-admin-page .language-current-label {
+    display: block;
+    margin: 0.15rem 0 0.55rem;
+    color: #171826;
+    font-size: 1rem;
+    font-weight: 850;
+    text-align: center;
+}
+
+.menu-admin-page .language-entry-nav-bottom {
+    margin-top: 2rem;
+    margin-bottom: 0.15rem;
+}
+
+.menu-admin-page .language-single-complete-nav {
+    display: flex;
+    justify-content: center;
+}
+
+.menu-admin-page .language-editor-modal {
+    width: min(31rem, 92vw);
+    padding: 3.55rem 1.5rem 1.5rem;
+}
+
+.menu-admin-page .language-editor-modal .modal-x {
+    top: 0.85rem;
+    right: 0.95rem;
+    width: 2.45rem;
+    height: 2.45rem;
 }

@@ -18,6 +18,7 @@
 
             <ProductMenu
                 :categories="categories"
+                :category-translations="categoryTranslations"
                 :active-category="activeCategory"
                 :products="filteredProducts"
                 @update:active-category="activeCategory = $event"
@@ -972,6 +973,7 @@ export default {
                 { label: 'Transactions', icon: 'fa-receipt' },
             ],
             categories: catalog.categories,
+            categoryTranslations: catalog.categoryTranslations,
             products: catalog.products,
         }
     },

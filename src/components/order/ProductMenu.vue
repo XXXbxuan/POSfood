@@ -8,7 +8,7 @@
                 :class="{ active: activeCategory === category }"
                 @click="$emit('update:activeCategory', category)"
             >
-                {{ category }}
+                {{ localizedCategoryName(category) }}
             </button>
         </div>
         <div v-if="products.length" class="product-grid">
@@ -27,7 +27,7 @@
                     <img v-if="product.image" :src="product.image" :alt="product.name" />
                     <i v-else class="fa-regular fa-image"></i>
                 </div>
-                <h2>{{ product.name }}</h2>
+                <h2>{{ localizedProductName(product) }}</h2>
                 <small v-if="product.type === 'set'" class="set-summary">
                     {{ setSummary(product) }}
                 </small>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { localizedName } from '@/system/language'
 import {
     productAvailabilityLabel,
     productAvailabilityStatus,
@@ -57,11 +58,21 @@ export default {
     name: 'ProductMenu',
     props: {
         categories: { type: Array, default: () => [] },
+        categoryTranslations: { type: Object, default: () => ({}) },
         activeCategory: { type: String, default: '' },
         products: { type: Array, default: () => [] },
     },
     emits: ['update:activeCategory', 'select'],
     methods: {
+        localizedProductName(product) {
+            return localizedName(product?.nameTranslations, product?.name || '')
+        },
+        localizedCategoryName(category) {
+            return localizedName(
+                this.categoryTranslations?.[category],
+                category || '',
+            )
+        },
         money(value) {
             return Number(value || 0).toFixed(2)
         },

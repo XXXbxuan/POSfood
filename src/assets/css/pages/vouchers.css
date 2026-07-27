@@ -84,8 +84,10 @@
 
 .voucher-card {
     position: relative;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    min-height: 20rem;
+    min-height: 22rem;
     padding: 1rem;
     border: 1px solid var(--pos-color-border);
     border-radius: var(--pos-card-radius);
@@ -265,7 +267,8 @@
     display: flex;
     justify-content: space-between;
     gap: 0.65rem;
-    margin-top: 0.9rem;
+    margin-top: auto;
+    padding-top: 0.9rem;
     padding-top: 0.8rem;
     border-top: 1px solid var(--pos-color-border);
     color: var(--pos-color-muted);
@@ -446,4 +449,38 @@
     .voucher-condition-grid {
         grid-template-columns: 1fr;
     }
+}
+/* Append to: src/assets/css/pages/vouchers.css */
+
+.voucher-filter-spacer {
+    min-width: 0.75rem;
+    flex: 1 1 auto;
+}
+
+.voucher-filter-bar .voucher-filter-print {
+    width: 2.55rem;
+    min-width: 2.55rem;
+    height: 2.55rem;
+    min-height: 2.55rem;
+    justify-content: center;
+    margin-left: auto;
+    padding: 0;
+    border: 1px solid #ffc99d;
+    background: #fff7f0;
+    color: var(--pos-color-accent);
+    font-size: 1rem;
+}
+
+.voucher-filter-bar .voucher-filter-print:hover,
+.voucher-filter-bar .voucher-filter-print:focus-visible {
+    border-color: var(--pos-color-accent);
+    background: var(--pos-color-accent-soft);
+    outline: 0;
+}
+
+.voucher-filter-bar .voucher-filter-print:disabled {
+    border-color: #e2e3e6;
+    background: #f2f2f3;
+    color: #b3b5ba;
+    cursor: not-allowed;
 }

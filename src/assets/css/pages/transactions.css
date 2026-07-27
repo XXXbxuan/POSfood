@@ -705,7 +705,7 @@
 .transactions-page .transaction-list {
     min-height: 0;
     flex: 1;
-    grid-template-rows: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
     overflow: hidden;
 }
 
@@ -1025,12 +1025,12 @@
 
 @media (min-width: 73.8125em) {
     .transactions-page .transaction-list {
-        grid-template-rows: repeat(6, minmax(4.55rem, 1fr));
+        grid-template-rows: repeat(5, minmax(5.35rem, 1fr));
     }
 
     .transactions-page .transaction-list > article {
-        min-height: 4.55rem;
-        padding: 0.55rem 1rem;
+        min-height: 5.35rem;
+        padding: 0.7rem 1rem;
         overflow: hidden;
     }
 

@@ -18,6 +18,64 @@ function itemOptionSummary(item) {
     return details.slice(0, 2).join(' · ')
 }
 
+function renderUndoControl(ctx, label, className = '') {
+    return h(
+        'div',
+        {
+            class: ['kitchen-ticket-undo-control', className],
+            onClick: (event) => event.stopPropagation(),
+            onPointerdown: (event) => event.stopPropagation(),
+        },
+        [
+            h(
+                'div',
+                {
+                    class: [
+                        'kitchen-ticket-undo-track',
+                        { active: ctx.undoSlideValue >= 50 },
+                    ],
+                },
+                [
+                    h('span', {
+                        class: 'kitchen-ticket-undo-fill',
+                        style: { width: `${ctx.undoSlideValue}%` },
+                    }),
+                    h('strong', [
+                        h('span', { class: 'kitchen-ticket-undo-label' }, [
+                            h('span', 'UNDO'),
+                            icon('fa-arrow-right-long'),
+                        ]),
+                    ]),
+                    h('input', {
+                        type: 'range',
+                        min: 0,
+                        max: 100,
+                        step: 1,
+                        value: ctx.undoSlideValue,
+                        'aria-label': `Slide to undo ${label}`,
+                        onInput: (event) =>
+                            ctx.setUndoSlideValue(Number(event.target.value)),
+                        onChange: () => ctx.handleUndoSlideRelease(),
+                    }),
+                ],
+            ),
+            h(
+                'button',
+                {
+                    type: 'button',
+                    class: 'kitchen-ticket-undo-cancel',
+                    'aria-label': `Cancel undo ${label}`,
+                    onClick: (event) => {
+                        event.stopPropagation()
+                        ctx.cancelUndo()
+                    },
+                },
+                [icon('fa-xmark')],
+            ),
+        ],
+    )
+}
+
 function renderQuickDishButton(
     ctx,
     ticket,
@@ -26,9 +84,28 @@ function renderQuickDishButton(
     completeHandler,
     options = {},
 ) {
+    const undoType = options.setSelection ? 'set-selection' : 'item'
+    const undoItemId = options.parentItemId || item.id
+    const undoSetIndex = options.setSelection ? options.setIndex : null
+    const undoActive =
+        status === 'done' &&
+        ctx.isUndoTarget(
+            ticket.id,
+            undoItemId,
+            undoType,
+            undoSetIndex,
+        )
+
+    if (undoActive)
+        return renderUndoControl(
+            ctx,
+            item.name,
+            options.setSelection ? 'set-selection' : '',
+        )
+
     const disabled =
-        ticket.status === 'completed' ||
-        ['done', 'returned'].includes(status)
+        status === 'returned' ||
+        (ticket.status === 'completed' && status !== 'done')
     return h(
         'button',
         {
@@ -44,7 +121,17 @@ function renderQuickDishButton(
             disabled,
             onClick: (event) => {
                 event.stopPropagation()
-                if (!disabled) completeHandler()
+                if (disabled) return
+                if (status === 'done') {
+                    ctx.beginUndo(
+                        ticket.id,
+                        undoItemId,
+                        undoType,
+                        undoSetIndex,
+                    )
+                    return
+                }
+                completeHandler()
             },
         },
         [
@@ -89,7 +176,6 @@ function renderTicketItems(ctx, ticket) {
 
         if (item.setSelections?.length) {
             const expanded = ctx.isTicketSetExpanded(ticket.id, item)
-            const allSetDone = ctx.setItemAllDone(item)
             rows.push(
                 h(
                     'li',
@@ -98,56 +184,104 @@ function renderTicketItems(ctx, ticket) {
                         class: 'kitchen-ticket-set-row',
                     },
                     [
-                        h(
-                            'button',
-                            {
-                                type: 'button',
-                                class: [
-                                    'kitchen-ticket-set-heading',
-                                    itemStatus,
-                                    { expanded, collapsed: !expanded },
-                                ],
-                                onClick: (event) => {
-                                    event.stopPropagation()
-                                    ctx.toggleTicketSet(ticket.id, item)
-                                },
-                            },
-                            [
-                                h(
-                                    'span',
-                                    { class: 'kitchen-ticket-set-heading-left' },
-                                    [
-                                        itemStatus === 'done'
-                                            ? h(
-                                                  'span',
-                                                  {
-                                                      class: [
-                                                          'kitchen-ticket-dish-icon',
-                                                          'set-icon',
-                                                          itemStatus,
-                                                      ],
-                                                  },
-                                                  [icon('fa-check')],
+                        itemStatus === 'done' &&
+                        ctx.isUndoTarget(
+                            ticket.id,
+                            item.id,
+                            'set',
+                            null,
+                        )
+                            ? renderUndoControl(ctx, item.name, 'set-heading')
+                            : h(
+                                  'button',
+                                  {
+                                      type: 'button',
+                                      class: [
+                                          'kitchen-ticket-set-heading',
+                                          itemStatus,
+                                          {
+                                              expanded,
+                                              collapsed: !expanded,
+                                          },
+                                      ],
+                                      onClick: (event) => {
+                                          event.stopPropagation()
+                                          if (itemStatus === 'done') {
+                                              ctx.beginUndo(
+                                                  ticket.id,
+                                                  item.id,
+                                                  'set',
+                                                  null,
                                               )
-                                            : null,
-                                        h('strong', item.name),
-                                    ],
-                                ),
-                                h('small', [
-                                    `${item.setSelections.length} set dishes`,
-                                    allSetDone
-                                        ? null
-                                        : h('i', {
-                                              class: `fa-solid ${
-                                                  expanded
-                                                      ? 'fa-chevron-up'
-                                                      : 'fa-chevron-down'
-                                              }`,
-                                              'aria-hidden': 'true',
-                                          }),
-                                ]),
-                            ],
-                        ),
+                                              return
+                                          }
+                                          ctx.toggleTicketSet(ticket.id, item)
+                                      },
+                                  },
+                                  [
+                                      h(
+                                          'span',
+                                          {
+                                              class: 'kitchen-ticket-set-heading-left',
+                                          },
+                                          [
+                                              itemStatus === 'done'
+                                                  ? h(
+                                                        'span',
+                                                        {
+                                                            class: [
+                                                                'kitchen-ticket-dish-icon',
+                                                                'set-icon',
+                                                                itemStatus,
+                                                            ],
+                                                        },
+                                                        [icon('fa-check')],
+                                                    )
+                                                  : null,
+                                              h('strong', item.name),
+                                          ],
+                                      ),
+                                      h(
+                                          'small',
+                                          {
+                                              role: 'button',
+                                              tabindex: 0,
+                                              onClick: (event) => {
+                                                  event.stopPropagation()
+                                                  ctx.toggleTicketSet(
+                                                      ticket.id,
+                                                      item,
+                                                  )
+                                              },
+                                              onKeydown: (event) => {
+                                                  if (
+                                                      ['Enter', ' '].includes(
+                                                          event.key,
+                                                      )
+                                                  ) {
+                                                      event.preventDefault()
+                                                      event.stopPropagation()
+                                                      ctx.toggleTicketSet(
+                                                          ticket.id,
+                                                          item,
+                                                      )
+                                                  }
+                                              },
+                                          },
+                                          [
+                                              `${item.setSelections.length} set dishes`,
+                                              h('i', {
+                                                  class: `fa-solid ${
+                                                      expanded
+                                                          ? 'fa-chevron-up'
+                                                          : 'fa-chevron-down'
+                                                  }`,
+                                                  'aria-hidden': 'true',
+                                              }),
+                                          ],
+                                      ),
+                                  ],
+                              ),
                         expanded
                             ? h(
                                   'div',
@@ -171,6 +305,8 @@ function renderTicketItems(ctx, ticket) {
                                                           ),
                                                       {
                                                           setSelection: true,
+                                                          parentItemId: item.id,
+                                                          setIndex,
                                                           itemIndex,
                                                           selectionIndex,
                                                       },
@@ -667,18 +803,20 @@ function renderTicketModal(ctx) {
                         ]),
                         h('div', { class: 'kitchen-modal-actions' }, [
                             !ctx.isHistoryDetail
-                                ? h(
-                                      'button',
-                                      {
-                                          type: 'button',
-                                          class: 'kitchen-return-trigger',
-                                          onClick: ctx.openReturnDialog,
-                                      },
-                                      [
-                                          icon('fa-rotate-left'),
-                                          ' Return',
-                                      ],
-                                  )
+                                ? ticket.orderType !== 'Takeaway'
+                                    ? h(
+                                          'button',
+                                          {
+                                              type: 'button',
+                                              class: 'kitchen-return-trigger',
+                                              onClick: ctx.openReturnDialog,
+                                          },
+                                          [
+                                              icon('fa-rotate-left'),
+                                              ' Return',
+                                          ],
+                                      )
+                                    : null
                                 : h(
                                       'button',
                                       {

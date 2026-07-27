@@ -20,7 +20,35 @@
                 Restro <span>POS</span>
             </h1>
         </div>
+        <div class="topbar-center">
+            <slot name="center"></slot>
+        </div>
         <div class="header-actions">
+            <div ref="languageMenu" class="language-switcher">
+                <button
+                    type="button"
+                    class="language-switcher-trigger"
+                    :aria-label="$t('language', 'Language')"
+                    :aria-expanded="languageMenuOpen"
+                    @click="languageMenuOpen = !languageMenuOpen"
+                >
+                    <i class="fa-solid fa-language"></i>
+                    <span>{{ activeLanguage.label }}</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div v-if="languageMenuOpen" class="language-switcher-menu">
+                    <button
+                        v-for="language in languages"
+                        :key="language.code"
+                        type="button"
+                        :class="{ active: $language.code === language.code }"
+                        @click="selectLanguage(language.code)"
+                    >
+                        {{ language.label }}
+                        <i v-if="$language.code === language.code" class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </div>
             <slot name="actions">
                 <button
                     v-if="showOrderActions"
@@ -132,6 +160,7 @@
     </header>
 </template>
 <script>
+import { LANGUAGES } from '@/system/language'
 import {
     clearCurrentMember,
     loadCurrentMember,
@@ -157,7 +186,9 @@ export default {
     emits: ['dine-in', 'membership', 'new-takeaway'],
     data() {
         return {
+            languages: LANGUAGES,
             currentMember: null,
+            languageMenuOpen: false,
             showMembershipDialog: false,
             registerMode: false,
             memberQuery: '',
@@ -174,11 +205,20 @@ export default {
     mounted() {
         this.currentMember = loadCurrentMember()
         window.addEventListener('pos-member:changed', this.syncCurrentMember)
+        document.addEventListener('click', this.closeLanguageMenu)
     },
     beforeUnmount() {
         window.removeEventListener('pos-member:changed', this.syncCurrentMember)
+        document.removeEventListener('click', this.closeLanguageMenu)
     },
     computed: {
+        activeLanguage() {
+            return (
+                this.languages.find(
+                    (language) => language.code === this.$language.code,
+                ) || this.languages[0]
+            )
+        },
         memberMatches() {
             const keyword = this.memberQuery.toLowerCase()
             return loadMembers()
@@ -197,6 +237,14 @@ export default {
         },
     },
     methods: {
+        selectLanguage(code) {
+            this.$setLanguage(code)
+            this.languageMenuOpen = false
+        },
+        closeLanguageMenu(event) {
+            if (!this.$refs.languageMenu?.contains(event.target))
+                this.languageMenuOpen = false
+        },
         syncCurrentMember(event) {
             this.currentMember = event.detail || loadCurrentMember()
         },

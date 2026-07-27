@@ -1,7 +1,15 @@
 .staff-management-page {
-    min-height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     background: #f7f7f8;
     color: #171826;
+}
+
+.staff-management-page > .pos-topbar {
+    flex: 0 0 auto;
 }
 
 .staff-add-button {
@@ -35,12 +43,18 @@
 
 .staff-management-content {
     width: min(100%, 112rem);
+    min-height: 0;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
     box-sizing: border-box;
     margin: 0 auto;
     padding: 2rem clamp(1.25rem, 4vw, 4rem) 3rem;
+    overflow: hidden;
 }
 
 .staff-management-header {
+    flex: 0 0 auto;
     padding-bottom: 1.25rem;
     border-bottom: 1px solid #dedfe2;
 }
@@ -67,6 +81,7 @@
 
 .staff-summary-grid {
     display: grid;
+    flex: 0 0 auto;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.85rem;
     margin-top: 1.25rem;
@@ -104,6 +119,7 @@
 
 .staff-filter-panel {
     display: grid;
+    flex: 0 0 auto;
     grid-template-columns: minmax(17rem, 1fr) auto;
     align-items: center;
     gap: 0.8rem 1rem;
@@ -177,13 +193,19 @@
 }
 
 .staff-list {
+    min-height: 0;
     display: grid;
+    flex: 1 1 auto;
+    align-content: start;
     gap: 0.75rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .staff-list-row {
     width: 100%;
-    min-height: 5.25rem;
+    min-height: 6.5rem;
     display: grid;
     grid-template-columns: auto minmax(12rem, 1fr) 9rem 7rem 2.5rem;
     align-items: center;

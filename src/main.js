@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import VueKonva from 'vue-konva'
 import App from './App.vue'
 import router from './router'
+import i18n from './system/language'
+import { installShopAutoText } from './system/language/shopText.js'
 
 import 'nprogress/nprogress.css'
 import './assets/fonts/font-awesome/style.css'
@@ -44,5 +46,7 @@ import './assets/css/pages/vouchers.css'
 const app = createApp(App)
 
 app.use(router)
+app.use(i18n)
 app.use(VueKonva)
 app.mount('#app')
+installShopAutoText()

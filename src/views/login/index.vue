@@ -2,6 +2,22 @@
     <main class="login-page" :style="{ '--login-bg': `url(${backgroundImg})` }">
         <div class="brand-mark">posfood</div>
 
+        <label class="login-language-switcher" :aria-label="$t('language')">
+            <i class="fa-solid fa-language"></i>
+            <select
+                :value="$language.code"
+                @change="$setLanguage($event.target.value)"
+            >
+                <option
+                    v-for="language in languages"
+                    :key="language.code"
+                    :value="language.code"
+                >
+                    {{ language.label }}
+                </option>
+            </select>
+        </label>
+
         <section class="login-panel">
             <div class="panel-texture"></div>
 
@@ -181,6 +197,7 @@
 <script>
 import backgroundImg from '@/assets/img/background/dark_background.jpg'
 import CameraScannerModal from '@/components/common/CameraScannerModal.vue'
+import { LANGUAGES } from '@/system/language'
 import { roleHome } from '@/services/pos/permissions.js'
 import {
     findStaffAccount,
@@ -193,6 +210,7 @@ export default {
     data() {
         return {
             backgroundImg,
+            languages: LANGUAGES,
             loginStep: 'credentials',
             loginMode: 'qr',
             showStaffScanner: false,

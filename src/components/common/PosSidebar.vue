@@ -128,10 +128,7 @@ export default {
         activeAccount() {
             this.accountVersion
             const activeAccount = readActiveAccount() || {}
-            return (
-                findStaffAccount(activeAccount.employeeId) ||
-                activeAccount
-            )
+            return findStaffAccount(activeAccount.employeeId) || activeAccount
         },
         accountName() {
             return this.activeAccount.name || 'Staff'

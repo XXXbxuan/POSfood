@@ -193,14 +193,47 @@
                                 {{ category }}
                             </button>
                         </nav>
-                        <select
-                            v-model="productSort"
-                            aria-label="Sort product performance"
+                        <div
+                            ref="productSortMenu"
+                            class="product-sort-menu"
                         >
-                            <option value="revenue">Top sales</option>
-                            <option value="orders">Most ordered</option>
-                            <option value="quantity">Quantity sold</option>
-                        </select>
+                            <button
+                                type="button"
+                                class="product-sort-trigger"
+                                :aria-expanded="productSortMenuOpen"
+                                aria-haspopup="listbox"
+                                aria-label="Sort product performance"
+                                @click="productSortMenuOpen = !productSortMenuOpen"
+                            >
+                                <span>{{ activeProductSort.label }}</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div
+                                v-if="productSortMenuOpen"
+                                class="product-sort-options"
+                                role="listbox"
+                            >
+                                <button
+                                    v-for="option in productSortOptions"
+                                    :key="option.value"
+                                    type="button"
+                                    :class="{
+                                        active: productSort === option.value,
+                                    }"
+                                    :aria-selected="
+                                        productSort === option.value
+                                    "
+                                    role="option"
+                                    @click="selectProductSort(option.value)"
+                                >
+                                    <span>{{ option.label }}</span>
+                                    <i
+                                        v-if="productSort === option.value"
+                                        class="fa-solid fa-check"
+                                    ></i>
+                                </button>
+                            </div>
+                        </div>
                     </section>
 
                     <section
@@ -723,6 +756,12 @@ export default {
             menuProducts: catalog.products,
             selectedCategory: 'All',
             productSort: 'revenue',
+            productSortMenuOpen: false,
+            productSortOptions: [
+                { value: 'revenue', label: 'Top sales' },
+                { value: 'orders', label: 'Most ordered' },
+                { value: 'quantity', label: 'Quantity sold' },
+            ],
             selectedProductName: '',
             selectedChart: '',
             histogramMode: 'hour',
@@ -734,6 +773,13 @@ export default {
         }
     },
     computed: {
+        activeProductSort() {
+            return (
+                this.productSortOptions.find(
+                    (option) => option.value === this.productSort,
+                ) || this.productSortOptions[0]
+            )
+        },
         periodStart() {
             const date = this.startOfDay(new Date())
             if (this.period === 'week') date.setDate(date.getDate() - 6)
@@ -1108,10 +1154,12 @@ export default {
         this.loadSales()
         window.addEventListener('storage', this.loadSales)
         window.addEventListener('focus', this.loadSales)
+        document.addEventListener('click', this.closeProductSortMenu)
     },
     beforeUnmount() {
         window.removeEventListener('storage', this.loadSales)
         window.removeEventListener('focus', this.loadSales)
+        document.removeEventListener('click', this.closeProductSortMenu)
     },
     watch: {
         period(value) {
@@ -1123,6 +1171,14 @@ export default {
         },
     },
     methods: {
+        closeProductSortMenu(event) {
+            if (!this.$refs.productSortMenu?.contains(event.target))
+                this.productSortMenuOpen = false
+        },
+        selectProductSort(value) {
+            this.productSort = value
+            this.productSortMenuOpen = false
+        },
         loadSales() {
             this.sales = readList('posfood_sales').filter(
                 (sale) => sale.status !== 'cancelled',

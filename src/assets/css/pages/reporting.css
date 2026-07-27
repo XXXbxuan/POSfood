@@ -220,7 +220,7 @@
 .reporting-page .category-legend small {
     grid-column: 2;
     color: #8d9199;
-    font-size: 0.74rem;
+    font-size: 0.84rem;
 }
 
 .reporting-page .category-bars {
@@ -477,19 +477,19 @@
 }
 
 .reporting-page .service-list span {
-    font-size: 0.92rem;
+    font-size: 1.1rem;
     font-weight: 850;
 }
 
 .reporting-page .service-list strong {
     grid-column: 3;
     grid-row: 1/3;
-    font-size: 1.15rem;
+    font-size: 1.3rem;
 }
 
 .reporting-page .service-list small {
     color: #8d9199;
-    font-size: 0.78rem;
+    font-size: 0.94rem;
 }
 
 .reporting-page .secondary-grid .report-card {
@@ -512,7 +512,7 @@
     grid-column: 1/3;
     display: flex;
     justify-content: space-between;
-    font-size: 0.87rem;
+    font-size: 0.97rem;
 }
 
 .reporting-page .progress {
@@ -531,7 +531,7 @@
 
 .reporting-page .payment-list small {
     color: #858991;
-    font-size: 0.78rem;
+    font-size: 0.88rem;
     text-align: right;
 }
 
@@ -580,11 +580,11 @@
 .reporting-page .items-card li small {
     display: block;
     color: #8d9199;
-    font-size: 0.74rem;
+    font-size: 0.84rem;
 }
 
 .reporting-page .items-card li b {
-    font-size: 0.95rem;
+    font-size: 1.3rem;
 }
 
 .reporting-page .report-empty {
@@ -778,6 +778,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) 10rem;
     gap: 0.7rem;
+    min-width: 0;
 }
 
 .reporting-page .product-category-tabs {
@@ -813,13 +814,91 @@
     color: #fc8019;
 }
 
-.reporting-page .product-report-toolbar select {
+.reporting-page .product-sort-menu {
+    position: relative;
+    z-index: 10;
+    min-width: 0;
+}
+
+.reporting-page .product-sort-trigger {
+    width: 100%;
+    min-width: 0;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
     padding: 0 0.75rem;
     border: 1px solid #e2e3e5;
     border-radius: 0.7rem;
     background: #fff;
+    color: #171826;
     font-size: 0.9rem;
     font-weight: 850;
+    text-align: left;
+}
+
+.reporting-page .product-sort-trigger span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.reporting-page .product-sort-trigger i {
+    flex: 0 0 auto;
+    color: #fc8019;
+    font-size: 0.72rem;
+}
+
+.reporting-page .product-sort-trigger:hover,
+.reporting-page .product-sort-trigger:focus-visible {
+    border-color: #ffc38f;
+    outline: 0;
+}
+
+.reporting-page .product-sort-options {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    right: 0;
+    width: max-content;
+    min-width: 100%;
+    max-width: min(13rem, calc(100vw - 2rem));
+    display: grid;
+    padding: 0.3rem;
+    border: 1px solid #d9dbe0;
+    border-radius: 0.7rem;
+    background: #fff;
+    box-shadow: 0 0.7rem 1.6rem rgba(23, 24, 38, 0.14);
+}
+
+.reporting-page .product-sort-options button {
+    min-width: 0;
+    min-height: 2.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.45rem 0.65rem;
+    border: 0;
+    border-radius: 0.45rem;
+    background: transparent;
+    color: #171826;
+    font-size: 0.88rem;
+    font-weight: 750;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.reporting-page .product-sort-options button:hover,
+.reporting-page .product-sort-options button.active {
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.reporting-page .product-sort-options i {
+    color: #fc8019;
+    font-size: 0.78rem;
 }
 
 .reporting-page .product-performance-grid {
@@ -880,7 +959,7 @@
 
 .reporting-page .performance-copy small {
     color: #fc8019;
-    font-size: 0.75rem;
+    font-size: 0.95em;
     font-weight: 900;
 }
 
@@ -895,7 +974,7 @@
 .reporting-page .performance-copy p {
     margin: 0;
     color: #888c94;
-    font-size: 0.78rem;
+    font-size: 0.84rem;
 }
 
 .reporting-page .performance-total {
@@ -910,13 +989,13 @@
 
 .reporting-page .performance-total strong {
     color: #fc8019;
-    font-size: 1.02rem;
+    font-size: 1.3rem;
 }
 
 .reporting-page .performance-total small {
     margin-top: 0.12rem;
     color: #91959d;
-    font-size: 0.72rem;
+    font-size: 0.83rem;
 }
 
 .reporting-page .performance-card > i {
@@ -1285,7 +1364,7 @@
 
 .reporting-page .overview-detail-grid .service-list,
 .reporting-page .overview-detail-grid .payment-list {
-    gap: 0.4rem;
+    gap: 0.85rem;
 }
 
 .reporting-page .overview-detail-grid .service-list > div {
@@ -1348,7 +1427,7 @@
 
 .reporting-page .overview-detail-grid .items-card ol {
     grid-template-rows: none;
-    grid-auto-rows: 3.25rem;
+    grid-auto-rows: 4.25rem;
     align-content: start;
     max-height: calc(8 * 3.25rem + 7 * 0.4rem);
     flex: 0 1 auto;

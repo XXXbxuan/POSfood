@@ -76,8 +76,8 @@
 }
 
 .checkout-popup-page .payment-close {
-    width: 2.7rem;
-    height: 2.7rem;
+    width: 3.7rem;
+    height: 3rem;
     flex: 0 0 2.7rem;
     border: 0;
     border-radius: 50%;
@@ -89,13 +89,13 @@
 .checkout-popup-page .payment-header-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.9rem;
 }
 
 .checkout-popup-page .payment-member-button {
     position: relative;
-    width: 2.7rem;
-    height: 2.7rem;
+    width: 4rem;
+    height: 3rem;
     flex: 0 0 2.7rem;
     border: 1px solid #dedfe2;
     border-radius: 50%;
@@ -413,7 +413,7 @@
 }
 
 .checkout-popup-page .voucher-entry-row > button {
-    min-height: 2.8rem;
+    min-height: 2rem;
     padding: 0 0.8rem;
     border-radius: 0.5rem;
     font-size: 0.85rem;
@@ -1152,7 +1152,7 @@
 }
 
 .checkout-popup-page .confirm-payment button {
-    height: 2.8rem;
+    height: 3.5rem;
     border: 0.08rem solid #ddd;
     border-radius: 0.5rem;
     background: #fff;
