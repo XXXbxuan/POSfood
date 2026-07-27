@@ -9,11 +9,11 @@ module.exports = {
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
-            '/~/': path.resolve(__dirname, './src/assets'),
+            '@vue/devtools-api': path.resolve(
+                __dirname,
+                './node_modules/@vue/devtools-api/lib/cjs/index.js',
+            ),
         },
-    },
-    optimizeDeps: {
-        exclude: ['@vue/devtools-api'],
     },
     plugins: [vue()],
 }
