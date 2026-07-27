@@ -306,7 +306,7 @@ function scheduleTranslation() {
     })
 }
 
-export function installShopAutoText() {
+export function installAutoText() {
     if (observer) return
 
     translateTree(document.body)
