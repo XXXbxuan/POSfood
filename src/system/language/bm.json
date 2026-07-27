@@ -1,5 +1,6 @@
 {
   "language": "Bahasa",
+  "network": { "offlineTitle": "Tiada sambungan internet", "offlineMessage": "Sila sambung semula Wi-Fi. Mesej ini akan hilang selepas internet disambungkan." },
   "singleLanguage": "Satu bahasa",
   "multipleLanguages": "Pelbagai bahasa",
   "previous": "Sebelumnya",

@@ -1,5 +1,6 @@
 {
   "language": "Language",
+  "network": { "offlineTitle": "No internet connection", "offlineMessage": "Please reconnect to Wi-Fi. This message will disappear when you are online again." },
   "singleLanguage": "Single language",
   "multipleLanguages": "Multiple languages",
   "previous": "Previous",

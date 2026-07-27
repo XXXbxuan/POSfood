@@ -1,5 +1,6 @@
 {
   "language": "语言",
+  "network": { "offlineTitle": "没有网络连接", "offlineMessage": "请重新连接 Wi-Fi。恢复网络后此提示会自动消失。" },
   "singleLanguage": "单一语言",
   "multipleLanguages": "多种语言",
   "previous": "上一步",
