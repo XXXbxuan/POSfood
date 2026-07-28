@@ -14,19 +14,19 @@
         <section class="metric-grid">
             <button type="button" class="metric-card" :class="{ active: selectedMetric === 'products' }" @click="selectedMetric = 'products'">
                 <span class="metric-icon blue"><i class="fa-solid fa-box"></i></span>
-                <div><small>Total Products</small><strong>{{ stats.totalProducts }}</strong><p>Active items</p></div>
+                <div><small>Total Products</small><strong>{{ stats.totalProducts }}</strong></div>
             </button>
             <button type="button" class="metric-card" :class="{ active: selectedMetric === 'stock' }" @click="selectedMetric = 'stock'">
                 <span class="metric-icon charcoal"><i class="fa-solid fa-boxes-stacked"></i></span>
-                <div><small>Total Stock</small><strong>{{ compact(stats.totalQuantity) }}</strong><p>Across all units</p></div>
+                <div><small>Total Stock</small><strong>{{ compact(stats.totalQuantity) }}</strong></div>
             </button>
             <button type="button" class="metric-card" :class="{ active: selectedMetric === 'low' }" @click="selectedMetric = 'low'">
                 <span class="metric-icon amber"><i class="fa-solid fa-triangle-exclamation"></i></span>
-                <div><small>Low Stock</small><strong>{{ stats.lowStock.length }}</strong><p>Needs reorder</p></div>
+                <div><small>Low Stock</small><strong>{{ stats.lowStock.length }}</strong></div>
             </button>
             <button type="button" class="metric-card" :class="{ active: selectedMetric === 'out' }" @click="selectedMetric = 'out'">
                 <span class="metric-icon red"><i class="fa-solid fa-circle-xmark"></i></span>
-                <div><small>Out of Stock</small><strong>{{ stats.outOfStock.length }}</strong><p>Unavailable</p></div>
+                <div><small>Out of Stock</small><strong>{{ stats.outOfStock.length }}</strong></div>
             </button>
         </section>
 
@@ -53,18 +53,19 @@
                     </div>
                 </div>
                 <footer class="dashboard-panel-footer">
-                    <div><small>Today In</small><strong class="positive">+{{ stats.todayIn }}</strong></div>
-                    <div><small>Today Out</small><strong class="negative">-{{ stats.todayOut }}</strong></div>
+                    <div class="today-in"><strong><span>Today In</span>+{{ stats.todayIn }}</strong></div>
+                    <div class="today-out"><strong><span>Today Out</span>-{{ stats.todayOut }}</strong></div>
                 </footer>
             </article>
+
+            <button class="activity-divider-toggle" type="button" :aria-label="activityOpen ? 'Collapse recent activity' : 'Open recent activity'" @click="activityOpen = !activityOpen">
+                <i class="fa-solid" :class="activityOpen ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+            </button>
 
             <article class="panel dashboard-list-panel activity-panel" :class="{ collapsed: !activityOpen }">
                 <header class="panel-header">
                     <div v-if="activityOpen"><span class="eyebrow">TODAY</span><h2>Recent activity</h2></div>
                     <span v-if="activityOpen" class="dashboard-list-count">{{ store.state.movements.length }} records</span>
-                    <button class="activity-toggle" type="button" :aria-label="activityOpen ? 'Collapse recent activity' : 'Open recent activity'" @click="activityOpen = !activityOpen">
-                        <i class="fa-solid" :class="activityOpen ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
-                    </button>
                 </header>
                 <div v-if="activityOpen" class="dashboard-scroll activity-list">
                     <button
@@ -100,6 +101,7 @@
                         <p v-else>Product details and stock actions.</p>
                     </div>
                     <div class="product-detail-header-actions">
+                        <button v-if="selectedProduct" class="icon-button" type="button" aria-label="Print product label" title="Print product label" @click="openProductLabel"><i class="fa-solid fa-print"></i></button>
                         <button v-if="selectedProduct" class="icon-button" type="button" aria-label="Edit product" title="Edit product" @click="editOpen = true"><i class="fa-solid fa-pen"></i></button>
                         <button class="icon-button" type="button" aria-label="Close" @click="closePicker"><i class="fa-solid fa-xmark"></i></button>
                     </div>
@@ -290,6 +292,9 @@ export default {
         },
         openProduct(product) {
             if (product) this.openPicker('details', product)
+        },
+        openProductLabel() {
+            this.$router.push({ name: 'labels', query: { product: this.selectedProduct.id } })
         },
         continueOperation() {
             this.operation = this.pickerAction

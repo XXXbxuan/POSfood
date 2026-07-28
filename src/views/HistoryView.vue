@@ -6,20 +6,16 @@
                 <h1>Stock History</h1>
                 <p>Every stock change, operator and quantity in one record.</p>
             </div>
-            <button class="button secondary" type="button" @click="print"><i class="fa-solid fa-print"></i>Print</button>
         </section>
 
         <section class="history-summary">
             <article><span class="stock-in"><i class="fa-solid fa-arrow-down"></i></span><div><small>Total Stock In</small><strong>+{{ totals.stockIn }}</strong></div></article>
             <article><span class="stock-out"><i class="fa-solid fa-arrow-up"></i></span><div><small>Total Stock Out</small><strong>-{{ totals.stockOut }}</strong></div></article>
             <article><span class="neutral"><i class="fa-solid fa-list-check"></i></span><div><small>Movements</small><strong>{{ filteredMovements.length }}</strong></div></article>
-        </section>
-
-        <section class="history-filter-trigger">
-            <button class="button secondary" type="button" @click="openFilters">
-                <i class="fa-solid fa-sliders"></i>Filter
-                <span v-if="activeFilterCount">{{ activeFilterCount }}</span>
-            </button>
+            <article class="history-action-card">
+                <button type="button" @click="print"><i class="fa-solid fa-print"></i>Print</button>
+                <button type="button" @click="openFilters"><i class="fa-solid fa-sliders"></i>Filter<span v-if="activeFilterCount">{{ activeFilterCount }}</span></button>
+            </article>
         </section>
 
         <section class="panel table-panel history-table-panel">

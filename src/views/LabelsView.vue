@@ -7,9 +7,6 @@
                 <p>Prepare product or batch labels for receiving and storage.</p>
             </div>
             <div class="label-heading-actions">
-                <button class="button secondary" type="button" :disabled="!product" :class="{ active: labelEditMode }" @click="labelEditMode = !labelEditMode">
-                    <i class="fa-solid fa-pen"></i>{{ labelEditMode ? 'Finish Editing' : 'Edit Label' }}
-                </button>
                 <button class="button print" type="button" :disabled="!product" @click="printLabels"><i class="fa-solid fa-print"></i>Print Labels</button>
             </div>
         </section>
@@ -32,53 +29,23 @@
                 </dl>
             </form>
 
-            <section class="panel label-preview-panel">
+            <section class="panel label-preview-panel" :class="{ interactive: product }" @click="product && openLabelDesigner()">
                 <header class="panel-header"><div><span class="eyebrow">PREVIEW</span><h2>Warehouse sticker</h2></div><span>{{ sizeLabel }}</span></header>
                 <div v-if="product" class="label-stage">
-                    <article id="printable-label" class="inventory-label" :class="[`label-${size}`, { 'is-editing': labelEditMode }]">
+                    <article id="printable-label" class="inventory-label" :class="`label-${size}`">
                         <header>
                             <span><i class="fa-solid fa-boxes-stacked"></i></span>
-                            <strong
-                                class="label-edit-target"
-                                :style="labelStyle('brand')"
-                                :tabindex="labelEditMode ? 0 : -1"
-                                @click="editLabelText('brand', 'INVENTORY')"
-                                @keydown.enter="editLabelText('brand', 'INVENTORY')"
-                            >{{ labelText('brand', 'INVENTORY') }}</strong>
+                            <strong :style="labelStyle('brand')">{{ labelText('brand', 'INVENTORY') }}</strong>
                             <small>MAIN WAREHOUSE</small>
                         </header>
-                        <h2
-                            class="label-edit-target"
-                            :style="labelStyle('name')"
-                            :tabindex="labelEditMode ? 0 : -1"
-                            @click="editLabelText('name', product.name)"
-                            @keydown.enter="editLabelText('name', product.name)"
-                        >{{ labelText('name', product.name) }}</h2>
-                        <p
-                            class="mono product-label-code label-edit-target"
-                            :style="labelStyle('sku')"
-                            :tabindex="labelEditMode ? 0 : -1"
-                            @click="editLabelText('sku', product.sku)"
-                            @keydown.enter="editLabelText('sku', product.sku)"
-                        >{{ labelText('sku', product.sku) }}</p>
+                        <h2 :style="labelStyle('name')">{{ labelText('name', product.name) }}</h2>
+                        <p class="mono product-label-code" :style="labelStyle('sku')">{{ labelText('sku', product.sku) }}</p>
                         <dl>
                             <div v-if="batch"><dt>Batch</dt><dd class="mono">{{ batch.id }}</dd></div>
-                            <div><dt>Quantity</dt><dd
-                                class="label-edit-target"
-                                :style="labelStyle('quantity')"
-                                :tabindex="labelEditMode ? 0 : -1"
-                                @click="editLabelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`)"
-                                @keydown.enter="editLabelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`)"
-                            >{{ labelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`) }}</dd></div>
+                            <div><dt>Quantity</dt><dd :style="labelStyle('quantity')">{{ labelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`) }}</dd></div>
                             <div><dt>Received</dt><dd>{{ formatDate(batch?.receivedDate) }}</dd></div>
                             <div v-if="showExpiry && batch?.expiryDate"><dt>Expiry</dt><dd>{{ formatDate(batch.expiryDate) }}</dd></div>
-                            <div><dt>Location</dt><dd
-                                class="label-edit-target"
-                                :style="labelStyle('location')"
-                                :tabindex="labelEditMode ? 0 : -1"
-                                @click="editLabelText('location', batch?.location || product.location)"
-                                @keydown.enter="editLabelText('location', batch?.location || product.location)"
-                            >{{ labelText('location', batch?.location || product.location) }}</dd></div>
+                            <div><dt>Location</dt><dd :style="labelStyle('location')">{{ labelText('location', batch?.location || product.location) }}</dd></div>
                             <div v-if="showPrice && product.sellingPrice"><dt>Price</dt><dd>RM {{ Number(product.sellingPrice).toFixed(2) }}</dd></div>
                         </dl>
                         <div class="label-code-row">
@@ -86,7 +53,7 @@
                             <div class="barcode-visual"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar}px` }"></span><small>{{ product.barcode }}</small></div>
                         </div>
                     </article>
-                    <p><i class="fa-solid fa-circle-info"></i>QR identifies {{ batch ? 'this batch' : 'the product' }}. Product and staff codes remain separate.</p>
+                    <p><i class="fa-solid fa-pen"></i>Tap the sticker to edit its text.</p>
                 </div>
                 <div v-else class="summary-placeholder"><i class="fa-solid fa-tag"></i><p>Select a product to preview its label.</p></div>
             </section>
@@ -96,28 +63,54 @@
             <article v-for="index in printCount" :key="index" class="inventory-label print-copy" :class="`label-${size}`" v-html="printMarkup"></article>
         </div>
 
-        <div v-if="textEditorOpen" class="modal-backdrop" @click.self="textEditorOpen = false">
-            <section class="form-modal label-text-editor">
+        <div v-if="labelDesignerOpen" class="modal-backdrop" @click.self="labelDesignerOpen = false">
+            <section class="form-modal label-designer-modal">
                 <header class="modal-header">
-                    <div><span class="eyebrow">LABEL EDITOR</span><h2>Edit {{ editorLabel }}</h2><p>Change the text, size and alignment.</p></div>
-                    <button class="icon-button" type="button" aria-label="Close" @click="textEditorOpen = false"><i class="fa-solid fa-xmark"></i></button>
+                    <div><span class="eyebrow">LABEL EDITOR</span><h2>Edit Warehouse Sticker</h2><p>Tap any highlighted text, then adjust it on the right.</p></div>
+                    <button class="icon-button" type="button" aria-label="Close" @click="labelDesignerOpen = false"><i class="fa-solid fa-xmark"></i></button>
                 </header>
-                <form class="form-grid" @submit.prevent="saveLabelText">
-                    <label><span>Display Text</span><input v-model="textDraft.text" type="text" autofocus /></label>
-                    <label><span>Font Size</span><div class="label-size-control"><input v-model.number="textDraft.size" type="range" min="7" max="32" /><strong>{{ textDraft.size }}px</strong></div></label>
-                    <label><span>Text Alignment</span>
-                        <div class="label-align-control">
-                            <button v-for="align in ['left', 'center', 'right']" :key="align" type="button" :class="{ active: textDraft.align === align }" @click="textDraft.align = align">
-                                <i class="fa-solid" :class="`fa-align-${align}`"></i>
-                            </button>
-                        </div>
-                    </label>
-                    <footer class="form-actions">
-                        <button class="button secondary" type="button" @click="resetLabelText">Reset</button>
-                        <span></span>
-                        <button class="button primary" type="submit">Save</button>
-                    </footer>
-                </form>
+                <div class="label-designer-body">
+                    <div class="label-designer-stage">
+                        <article class="inventory-label is-editing" :class="`label-${size}`">
+                            <header>
+                                <span><i class="fa-solid fa-boxes-stacked"></i></span>
+                                <strong class="label-edit-target" :class="{ selected: selectedTextKey === 'brand' }" :style="labelStyle('brand')" @click="selectLabelText('brand', 'INVENTORY')">{{ labelText('brand', 'INVENTORY') }}</strong>
+                                <small>MAIN WAREHOUSE</small>
+                            </header>
+                            <h2 class="label-edit-target" :class="{ selected: selectedTextKey === 'name' }" :style="labelStyle('name')" @click="selectLabelText('name', product.name)">{{ labelText('name', product.name) }}</h2>
+                            <p class="mono product-label-code label-edit-target" :class="{ selected: selectedTextKey === 'sku' }" :style="labelStyle('sku')" @click="selectLabelText('sku', product.sku)">{{ labelText('sku', product.sku) }}</p>
+                            <dl>
+                                <div v-if="batch"><dt>Batch</dt><dd class="mono">{{ batch.id }}</dd></div>
+                                <div><dt>Quantity</dt><dd class="label-edit-target" :class="{ selected: selectedTextKey === 'quantity' }" :style="labelStyle('quantity')" @click="selectLabelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`)">{{ labelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`) }}</dd></div>
+                                <div><dt>Received</dt><dd>{{ formatDate(batch?.receivedDate) }}</dd></div>
+                                <div v-if="showExpiry && batch?.expiryDate"><dt>Expiry</dt><dd>{{ formatDate(batch.expiryDate) }}</dd></div>
+                                <div><dt>Location</dt><dd class="label-edit-target" :class="{ selected: selectedTextKey === 'location' }" :style="labelStyle('location')" @click="selectLabelText('location', batch?.location || product.location)">{{ labelText('location', batch?.location || product.location) }}</dd></div>
+                                <div v-if="showPrice && product.sellingPrice"><dt>Price</dt><dd>RM {{ Number(product.sellingPrice).toFixed(2) }}</dd></div>
+                            </dl>
+                            <div class="label-code-row">
+                                <img v-if="qrDataUrl" :src="qrDataUrl" alt="Product QR code" />
+                                <div class="barcode-visual"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar}px` }"></span><small>{{ product.barcode }}</small></div>
+                            </div>
+                        </article>
+                    </div>
+                    <form class="label-designer-controls form-grid" @submit.prevent="saveLabelText">
+                        <div class="designer-selection"><span>SELECTED TEXT</span><strong>{{ editorLabel }}</strong></div>
+                        <label><span>Display Text</span><input v-model="textDraft.text" type="text" /></label>
+                        <label><span>Font Size</span><div class="label-size-control"><input v-model.number="textDraft.size" type="range" min="7" max="32" /><strong>{{ textDraft.size }}px</strong></div></label>
+                        <label><span>Text Alignment</span>
+                            <div class="label-align-control">
+                                <button v-for="align in ['left', 'center', 'right']" :key="align" type="button" :class="{ active: textDraft.align === align }" @click="textDraft.align = align">
+                                    <i class="fa-solid" :class="`fa-align-${align}`"></i>
+                                </button>
+                            </div>
+                        </label>
+                        <footer class="form-actions">
+                            <button class="button secondary" type="button" @click="resetLabelText">Reset</button>
+                            <span></span>
+                            <button class="button primary" type="submit">Save</button>
+                        </footer>
+                    </form>
+                </div>
             </section>
         </div>
     </div>
@@ -148,8 +141,7 @@ export default {
             showPrice: false,
             qrDataUrl: '',
             printMarkup: '',
-            labelEditMode: false,
-            textEditorOpen: false,
+            labelDesignerOpen: false,
             selectedTextKey: '',
             selectedFallback: '',
             textDraft: { text: '', size: 12, align: 'left' },
@@ -185,6 +177,15 @@ export default {
         labelEdits() {
             return this.labelEditsByProduct[this.productId] || {}
         },
+        editorLabel() {
+            return {
+                brand: 'Brand',
+                name: 'Product Name',
+                sku: 'Product Code',
+                quantity: 'Quantity',
+                location: 'Location',
+            }[this.selectedTextKey] || 'Text'
+        },
     },
     watch: {
         codeContent: 'generateQr',
@@ -212,15 +213,17 @@ export default {
             const style = this.labelEdits[key] || this.defaultTextStyle(key)
             return { fontSize: `${style.size}px`, textAlign: style.align }
         },
-        editLabelText(key, fallback) {
-            if (!this.labelEditMode) return
+        openLabelDesigner() {
+            this.labelDesignerOpen = true
+            this.selectLabelText('name', this.product.name)
+        },
+        selectLabelText(key, fallback) {
             this.selectedTextKey = key
             this.selectedFallback = String(fallback || '')
             const saved = this.labelEdits[key]
             this.textDraft = saved
                 ? { ...saved }
                 : { text: this.selectedFallback, ...this.defaultTextStyle(key) }
-            this.textEditorOpen = true
         },
         saveLabelText() {
             this.labelEditsByProduct[this.productId] = {
@@ -228,7 +231,6 @@ export default {
                 [this.selectedTextKey]: { ...this.textDraft },
             }
             localStorage.setItem('ims_label_text_styles', JSON.stringify(this.labelEditsByProduct))
-            this.textEditorOpen = false
             this.store.addToast('Label text style saved.')
         },
         resetLabelText() {

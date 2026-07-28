@@ -4882,19 +4882,19 @@ textarea:focus {
     border: 0;
     border-radius: 14px;
     box-shadow: none;
-    background: #e8eef7;
+    background: #e9f3f4;
 }
 
 .dashboard-page .metric-grid .metric-card:nth-child(2) {
-    background: #e8f5f5;
+    background: #e9f3f4;
 }
 
 .dashboard-page .metric-grid .metric-card:nth-child(3) {
-    background: #fff5e2;
+    background: #e9f3f4;
 }
 
 .dashboard-page .metric-grid .metric-card:nth-child(4) {
-    background: #fff0ed;
+    background: #e9f3f4;
 }
 
 .dashboard-page .metric-grid .metric-card.active {
@@ -4911,6 +4911,11 @@ textarea:focus {
 .dashboard-page .metric-grid .metric-card.active .metric-icon {
     background: rgba(255, 255, 255, 0.16);
     color: #fff;
+}
+
+.dashboard-page .metric-grid .metric-card:not(.active) .metric-icon {
+    background: rgba(78, 109, 115, 0.09);
+    color: #536f75;
 }
 
 .dashboard-page .metric-icon {
@@ -4934,6 +4939,7 @@ textarea:focus {
 }
 
 .dashboard-page .dashboard-grid {
+    position: relative;
     grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
     gap: 10px;
 }
@@ -4971,6 +4977,32 @@ textarea:focus {
     background: #fbfdfd;
 }
 
+.dashboard-panel-footer .today-in {
+    background: #e8f8f2;
+    color: #087b5c;
+}
+
+.dashboard-panel-footer .today-out {
+    background: #fff0ed;
+    color: #dc4f43;
+}
+
+.dashboard-panel-footer .today-in strong,
+.dashboard-panel-footer .today-out strong {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: inherit;
+    font-size: 12px;
+}
+
+.dashboard-panel-footer .today-in strong span,
+.dashboard-panel-footer .today-out strong span {
+    color: inherit;
+    font-size: inherit;
+    font-weight: 700;
+}
+
 /* Single-scroll page layouts */
 .products-page {
     grid-template-rows: 50px 48px minmax(0, 1fr);
@@ -4979,18 +5011,19 @@ textarea:focus {
 
 .history-page {
     display: grid;
-    grid-template-rows: 50px 68px 48px minmax(0, 1fr);
+    grid-template-rows: 50px 82px minmax(0, 1fr);
     gap: 10px;
     overflow: hidden !important;
 }
 
 .history-page .history-summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     min-height: 0;
     gap: 10px;
 }
 
 .history-page .history-summary article {
-    min-height: 68px;
+    min-height: 82px;
     border-color: var(--inv-border);
     border-radius: 13px;
     box-shadow: none;
@@ -5082,6 +5115,11 @@ textarea:focus {
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
+}
+
+.labels-page .label-preview-panel.interactive,
+.labels-page .label-preview-panel.interactive .label-stage {
+    cursor: pointer;
 }
 
 /* Tables */
@@ -6326,9 +6364,32 @@ textarea {
     margin: 0;
 }
 
+.activity-divider-toggle {
+    position: absolute;
+    z-index: 8;
+    top: 50%;
+    right: calc(46% - 18px);
+    display: grid;
+    width: 38px;
+    height: 52px;
+    place-items: center;
+    transform: translateY(-50%);
+    border: 1px solid var(--inv-border);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(24, 69, 76, 0.13);
+    color: var(--inv-primary);
+    cursor: pointer;
+}
+
+.dashboard-grid.activity-collapsed .activity-divider-toggle {
+    right: 39px;
+}
+
 /* Product detail header/footer action placement */
 .product-detail-header-actions {
     display: flex;
+    flex-direction: row !important;
     align-items: center;
     gap: 8px;
 }
@@ -6389,6 +6450,7 @@ textarea {
 /* Interactive label text editor */
 .label-heading-actions {
     display: flex;
+    flex-direction: row !important;
     gap: 9px;
 }
 
@@ -6411,8 +6473,106 @@ textarea {
     outline: 2px solid var(--inv-primary);
 }
 
-.label-text-editor {
-    width: min(520px, calc(100vw - 32px));
+.label-designer-modal {
+    width: min(1040px, calc(100vw - 36px));
+    max-height: min(760px, calc(100vh - 36px));
+    overflow: hidden;
+}
+
+.label-designer-body {
+    display: grid;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) 330px;
+}
+
+.label-designer-stage {
+    display: grid;
+    min-height: 520px;
+    place-items: center;
+    overflow: auto;
+    padding: 28px;
+    background-color: #f4f8f9;
+    background-image:
+        linear-gradient(rgba(107, 137, 143, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(107, 137, 143, 0.09) 1px, transparent 1px);
+    background-size: 18px 18px;
+}
+
+.label-designer-stage .inventory-label {
+    width: min(100%, 560px);
+    min-height: 350px;
+    transform: none;
+}
+
+.label-designer-stage .label-edit-target.selected {
+    background: rgba(8, 166, 182, 0.13);
+    outline: 3px solid var(--inv-primary);
+}
+
+.label-designer-controls {
+    align-content: start;
+    overflow-y: auto;
+    padding: 22px;
+    border-left: 1px solid var(--inv-border);
+    background: #fff;
+}
+
+.designer-selection {
+    display: grid;
+    gap: 4px;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--inv-primary-soft);
+}
+
+.designer-selection span {
+    color: var(--inv-primary-dark);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.designer-selection strong {
+    font-size: 16px;
+}
+
+.history-action-card {
+    display: grid !important;
+    grid-template-rows: 1fr 1fr;
+    gap: 6px !important;
+    padding: 6px !important;
+}
+
+.history-action-card button {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border: 1px solid var(--inv-border);
+    border-radius: 9px;
+    background: #f7fbfb;
+    color: var(--inv-text);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.history-action-card button:hover {
+    border-color: var(--inv-primary);
+    background: var(--inv-primary-soft);
+    color: var(--inv-primary-dark);
+}
+
+.history-action-card button span {
+    display: grid;
+    min-width: 20px;
+    height: 20px;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--inv-primary);
+    color: #fff;
+    font-size: 9px;
 }
 
 .label-size-control {
@@ -6457,6 +6617,63 @@ textarea {
     color: var(--inv-primary);
 }
 
+/* Tablet readability: lift interface copy without breaking fixed-height views. */
+.inv-shell {
+    font-size: 16px;
+}
+
+.page-heading h1 {
+    font-size: clamp(24px, 2vw, 30px);
+}
+
+.page-heading p,
+.panel-header p,
+.section-header p,
+.modal-header p {
+    font-size: 12px;
+}
+
+.eyebrow,
+.inventory-table th,
+.metric-grid small,
+.dashboard-list-count {
+    font-size: 10px;
+}
+
+.panel-header h2,
+.section-header h2,
+.dashboard-list-panel .panel-header h2 {
+    font-size: 15px;
+}
+
+.metric-grid strong {
+    font-size: 24px;
+}
+
+.alert-list strong,
+.activity-list strong,
+.inventory-table td strong,
+.form-grid label > span,
+.label-controls label > span {
+    font-size: 12px;
+}
+
+.alert-list small,
+.activity-list small,
+.inventory-table td small,
+.label-meta,
+.toggle-label small {
+    font-size: 10px;
+}
+
+input,
+select,
+textarea,
+button,
+.button {
+    font-size: 12px;
+}
+
 @media (max-width: 1100px) {
     .sidebar-profile {
         justify-content: center;
@@ -6491,12 +6708,17 @@ textarea {
         grid-template-columns: 1fr;
     }
 
+    .activity-divider-toggle,
     .activity-panel.collapsed {
         display: none;
     }
 
     .label-heading-actions .button {
         padding-inline: 11px;
+    }
+
+    .label-designer-body {
+        grid-template-columns: minmax(0, 1fr) 290px;
     }
 }
 
