@@ -28,6 +28,27 @@
             </button>
         </section>
 
+        <button
+            class="inventory-attention"
+            :class="{ clear: attentionCount === 0, active: selectedMetric === 'attention' }"
+            type="button"
+            :aria-pressed="selectedMetric === 'attention'"
+            @click="selectedMetric = 'attention'"
+        >
+            <span class="inventory-attention-icon">
+                <i class="fa-solid" :class="attentionCount ? 'fa-triangle-exclamation' : 'fa-circle-check'"></i>
+            </span>
+            <span class="inventory-attention-copy">
+                <strong>{{ attentionHeadline }}</strong>
+                <small v-if="attentionCount">{{ stats.lowStock.length }} low stock &middot; {{ stats.outOfStock.length }} out of stock</small>
+                <small v-else>No low-stock or unavailable products</small>
+            </span>
+            <span class="inventory-attention-action">
+                {{ attentionCount ? 'Review now' : 'View status' }}
+                <i class="fa-solid fa-arrow-right"></i>
+            </span>
+        </button>
+
         <section class="dashboard-grid" :class="{ 'activity-collapsed': !activityOpen }">
             <article class="panel dashboard-list-panel stock-alert-panel">
                 <header class="panel-header">
@@ -213,7 +234,7 @@ export default {
             productSearch: '',
             selectedProduct: null,
             operation: '',
-            selectedMetric: 'products',
+            selectedMetric: 'attention',
             registerOpen: false,
             editOpen: false,
             activityOpen: true,
@@ -223,8 +244,23 @@ export default {
         stats() {
             return this.store.dashboardStats()
         },
+        attentionProducts() {
+            const products = [...this.stats.outOfStock, ...this.stats.lowStock]
+            return products.filter(
+                (product, index, list) =>
+                    list.findIndex((item) => item.id === product.id) === index,
+            )
+        },
+        attentionCount() {
+            return this.attentionProducts.length
+        },
+        attentionHeadline() {
+            if (!this.attentionCount) return 'Stock levels look healthy'
+            return `${this.attentionCount} ${this.attentionCount === 1 ? 'product needs' : 'products need'} attention`
+        },
         metricProducts() {
             const active = this.store.state.products.filter((product) => product.active)
+            if (this.selectedMetric === 'attention') return this.attentionProducts
             if (this.selectedMetric === 'stock') {
                 return active
                     .filter((product) => Number(product.currentStock) > 0)
@@ -235,12 +271,14 @@ export default {
             return active
         },
         metricTitle() {
+            if (this.selectedMetric === 'attention') return 'Needs attention'
             if (this.selectedMetric === 'stock') return 'Products with stock'
             if (this.selectedMetric === 'low') return 'Needs reorder'
             if (this.selectedMetric === 'out') return 'Unavailable products'
             return 'All products'
         },
         metricEyebrow() {
+            if (this.selectedMetric === 'attention') return 'ATTENTION'
             if (this.selectedMetric === 'stock') return 'TOTAL STOCK'
             if (this.selectedMetric === 'low') return 'LOW STOCK'
             if (this.selectedMetric === 'out') return 'OUT OF STOCK'

@@ -31,7 +31,15 @@
                             <input type="file" accept="image/*" @change="loadProductPhoto" />
                         </span>
                     </label>
-                    <label><span>Category <b>*</b></span><input v-model.trim="form.category" type="text" required placeholder="e.g. Dairy" /></label>
+                    <label><span>Category <b>*</b></span>
+                        <select v-model="form.category" required>
+                            <option disabled value="">Select category</option>
+                            <option>Dairy</option>
+                            <option>Dry Goods</option>
+                            <option>Packaging</option>
+                            <option>Prepared Food</option>
+                        </select>
+                    </label>
                     <label><span>Product Type <b>*</b></span>
                         <select v-model="form.type">
                             <option>Retail Product</option>

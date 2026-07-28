@@ -83,8 +83,6 @@
                 <header class="modal-header">
                     <div>
                         <span class="eyebrow">PRODUCT DETAILS</span>
-                        <h2>{{ selectedProduct.name }}</h2>
-                        <p class="mono">{{ selectedProduct.sku }}</p>
                     </div>
                     <div class="product-detail-header-actions">
                         <button class="icon-button" type="button" aria-label="Print QR" title="Print QR" @click="printQr"><i class="fa-solid fa-print"></i></button>
@@ -103,7 +101,9 @@
                             <img v-if="detailQr" :src="detailQr" :alt="`${selectedProduct.name} QR code`" />
                             <i v-else class="fa-solid fa-qrcode"></i>
                         </div>
-                        <div class="product-details-status">
+                        <div class="product-details-copy">
+                            <h2>{{ selectedProduct.name }}</h2>
+                            <p class="mono">{{ selectedProduct.sku }}</p>
                             <span class="status-badge" :class="statusClass(selectedProduct)">{{ store.productStatus(selectedProduct) }}</span>
                         </div>
                         <div class="details-stock">

@@ -18,6 +18,7 @@
                 @click="$emit('action', tool.id)"
             >
                 <i class="fa-solid" :class="tool.icon"></i>
+                <span>{{ tool.short }}</span>
             </button>
         </div>
     </header>
@@ -30,10 +31,10 @@ export default {
     data() {
         return {
             tools: [
-                { id: 'register', label: 'Register Product', icon: 'fa-plus', tone: 'register' },
-                { id: 'scan', label: 'Scan Product', icon: 'fa-qrcode', tone: 'scan' },
-                { id: 'in', label: 'Stock In', icon: 'fa-arrow-down', tone: 'stock-in' },
-                { id: 'out', label: 'Stock Out', icon: 'fa-arrow-up', tone: 'stock-out' },
+                { id: 'register', label: 'Register Product', short: 'New', icon: 'fa-plus', tone: 'register' },
+                { id: 'scan', label: 'Scan Product', short: 'Scan', icon: 'fa-qrcode', tone: 'scan' },
+                { id: 'in', label: 'Stock In', short: 'In', icon: 'fa-arrow-down', tone: 'stock-in' },
+                { id: 'out', label: 'Stock Out', short: 'Out', icon: 'fa-arrow-up', tone: 'stock-out' },
             ],
         }
     },
