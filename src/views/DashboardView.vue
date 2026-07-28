@@ -2,9 +2,7 @@
     <div class="dashboard-page">
         <section class="page-heading dashboard-heading">
             <div>
-                <span class="eyebrow">{{ greeting }}</span>
                 <h1>Inventory Dashboard</h1>
-                <p>Live stock position across Main Warehouse.</p>
             </div>
             <button class="button primary dashboard-register-button" type="button" @click="registerOpen = true">
                 <i class="fa-solid fa-plus"></i>Register Product
@@ -33,7 +31,7 @@
         <section class="dashboard-grid" :class="{ 'activity-collapsed': !activityOpen }">
             <article class="panel dashboard-list-panel stock-alert-panel">
                 <header class="panel-header">
-                    <div><span class="eyebrow">{{ metricEyebrow }}</span><h2>{{ metricTitle }}</h2></div>
+                    <div><h2>{{ metricTitle }}</h2></div>
                     <span class="dashboard-list-count">{{ metricProducts.length }} items</span>
                 </header>
                 <div class="dashboard-scroll alert-list">
@@ -64,7 +62,7 @@
 
             <article class="panel dashboard-list-panel activity-panel" :class="{ collapsed: !activityOpen }">
                 <header class="panel-header">
-                    <div v-if="activityOpen"><span class="eyebrow">TODAY</span><h2>Recent activity</h2></div>
+                    <div v-if="activityOpen"><h2>Recent activity</h2></div>
                     <span v-if="activityOpen" class="dashboard-list-count">{{ store.state.movements.length }} records</span>
                 </header>
                 <div v-if="activityOpen" class="dashboard-scroll activity-list">

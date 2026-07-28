@@ -1,11 +1,7 @@
 <template>
     <div class="page-stack products-page">
         <section class="page-heading">
-            <div>
-                <span class="eyebrow">PRODUCT MANAGEMENT</span>
-                <h1>Products</h1>
-                <p>Tap any product to see its details.</p>
-            </div>
+            <div><h1>Products</h1></div>
         </section>
 
         <section class="filter-bar">
@@ -26,8 +22,6 @@
                     <thead>
                         <tr>
                             <th>Product</th>
-                            <th>Type</th>
-                            <th>Location</th>
                             <th>Stock</th>
                             <th>Status</th>
                         </tr>
@@ -44,13 +38,14 @@
                         >
                             <td>
                                 <div class="product-cell">
-                                    <span>{{ product.name.slice(0, 2).toUpperCase() }}</span>
-                                    <div><strong>{{ product.name }}</strong><small class="mono">{{ product.sku }} &middot; {{ product.barcode }}</small></div>
+                                    <span class="product-list-photo">
+                                        <img v-if="product.photo" :src="product.photo" :alt="product.name" />
+                                        <template v-else>{{ product.name.slice(0, 2).toUpperCase() }}</template>
+                                    </span>
+                                    <div><strong>{{ product.name }}</strong><small class="mono">{{ product.sku }}</small></div>
                                 </div>
                             </td>
-                            <td><span>{{ product.type }}</span><small>{{ product.category }}</small></td>
-                            <td><span>{{ product.location || 'Not assigned' }}</span><small>{{ product.supplier || 'No supplier' }}</small></td>
-                            <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small><small>Min. {{ product.minimumStock }}</small></td>
+                            <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small></td>
                             <td>
                                 <span class="status-badge" :class="statusClass(product)">{{ store.productStatus(product) }}</span>
                                 <i class="fa-solid fa-chevron-right product-row-chevron"></i>
@@ -81,6 +76,10 @@
                 <div class="product-details-workspace">
                 <div class="product-details-body">
                     <section class="product-details-identity">
+                        <div class="product-detail-photo">
+                            <img v-if="selectedProduct.photo" :src="selectedProduct.photo" :alt="selectedProduct.name" />
+                            <strong v-else>{{ selectedProduct.name.slice(0, 2).toUpperCase() }}</strong>
+                        </div>
                         <div class="product-details-qr">
                             <img v-if="detailQr" :src="detailQr" :alt="`${selectedProduct.name} QR code`" />
                             <i v-else class="fa-solid fa-qrcode"></i>

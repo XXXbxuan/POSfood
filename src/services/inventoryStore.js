@@ -443,6 +443,7 @@ function saveProduct(input, productId = '') {
         sellingPrice: Math.max(0, number(input.sellingPrice)),
         supplier: String(input.supplier || '').trim(),
         location: String(input.location || '').trim(),
+        photo: String(input.photo || current?.photo || ''),
         expiryTracking: Boolean(input.expiryTracking),
         active: input.active !== false,
         batches: current?.batches || [],

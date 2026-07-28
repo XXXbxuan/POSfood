@@ -3,10 +3,9 @@
         <button class="icon-button mobile-menu" type="button" aria-label="Open menu" @click="$emit('menu')">
             <i class="fa-solid fa-bars"></i>
         </button>
-        <div class="topbar-context">
-            <span>MAIN WAREHOUSE</span>
-            <strong>{{ title }}</strong>
-        </div>
+        <RouterLink class="topbar-context topbar-home-link" to="/inventory/dashboard" aria-label="Return to Dashboard">
+            <strong>MAIN WAREHOUSE</strong>
+        </RouterLink>
         <div class="topbar-quick-tools" aria-label="Quick inventory tools">
             <button
                 v-for="tool in tools"
@@ -26,9 +25,6 @@
 <script>
 export default {
     name: 'AppTopbar',
-    props: {
-        title: { type: String, default: 'Dashboard' },
-    },
     emits: ['menu', 'action'],
     data() {
         return {

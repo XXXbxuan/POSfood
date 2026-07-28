@@ -9,7 +9,6 @@
         />
         <div class="inv-workspace">
             <AppTopbar
-                :title="$route.meta.title"
                 @menu="menuOpen = true"
                 @action="handleSidebarAction"
             />

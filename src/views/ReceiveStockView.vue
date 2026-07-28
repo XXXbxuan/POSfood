@@ -1,11 +1,7 @@
 <template>
     <div class="page-stack receive-page">
         <section class="page-heading">
-            <div>
-                <span class="eyebrow">SUPPLIER DELIVERY</span>
-                <h1>Receive Stock</h1>
-                <p>Complete one short step at a time.</p>
-            </div>
+            <div><h1>Receive Stock</h1></div>
             <span class="workflow-steps">
                 <b :class="{ active: step >= 1 }">1</b>Delivery
                 <i></i>
@@ -21,7 +17,6 @@
                     <span><i class="fa-solid" :class="step === 1 ? 'fa-truck-ramp-box' : 'fa-boxes-stacked'"></i></span>
                     <div>
                         <h2>{{ step === 1 ? 'Delivery details' : 'Product & quantity' }}</h2>
-                        <p>{{ step === 1 ? 'Who sent this delivery?' : 'What arrived and how much?' }}</p>
                     </div>
                 </header>
 
@@ -30,10 +25,6 @@
                     <label><span>Receiving Date <b>*</b></span><input v-model="form.receivingDate" type="date" required /></label>
                     <label><span>Invoice Number</span><input v-model.trim="form.invoiceNumber" class="mono" type="text" placeholder="INV-2026-001" /></label>
                     <label><span>Purchase Order</span><input v-model.trim="form.purchaseOrderNumber" class="mono" type="text" placeholder="PO-2026-001" /></label>
-                    <div class="delivery-step-note full">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <span><strong>Next: product and quantity</strong><small>Delivery details stay saved while you continue.</small></span>
-                    </div>
                     <p v-if="error" class="form-error full"><i class="fa-solid fa-circle-exclamation"></i>{{ error }}</p>
                 </div>
 

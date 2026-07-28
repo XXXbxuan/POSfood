@@ -22,6 +22,15 @@
 
                 <section v-if="formStep === 1" class="registration-step-panel form-grid two-column">
                     <label class="full"><span>Product Name <b>*</b></span><input v-model.trim="form.name" type="text" required autofocus placeholder="e.g. Fresh Milk" /></label>
+                    <label class="full product-photo-input"><span>Product Photo</span>
+                        <span class="product-photo-picker">
+                            <span>
+                                <img v-if="form.photo" :src="form.photo" alt="Product preview" />
+                                <i v-else class="fa-solid fa-image"></i>
+                            </span>
+                            <input type="file" accept="image/*" @change="loadProductPhoto" />
+                        </span>
+                    </label>
                     <label><span>Category <b>*</b></span><input v-model.trim="form.category" type="text" required placeholder="e.g. Dairy" /></label>
                     <label><span>Product Type <b>*</b></span>
                         <select v-model="form.type">
@@ -104,6 +113,7 @@ const emptyForm = () => ({
     sellingPrice: 0,
     supplier: '',
     location: '',
+    photo: '',
     expiryTracking: false,
     active: true,
 })
@@ -133,6 +143,7 @@ export default {
                       sellingPrice: source.sellingPrice,
                       supplier: source.supplier,
                       location: source.location,
+                      photo: source.photo || '',
                       expiryTracking: source.expiryTracking,
                       active: source.active,
                   }
@@ -161,6 +172,21 @@ export default {
                 return
             }
             this.formStep = 2
+        },
+        loadProductPhoto(event) {
+            const file = event.target.files?.[0]
+            if (!file) return
+            if (file.size > 1500000) {
+                this.formError = 'Choose a photo smaller than 1.5 MB.'
+                event.target.value = ''
+                return
+            }
+            const reader = new FileReader()
+            reader.onload = () => {
+                this.form.photo = String(reader.result || '')
+                this.formError = ''
+            }
+            reader.readAsDataURL(file)
         },
         save() {
             this.formError = ''

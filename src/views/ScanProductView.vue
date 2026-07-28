@@ -1,11 +1,7 @@
 <template>
     <div class="page-stack scan-page">
         <section class="page-heading">
-            <div>
-                <span class="eyebrow">SCAN-FIRST OPERATION</span>
-                <h1>Scan Product</h1>
-                <p>Scan a product QR or barcode to view and update stock.</p>
-            </div>
+            <div><h1>Scan Product</h1></div>
             <button class="button primary" type="button" @click="scannerOpen = true">
                 <i class="fa-solid fa-qrcode"></i>{{ product ? 'Scan Another' : 'Open Scanner' }}
             </button>
