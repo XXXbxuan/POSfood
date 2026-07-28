@@ -1,0 +1,169 @@
+<template>
+    <div class="modal-backdrop" @click.self="close">
+        <section class="form-modal registration-modal">
+            <header class="modal-header">
+                <div>
+                    <span class="eyebrow">{{ stage === 'form' ? 'NEW ITEM' : 'PRODUCT REGISTERED' }}</span>
+                    <h2>{{ stage === 'form' ? 'Register Product' : product.name }}</h2>
+                    <p v-if="stage === 'form'">Create the product first. Stock can be added after registration.</p>
+                    <p v-else class="mono">{{ product.sku }}</p>
+                </div>
+                <button class="icon-button" type="button" aria-label="Close" @click="close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </header>
+
+            <form v-if="stage === 'form'" class="form-grid two-column registration-form" @submit.prevent="save">
+                <label class="full"><span>Product Name <b>*</b></span><input v-model.trim="form.name" type="text" required autofocus placeholder="e.g. Fresh Milk" /></label>
+                <label><span>Product Code / SKU</span><input v-model.trim="form.sku" class="mono" type="text" :placeholder="suggestedSku" /></label>
+                <label><span>Barcode</span><input v-model.trim="form.barcode" class="mono" type="text" placeholder="Generated if empty" /></label>
+                <label><span>Category <b>*</b></span><input v-model.trim="form.category" type="text" required placeholder="Dairy" /></label>
+                <label><span>Product Type <b>*</b></span>
+                    <select v-model="form.type">
+                        <option>Retail Product</option>
+                        <option>Ingredient</option>
+                        <option>Prepared Product</option>
+                    </select>
+                </label>
+                <label><span>Unit <b>*</b></span><input v-model.trim="form.unit" type="text" required placeholder="pcs, kg, cartons" /></label>
+                <label><span>Minimum Stock</span><input v-model.number="form.minimumStock" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+                <label><span>Cost Price (RM)</span><input v-model.number="form.costPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+                <label><span>Selling Price (RM)</span><input v-model.number="form.sellingPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+                <label><span>Supplier</span><input v-model.trim="form.supplier" type="text" placeholder="Supplier name" /></label>
+                <label><span>Warehouse Location</span><input v-model.trim="form.location" type="text" placeholder="Rack A-01" /></label>
+                <label class="toggle-label full">
+                    <input v-model="form.expiryTracking" type="checkbox" />
+                    <span><strong>Track batches and expiry</strong><small>Use for perishable products.</small></span>
+                </label>
+                <p v-if="formError" class="form-error full"><i class="fa-solid fa-circle-exclamation"></i>{{ formError }}</p>
+                <footer class="form-actions full">
+                    <span></span>
+                    <button class="button secondary" type="button" @click="close">Cancel</button>
+                    <button class="button primary" type="submit"><i class="fa-solid fa-check"></i>Register Product</button>
+                </footer>
+            </form>
+
+            <div v-else-if="stage === 'choice'" class="registration-result">
+                <span class="registration-success"><i class="fa-solid fa-check"></i></span>
+                <h3>Product is in the list</h3>
+                <p>You can close now or show its QR label.</p>
+                <div class="registration-summary">
+                    <div><small>Product</small><strong>{{ product.name }}</strong></div>
+                    <div><small>SKU</small><strong class="mono">{{ product.sku }}</strong></div>
+                    <div><small>Stock</small><strong>0 {{ product.unit }}</strong></div>
+                </div>
+                <div class="registration-choice-actions">
+                    <button class="button secondary" type="button" @click="close">Cancel</button>
+                    <button class="button primary" type="button" @click="showQr"><i class="fa-solid fa-qrcode"></i>Show QR</button>
+                </div>
+            </div>
+
+            <div v-else class="registration-result qr-result">
+                <div class="registration-qr-card">
+                    <img :src="qrDataUrl" :alt="`${product.name} QR code`" />
+                    <h3>{{ product.name }}</h3>
+                    <p class="mono">{{ product.sku }}</p>
+                    <small>{{ product.barcode }}</small>
+                    <span>{{ product.location || 'Location not assigned' }}</span>
+                </div>
+                <div class="registration-choice-actions">
+                    <button class="button secondary" type="button" @click="close">Close</button>
+                    <button class="button primary" type="button" @click="printQr"><i class="fa-solid fa-print"></i>Print</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</template>
+
+<script>
+import QRCode from 'qrcode'
+import { inventoryStore } from '@/services/inventoryStore'
+
+const emptyForm = () => ({
+    name: '',
+    sku: '',
+    barcode: '',
+    category: '',
+    type: 'Retail Product',
+    unit: 'pcs',
+    minimumStock: 5,
+    costPrice: 0,
+    sellingPrice: 0,
+    supplier: '',
+    location: '',
+    expiryTracking: false,
+    active: true,
+})
+
+export default {
+    name: 'ProductRegistrationModal',
+    emits: ['close', 'registered'],
+    data() {
+        return {
+            store: inventoryStore,
+            stage: 'form',
+            form: emptyForm(),
+            formError: '',
+            product: null,
+            qrDataUrl: '',
+        }
+    },
+    computed: {
+        suggestedSku() {
+            return this.form.category ? this.store.nextSku(this.form.category) : 'Generated when saved'
+        },
+    },
+    methods: {
+        close() {
+            this.$emit('close')
+        },
+        save() {
+            this.formError = ''
+            try {
+                this.product = this.store.saveProduct(this.form)
+                this.stage = 'choice'
+                this.$emit('registered', this.product)
+                this.store.addToast(`${this.product.name} registered.`)
+            } catch (error) {
+                this.formError = error.message
+            }
+        },
+        async showQr() {
+            try {
+                this.qrDataUrl = await QRCode.toDataURL(this.product.qrCode, {
+                    width: 320,
+                    margin: 1,
+                    errorCorrectionLevel: 'M',
+                })
+                this.stage = 'qr'
+            } catch (error) {
+                this.store.addToast('Unable to generate this QR code.', 'danger')
+            }
+        },
+        async printQr() {
+            if (!this.qrDataUrl) await this.showQr()
+            const printWindow = window.open('', '_blank', 'width=520,height=640')
+            if (!printWindow) {
+                this.store.addToast('Allow pop-ups to print the QR label.', 'danger')
+                return
+            }
+            const safe = (value) =>
+                String(value || '')
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+            printWindow.document.write(`<!doctype html><html><head><title>${safe(this.product.name)}</title><style>
+                @page{size:60mm 45mm;margin:3mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}
+                .label{width:54mm;height:39mm;border:1px solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
+                img{width:24mm;height:24mm}.info{min-width:0}h1{font-size:11pt;margin:0 0 2mm;line-height:1.15}
+                p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
+            </style></head><body><div class="label"><img src="${this.qrDataUrl}" alt=""><div class="info">
+                <h1>${safe(this.product.name)}</h1><p>${safe(this.product.sku)}</p>
+                <small>${safe(this.product.barcode)}</small><small>${safe(this.product.location || 'No location')}</small>
+            </div></div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
+            printWindow.document.close()
+        },
+    },
+}
+</script>

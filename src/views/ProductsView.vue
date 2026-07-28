@@ -1,13 +1,13 @@
 <template>
-    <div class="page-stack">
+    <div class="page-stack products-page">
         <section class="page-heading">
             <div>
                 <span class="eyebrow">PRODUCT MANAGEMENT</span>
                 <h1>Products</h1>
-                <p>Create products and control their inventory setup.</p>
+                <p>Tap any product to see its details.</p>
             </div>
-            <button class="button primary" type="button" @click="openProductForm()">
-                <i class="fa-solid fa-plus"></i>Add Product
+            <button class="button primary" type="button" @click="registerOpen = true">
+                <i class="fa-solid fa-plus"></i>Register Product
             </button>
         </section>
 
@@ -32,7 +32,7 @@
 
         <section class="panel table-panel">
             <div class="table-scroll">
-                <table class="inventory-table">
+                <table class="inventory-table products-table">
                     <thead>
                         <tr>
                             <th>Product</th>
@@ -40,116 +40,123 @@
                             <th>Location</th>
                             <th>Stock</th>
                             <th>Status</th>
-                            <th aria-label="Actions"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="product in filteredProducts"
                             :key="product.id"
+                            class="clickable-product-row"
                             :class="{ 'low-row': store.productStatus(product) === 'Low Stock' }"
+                            tabindex="0"
+                            @click="openDetails(product)"
+                            @keydown.enter="openDetails(product)"
                         >
                             <td>
-                                <button class="product-cell" type="button" @click="viewProduct(product)">
+                                <div class="product-cell">
                                     <span>{{ product.name.slice(0, 2).toUpperCase() }}</span>
-                                    <div><strong>{{ product.name }}</strong><small class="mono">{{ product.sku }} · {{ product.barcode }}</small></div>
-                                </button>
+                                    <div><strong>{{ product.name }}</strong><small class="mono">{{ product.sku }} &middot; {{ product.barcode }}</small></div>
+                                </div>
                             </td>
                             <td><span>{{ product.type }}</span><small>{{ product.category }}</small></td>
                             <td><span>{{ product.location || 'Not assigned' }}</span><small>{{ product.supplier || 'No supplier' }}</small></td>
                             <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small><small>Min. {{ product.minimumStock }}</small></td>
-                            <td><span class="status-badge" :class="statusClass(product)">{{ store.productStatus(product) }}</span></td>
                             <td>
-                                <div class="row-actions">
-                                    <button type="button" aria-label="Edit product" @click="openProductForm(product)"><i class="fa-solid fa-pen"></i></button>
-                                    <button type="button" aria-label="View product" @click="viewProduct(product)"><i class="fa-solid fa-chevron-right"></i></button>
-                                </div>
+                                <span class="status-badge" :class="statusClass(product)">{{ store.productStatus(product) }}</span>
+                                <i class="fa-solid fa-chevron-right product-row-chevron"></i>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div v-if="!filteredProducts.length" class="empty-state">
-                <i class="fa-solid fa-box-open"></i><strong>No products found</strong><p>Change the filters or add a new product.</p>
+                <i class="fa-solid fa-box-open"></i><strong>No products found</strong><p>Change the filters or register a product.</p>
             </div>
         </section>
 
-        <div v-if="formOpen" class="modal-backdrop" @click.self="formOpen = false">
-            <section class="form-modal product-form-modal">
+        <ProductRegistrationModal
+            v-if="registerOpen"
+            @close="registerOpen = false"
+            @registered="handleRegistered"
+        />
+
+        <div v-if="selectedProduct" class="modal-backdrop" @click.self="closeDetails">
+            <section class="form-modal product-details-modal">
                 <header class="modal-header">
                     <div>
-                        <span class="eyebrow">{{ editingProduct ? 'EDIT PRODUCT' : 'NEW PRODUCT' }}</span>
-                        <h2>{{ editingProduct ? editingProduct.name : 'Add Product' }}</h2>
-                        <p>Product identity and stock rules.</p>
+                        <span class="eyebrow">PRODUCT DETAILS</span>
+                        <h2>{{ selectedProduct.name }}</h2>
+                        <p class="mono">{{ selectedProduct.sku }}</p>
                     </div>
-                    <button class="icon-button" type="button" aria-label="Close" @click="formOpen = false"><i class="fa-solid fa-xmark"></i></button>
+                    <button class="icon-button" type="button" aria-label="Close" @click="closeDetails">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </header>
-                <form class="form-grid two-column" @submit.prevent="save">
-                    <label class="full"><span>Product Name <b>*</b></span><input v-model.trim="form.name" type="text" required placeholder="e.g. Fresh Milk" /></label>
-                    <label><span>Product Code / SKU</span><input v-model.trim="form.sku" class="mono" type="text" :placeholder="suggestedSku" /></label>
-                    <label><span>Barcode</span><input v-model.trim="form.barcode" class="mono" type="text" placeholder="Generated if empty" /></label>
-                    <label><span>Category <b>*</b></span><input v-model.trim="form.category" type="text" required placeholder="Dairy" /></label>
-                    <label><span>Product Type <b>*</b></span>
-                        <select v-model="form.type">
-                            <option>Retail Product</option><option>Ingredient</option><option>Prepared Product</option>
-                        </select>
-                    </label>
-                    <label><span>Unit <b>*</b></span><input v-model.trim="form.unit" type="text" required placeholder="pcs, kg, cartons" /></label>
-                    <label><span>Minimum Stock</span><input v-model.number="form.minimumStock" type="number" min="0" step="0.01" inputmode="decimal" /></label>
-                    <label><span>Cost Price (RM)</span><input v-model.number="form.costPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
-                    <label><span>Selling Price (RM)</span><input v-model.number="form.sellingPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
-                    <label><span>Supplier</span><input v-model.trim="form.supplier" type="text" placeholder="Supplier name" /></label>
-                    <label><span>Warehouse Location</span><input v-model.trim="form.location" type="text" placeholder="Rack A-01" /></label>
-                    <label class="toggle-label full">
-                        <input v-model="form.expiryTracking" type="checkbox" />
-                        <span><strong>Track batches and expiry</strong><small>Required for perishable products.</small></span>
-                    </label>
-                    <p v-if="formError" class="form-error full"><i class="fa-solid fa-circle-exclamation"></i>{{ formError }}</p>
-                    <footer class="form-actions full">
-                        <button v-if="editingProduct" class="button text-danger" type="button" @click="toggleActive">
-                            {{ editingProduct.active ? 'Disable Product' : 'Enable Product' }}
-                        </button>
-                        <span></span>
-                        <button class="button secondary" type="button" @click="formOpen = false">Cancel</button>
-                        <button class="button primary" type="submit"><i class="fa-solid fa-check"></i>Save Product</button>
-                    </footer>
-                </form>
+                <div class="product-details-body">
+                    <section class="product-details-identity">
+                        <div class="product-details-qr">
+                            <img v-if="detailQr" :src="detailQr" :alt="`${selectedProduct.name} QR code`" />
+                            <i v-else class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <div>
+                            <span class="status-badge" :class="statusClass(selectedProduct)">{{ store.productStatus(selectedProduct) }}</span>
+                            <h3>{{ selectedProduct.name }}</h3>
+                            <p class="mono">{{ selectedProduct.barcode }}</p>
+                        </div>
+                        <div class="details-stock">
+                            <small>Current Stock</small>
+                            <strong>{{ selectedProduct.currentStock }}</strong>
+                            <span>{{ selectedProduct.unit }}</span>
+                        </div>
+                    </section>
+                    <dl class="product-details-grid">
+                        <div><dt>Category</dt><dd>{{ selectedProduct.category }}</dd></div>
+                        <div><dt>Type</dt><dd>{{ selectedProduct.type }}</dd></div>
+                        <div><dt>Location</dt><dd>{{ selectedProduct.location || 'Not assigned' }}</dd></div>
+                        <div><dt>Minimum Stock</dt><dd>{{ selectedProduct.minimumStock }} {{ selectedProduct.unit }}</dd></div>
+                        <div><dt>Supplier</dt><dd>{{ selectedProduct.supplier || 'Not assigned' }}</dd></div>
+                        <div><dt>Batches</dt><dd>{{ selectedProduct.batches.length }}</dd></div>
+                    </dl>
+                </div>
+                <footer class="product-details-actions">
+                    <button class="button secondary" type="button" @click="printQr"><i class="fa-solid fa-print"></i>Print QR</button>
+                    <span></span>
+                    <button class="button stock-in" type="button" @click="startOperation('in')"><i class="fa-solid fa-arrow-down"></i>Stock In</button>
+                    <button class="button stock-out" type="button" @click="startOperation('out')"><i class="fa-solid fa-arrow-up"></i>Stock Out</button>
+                </footer>
             </section>
         </div>
+
+        <StockOperationModal
+            v-if="operation"
+            :product="operationProduct"
+            :direction="operation"
+            @close="operation = ''"
+            @completed="completeOperation"
+        />
     </div>
 </template>
 
 <script>
+import QRCode from 'qrcode'
+import ProductRegistrationModal from '@/components/ProductRegistrationModal.vue'
+import StockOperationModal from '@/components/StockOperationModal.vue'
 import { inventoryStore } from '@/services/inventoryStore'
-
-const emptyForm = () => ({
-    name: '',
-    sku: '',
-    barcode: '',
-    category: '',
-    type: 'Retail Product',
-    unit: 'pcs',
-    minimumStock: 5,
-    costPrice: 0,
-    sellingPrice: 0,
-    supplier: '',
-    location: '',
-    expiryTracking: false,
-    active: true,
-})
 
 export default {
     name: 'ProductsView',
+    components: { ProductRegistrationModal, StockOperationModal },
     data() {
         return {
             store: inventoryStore,
             search: '',
             category: '',
             status: '',
-            formOpen: false,
-            editingProduct: null,
-            form: emptyForm(),
-            formError: '',
+            registerOpen: false,
+            selectedProduct: null,
+            detailQr: '',
+            operation: '',
+            operationProduct: null,
         }
     },
     computed: {
@@ -171,56 +178,66 @@ export default {
                 )
             })
         },
-        suggestedSku() {
-            return this.form.category ? this.store.nextSku(this.form.category) : 'Generated when saved'
-        },
     },
     methods: {
         statusClass(product) {
             return `status-${this.store.productStatus(product).toLowerCase().replaceAll(' ', '-')}`
         },
-        viewProduct(product) {
-            this.$router.push({ path: '/inventory/scan', query: { code: product.sku } })
+        handleRegistered() {
+            this.search = ''
+            this.category = ''
+            this.status = ''
         },
-        openProductForm(product = null) {
-            this.editingProduct = product
-            this.formError = ''
-            this.form = product
-                ? {
-                      name: product.name,
-                      sku: product.sku,
-                      barcode: product.barcode,
-                      category: product.category,
-                      type: product.type,
-                      unit: product.unit,
-                      minimumStock: product.minimumStock,
-                      costPrice: product.costPrice,
-                      sellingPrice: product.sellingPrice,
-                      supplier: product.supplier,
-                      location: product.location,
-                      expiryTracking: product.expiryTracking,
-                      active: product.active,
-                  }
-                : emptyForm()
-            this.formOpen = true
-        },
-        save() {
-            this.formError = ''
+        async openDetails(product) {
+            this.selectedProduct = product
+            this.detailQr = ''
             try {
-                const product = this.store.saveProduct(this.form, this.editingProduct?.id)
-                this.formOpen = false
-                this.store.addToast(`${product.name} saved.`)
+                this.detailQr = await QRCode.toDataURL(product.qrCode, {
+                    width: 240,
+                    margin: 1,
+                    errorCorrectionLevel: 'M',
+                })
             } catch (error) {
-                this.formError = error.message
+                this.store.addToast('Unable to generate this QR code.', 'danger')
             }
         },
-        toggleActive() {
-            const product = this.store.setProductActive(
-                this.editingProduct.id,
-                !this.editingProduct.active,
-            )
-            this.formOpen = false
-            this.store.addToast(`${product.name} ${product.active ? 'enabled' : 'disabled'}.`)
+        closeDetails() {
+            this.selectedProduct = null
+            this.detailQr = ''
+        },
+        startOperation(direction) {
+            this.operationProduct = this.selectedProduct
+            this.operation = direction
+            this.closeDetails()
+        },
+        completeOperation() {
+            this.operation = ''
+            this.operationProduct = null
+        },
+        printQr() {
+            if (!this.selectedProduct || !this.detailQr) return
+            const product = this.selectedProduct
+            const safe = (value) =>
+                String(value || '')
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+            const printWindow = window.open('', '_blank', 'width=520,height=640')
+            if (!printWindow) {
+                this.store.addToast('Allow pop-ups to print the QR label.', 'danger')
+                return
+            }
+            printWindow.document.write(`<!doctype html><html><head><title>${safe(product.name)}</title><style>
+                @page{size:60mm 45mm;margin:3mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}
+                .label{width:54mm;height:39mm;border:1px solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
+                img{width:24mm;height:24mm}.info{min-width:0}h1{font-size:11pt;margin:0 0 2mm;line-height:1.15}
+                p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
+            </style></head><body><div class="label"><img src="${this.detailQr}" alt=""><div class="info">
+                <h1>${safe(product.name)}</h1><p>${safe(product.sku)}</p>
+                <small>${safe(product.barcode)}</small><small>${safe(product.location || 'No location')}</small>
+            </div></div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
+            printWindow.document.close()
         },
     },
 }

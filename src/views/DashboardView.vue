@@ -10,16 +10,16 @@
         </section>
 
         <section class="quick-actions">
-            <button class="quick-action primary-action" type="button" @click="openScanner">
+            <button class="quick-action primary-action" type="button" @click="registerOpen = true">
+                <span><i class="fa-solid fa-plus"></i></span>
+                <div><strong>Register Product</strong><small>Create item & QR</small></div>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button class="quick-action" type="button" @click="openScanner">
                 <span><i class="fa-solid fa-qrcode"></i></span>
                 <div><strong>Scan Product</strong><small>Find & update stock</small></div>
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
-            <RouterLink class="quick-action" to="/inventory/receive">
-                <span><i class="fa-solid fa-truck-ramp-box"></i></span>
-                <div><strong>Receive Stock</strong><small>Add delivery & batch</small></div>
-                <i class="fa-solid fa-arrow-right"></i>
-            </RouterLink>
             <button class="quick-action" type="button" @click="openPicker('in')">
                 <span class="teal"><i class="fa-solid fa-arrow-down"></i></span>
                 <div><strong>Stock In</strong><small>Top up an item</small></div>
@@ -33,33 +33,33 @@
         </section>
 
         <section class="metric-grid">
-            <article>
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'products' }" @click="selectedMetric = 'products'">
                 <span class="metric-icon blue"><i class="fa-solid fa-box"></i></span>
                 <div><small>Total Products</small><strong>{{ stats.totalProducts }}</strong><p>Active items</p></div>
-            </article>
-            <article>
+            </button>
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'stock' }" @click="selectedMetric = 'stock'">
                 <span class="metric-icon charcoal"><i class="fa-solid fa-boxes-stacked"></i></span>
                 <div><small>Total Stock</small><strong>{{ compact(stats.totalQuantity) }}</strong><p>Across all units</p></div>
-            </article>
-            <article>
+            </button>
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'low' }" @click="selectedMetric = 'low'">
                 <span class="metric-icon amber"><i class="fa-solid fa-triangle-exclamation"></i></span>
                 <div><small>Low Stock</small><strong>{{ stats.lowStock.length }}</strong><p>Needs reorder</p></div>
-            </article>
-            <article>
+            </button>
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'out' }" @click="selectedMetric = 'out'">
                 <span class="metric-icon red"><i class="fa-solid fa-circle-xmark"></i></span>
                 <div><small>Out of Stock</small><strong>{{ stats.outOfStock.length }}</strong><p>Unavailable</p></div>
-            </article>
+            </button>
         </section>
 
         <section class="dashboard-grid">
             <article class="panel dashboard-list-panel stock-alert-panel">
                 <header class="panel-header">
-                    <div><span class="eyebrow">STOCK ALERTS</span><h2>Needs attention</h2></div>
-                    <RouterLink to="/inventory/products">View products<i class="fa-solid fa-arrow-right"></i></RouterLink>
+                    <div><span class="eyebrow">{{ metricEyebrow }}</span><h2>{{ metricTitle }}</h2></div>
+                    <span class="dashboard-list-count">{{ metricProducts.length }} items</span>
                 </header>
                 <div class="dashboard-scroll alert-list">
                     <button
-                        v-for="product in alertProducts"
+                        v-for="product in metricProducts"
                         :key="product.id"
                         type="button"
                         @click="openProduct(product)"
@@ -69,8 +69,8 @@
                         <span class="stock-value">{{ product.currentStock }} <small>{{ product.unit }}</small></span>
                         <span class="status-badge" :class="statusClass(product)">{{ store.productStatus(product) }}</span>
                     </button>
-                    <div v-if="!alertProducts.length" class="empty-state compact">
-                        <i class="fa-solid fa-circle-check"></i><strong>Stock levels look good</strong>
+                    <div v-if="!metricProducts.length" class="empty-state compact">
+                        <i class="fa-solid fa-circle-check"></i><strong>No products in this view</strong>
                     </div>
                 </div>
                 <footer class="dashboard-panel-footer">
@@ -82,7 +82,7 @@
             <article class="panel dashboard-list-panel activity-panel">
                 <header class="panel-header">
                     <div><span class="eyebrow">TODAY</span><h2>Recent activity</h2></div>
-                    <RouterLink to="/inventory/history">All history<i class="fa-solid fa-arrow-right"></i></RouterLink>
+                    <span class="dashboard-list-count">{{ store.state.movements.length }} records</span>
                 </header>
                 <div class="dashboard-scroll activity-list">
                     <button
@@ -109,19 +109,20 @@
         </section>
 
         <div v-if="pickerOpen" class="modal-backdrop" @click.self="closePicker">
-            <section class="form-modal quick-workspace-modal">
+            <section class="form-modal quick-workspace-modal" :class="{ 'details-only': pickerAction === 'details' }">
                 <header class="modal-header">
                     <div>
                         <span class="eyebrow">{{ pickerEyebrow }}</span>
                         <h2>{{ pickerTitle }}</h2>
-                        <p>Select one item. The operation stays on Dashboard.</p>
+                        <p v-if="pickerAction !== 'details'">Select one item. The operation stays on Dashboard.</p>
+                        <p v-else>Product details and stock actions.</p>
                     </div>
                     <button class="icon-button" type="button" aria-label="Close" @click="closePicker">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>
-                <div class="quick-workspace-body">
-                    <section class="quick-product-column">
+                <div class="quick-workspace-body" :class="{ 'details-only': pickerAction === 'details' }">
+                    <section v-if="pickerAction !== 'details'" class="quick-product-column">
                         <label class="search-field">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <input v-model.trim="productSearch" type="search" placeholder="Search product or SKU" />
@@ -153,6 +154,8 @@
                                 <span>{{ selectedProduct.unit }}</span>
                             </div>
                             <dl>
+                                <div><dt>Barcode</dt><dd class="mono">{{ selectedProduct.barcode }}</dd></div>
+                                <div><dt>Category</dt><dd>{{ selectedProduct.category }}</dd></div>
                                 <div><dt>Location</dt><dd>{{ selectedProduct.location }}</dd></div>
                                 <div><dt>Minimum</dt><dd>{{ selectedProduct.minimumStock }} {{ selectedProduct.unit }}</dd></div>
                                 <div><dt>Supplier</dt><dd>{{ selectedProduct.supplier }}</dd></div>
@@ -181,6 +184,11 @@
             </section>
         </div>
 
+        <ProductRegistrationModal
+            v-if="registerOpen"
+            @close="registerOpen = false"
+            @registered="handleRegistered"
+        />
         <ScannerModal
             v-if="scannerOpen"
             @close="scannerOpen = false"
@@ -197,13 +205,14 @@
 </template>
 
 <script>
+import ProductRegistrationModal from '@/components/ProductRegistrationModal.vue'
 import ScannerModal from '@/components/ScannerModal.vue'
 import StockOperationModal from '@/components/StockOperationModal.vue'
 import { inventoryStore } from '@/services/inventoryStore'
 
 export default {
     name: 'DashboardView',
-    components: { ScannerModal, StockOperationModal },
+    components: { ProductRegistrationModal, ScannerModal, StockOperationModal },
     data() {
         return {
             store: inventoryStore,
@@ -213,14 +222,36 @@ export default {
             selectedProduct: null,
             scannerOpen: false,
             operation: '',
+            registerOpen: false,
+            selectedMetric: 'products',
         }
     },
     computed: {
         stats() {
             return this.store.dashboardStats()
         },
-        alertProducts() {
-            return [...this.stats.outOfStock, ...this.stats.lowStock]
+        metricProducts() {
+            const active = this.store.state.products.filter((product) => product.active)
+            if (this.selectedMetric === 'stock') {
+                return active
+                    .filter((product) => Number(product.currentStock) > 0)
+                    .sort((a, b) => Number(b.currentStock) - Number(a.currentStock))
+            }
+            if (this.selectedMetric === 'low') return this.stats.lowStock
+            if (this.selectedMetric === 'out') return this.stats.outOfStock
+            return active
+        },
+        metricTitle() {
+            if (this.selectedMetric === 'stock') return 'Products with stock'
+            if (this.selectedMetric === 'low') return 'Needs reorder'
+            if (this.selectedMetric === 'out') return 'Unavailable products'
+            return 'All products'
+        },
+        metricEyebrow() {
+            if (this.selectedMetric === 'stock') return 'TOTAL STOCK'
+            if (this.selectedMetric === 'low') return 'LOW STOCK'
+            if (this.selectedMetric === 'out') return 'OUT OF STOCK'
+            return 'TOTAL PRODUCTS'
         },
         filteredProducts() {
             const search = this.productSearch.toLowerCase()
@@ -248,12 +279,12 @@ export default {
         pickerTitle() {
             if (this.pickerAction === 'in') return 'Choose product for Stock In'
             if (this.pickerAction === 'out') return 'Choose product for Stock Out'
-            return 'Product quick view'
+            return this.selectedProduct?.name || 'Product Details'
         },
         pickerEyebrow() {
             if (this.pickerAction === 'in') return 'ADD INVENTORY'
             if (this.pickerAction === 'out') return 'DEDUCT INVENTORY'
-            return 'PRODUCT'
+            return 'PRODUCT DETAILS'
         },
     },
     methods: {
@@ -280,7 +311,7 @@ export default {
             this.productSearch = ''
         },
         openProduct(product) {
-            if (product) this.openPicker('view', product)
+            if (product) this.openPicker('details', product)
         },
         openScanner() {
             this.scannerOpen = true
@@ -305,6 +336,9 @@ export default {
         completeOperation() {
             this.operation = ''
             this.selectedProduct = null
+        },
+        handleRegistered() {
+            this.selectedMetric = 'products'
         },
     },
 }

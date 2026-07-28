@@ -88,6 +88,21 @@ try {
         expiryTracking: true,
     })
 
+    assert.equal(inventoryStore.state.products[0].id, product.id)
+    assert.equal(product.currentStock, 0)
+    assert.equal(product.qrCode, 'IMS:PRODUCT:TEST-001')
+    assert.equal(inventoryStore.findProduct(product.qrCode).id, product.id)
+    assert.throws(
+        () =>
+            inventoryStore.saveProduct({
+                name: 'Duplicate Test Item',
+                sku: 'TEST-001',
+                category: 'Testing',
+                unit: 'pcs',
+            }),
+        /already exists/,
+    )
+
     const receiving = inventoryStore.receiveStock({
         productId: product.id,
         supplier: 'Test Supplier',
@@ -140,7 +155,7 @@ try {
         [45, 50],
     )
 
-    console.log('Inventory logic checks passed: receive 50 → stock 50 → deduct 5 → stock 45.')
+    console.log('Inventory logic checks passed: register -> QR -> receive 50 -> deduct 5 -> stock 45.')
 } finally {
     if (fs.existsSync(compiledPath)) fs.rmSync(compiledPath)
 }
