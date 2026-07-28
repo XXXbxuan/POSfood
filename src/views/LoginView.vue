@@ -1,29 +1,13 @@
 <template>
-    <main class="login-page">
-        <section class="login-brand-panel">
-            <div class="login-brand">
-                <span><i class="fa-solid fa-boxes-stacked"></i></span>
-                <div><strong>INVENTORY</strong><small>MANAGEMENT SYSTEM</small></div>
-            </div>
-            <div class="login-intro">
-                <span class="eyebrow">SCAN · RECEIVE · TRACK</span>
-                <h1>Every item.<br />Exactly where it should be.</h1>
-                <p>Receive stock, print labels and record every movement from one secure workspace.</p>
-            </div>
-            <div class="login-flow">
-                <span><i class="fa-solid fa-id-card"></i>Staff</span>
-                <i class="fa-solid fa-arrow-right"></i>
-                <span><i class="fa-solid fa-qrcode"></i>Scan</span>
-                <i class="fa-solid fa-arrow-right"></i>
-                <span><i class="fa-solid fa-box"></i>Stock</span>
-            </div>
-        </section>
-
-        <section class="login-form-panel">
-            <div class="login-form-wrap">
+    <main class="login-page login-page-simple">
+        <section class="login-form-panel simple-login-panel">
+            <div class="login-form-wrap login-form-card">
+                <div class="login-card-brand">
+                    <span><i class="fa-solid fa-boxes-stacked"></i></span>
+                    <div><strong>INVENTORY</strong><small>MANAGEMENT SYSTEM</small></div>
+                </div>
                 <transition name="form-swap" mode="out-in">
                     <div v-if="step === 'credentials'" key="credentials">
-                        <span class="eyebrow">STAFF ACCESS</span>
                         <h2>{{ isUnlocking ? 'Session locked' : 'Sign in' }}</h2>
                         <p class="login-subtitle">
                             {{ isUnlocking ? 'Enter your PIN to continue.' : 'Use your staff card or account.' }}
@@ -89,7 +73,7 @@
                     </div>
                 </transition>
             </div>
-            <p class="login-device-status"><span></span>Secure device · Main Warehouse</p>
+            <p class="login-device-status"><span></span>Main Warehouse</p>
         </section>
 
         <ScannerModal
