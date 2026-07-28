@@ -5,7 +5,7 @@
                 <div>
                     <span class="eyebrow">{{ stage === 'form' ? (editing ? 'EDIT PRODUCT' : 'NEW ITEM') : 'PRODUCT REGISTERED' }}</span>
                     <h2>{{ stage === 'form' ? (editing ? editProduct.name : 'Register Product') : product.name }}</h2>
-                    <p v-if="stage === 'form'">{{ editing ? 'Update product identity and stock rules.' : 'Create the product first. Stock can be added after registration.' }}</p>
+                    <p v-if="stage === 'form'">{{ formStep === 1 ? 'Start with the product identity.' : 'Add stock rules and supply details.' }}</p>
                     <p v-else class="mono">{{ product.sku }}</p>
                 </div>
                 <button class="icon-button" type="button" aria-label="Close" @click="close">
@@ -13,33 +13,46 @@
                 </button>
             </header>
 
-            <form v-if="stage === 'form'" class="form-grid two-column registration-form" @submit.prevent="save">
-                <label class="full"><span>Product Name <b>*</b></span><input v-model.trim="form.name" type="text" required autofocus placeholder="e.g. Fresh Milk" /></label>
-                <label><span>Product Code / SKU</span><input v-model.trim="form.sku" class="mono" type="text" :placeholder="suggestedSku" /></label>
-                <label><span>Barcode</span><input v-model.trim="form.barcode" class="mono" type="text" placeholder="Generated if empty" /></label>
-                <label><span>Category <b>*</b></span><input v-model.trim="form.category" type="text" required placeholder="Dairy" /></label>
-                <label><span>Product Type <b>*</b></span>
-                    <select v-model="form.type">
-                        <option>Retail Product</option>
-                        <option>Ingredient</option>
-                        <option>Prepared Product</option>
-                    </select>
-                </label>
-                <label><span>Unit <b>*</b></span><input v-model.trim="form.unit" type="text" required placeholder="pcs, kg, cartons" /></label>
-                <label><span>Minimum Stock</span><input v-model.number="form.minimumStock" type="number" min="0" step="0.01" inputmode="decimal" /></label>
-                <label><span>Cost Price (RM)</span><input v-model.number="form.costPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
-                <label><span>Selling Price (RM)</span><input v-model.number="form.sellingPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
-                <label><span>Supplier</span><input v-model.trim="form.supplier" type="text" placeholder="Supplier name" /></label>
-                <label><span>Warehouse Location</span><input v-model.trim="form.location" type="text" placeholder="Rack A-01" /></label>
-                <label class="toggle-label full">
-                    <input v-model="form.expiryTracking" type="checkbox" />
-                    <span><strong>Track batches and expiry</strong><small>Use for perishable products.</small></span>
-                </label>
+            <form v-if="stage === 'form'" class="registration-form" @submit.prevent="formStep === 1 ? nextStep() : save()">
+                <nav class="registration-steps" aria-label="Registration progress">
+                    <button type="button" :class="{ active: formStep === 1, complete: formStep > 1 }" @click="formStep = 1"><span>1</span><strong>Product</strong></button>
+                    <i></i>
+                    <button type="button" :class="{ active: formStep === 2 }" :disabled="formStep === 1" @click="formStep = 2"><span>2</span><strong>Stock Setup</strong></button>
+                </nav>
+
+                <section v-if="formStep === 1" class="registration-step-panel form-grid two-column">
+                    <label class="full"><span>Product Name <b>*</b></span><input v-model.trim="form.name" type="text" required autofocus placeholder="e.g. Fresh Milk" /></label>
+                    <label><span>Category <b>*</b></span><input v-model.trim="form.category" type="text" required placeholder="e.g. Dairy" /></label>
+                    <label><span>Product Type <b>*</b></span>
+                        <select v-model="form.type">
+                            <option>Retail Product</option>
+                            <option>Ingredient</option>
+                            <option>Prepared Product</option>
+                        </select>
+                    </label>
+                    <label><span>Unit <b>*</b></span><input v-model.trim="form.unit" type="text" required placeholder="pcs, kg, cartons" /></label>
+                    <label><span>Product Code / SKU</span><input v-model.trim="form.sku" class="mono" type="text" :placeholder="suggestedSku" /></label>
+                    <label class="full"><span>Barcode</span><input v-model.trim="form.barcode" class="mono" type="text" placeholder="Generated automatically when empty" /></label>
+                </section>
+
+                <section v-else class="registration-step-panel form-grid two-column">
+                    <label><span>Minimum Stock</span><input v-model.number="form.minimumStock" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+                    <label><span>Warehouse Location</span><input v-model.trim="form.location" type="text" placeholder="Rack A-01" /></label>
+                    <label><span>Cost Price (RM)</span><input v-model.number="form.costPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+                    <label><span>Selling Price (RM)</span><input v-model.number="form.sellingPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+                    <label class="full"><span>Supplier</span><input v-model.trim="form.supplier" type="text" placeholder="Supplier name" /></label>
+                    <label class="toggle-label full">
+                        <input v-model="form.expiryTracking" type="checkbox" />
+                        <span><strong>Track batches and expiry</strong><small>Use for perishable products.</small></span>
+                    </label>
+                </section>
                 <p v-if="formError" class="form-error full"><i class="fa-solid fa-circle-exclamation"></i>{{ formError }}</p>
-                <footer class="form-actions full">
-                    <span></span>
-                    <button class="button secondary" type="button" @click="close">Cancel</button>
-                    <button class="button primary" type="submit"><i class="fa-solid fa-check"></i>{{ editing ? 'Save Changes' : 'Register Product' }}</button>
+                <footer class="registration-step-actions">
+                    <button class="button secondary" type="button" @click="formStep === 1 ? close() : formStep--">{{ formStep === 1 ? 'Cancel' : 'Back' }}</button>
+                    <button class="button primary" type="submit">
+                        {{ formStep === 1 ? 'Next' : (editing ? 'Save Changes' : 'Register Product') }}
+                        <i class="fa-solid" :class="formStep === 1 ? 'fa-arrow-right' : 'fa-check'"></i>
+                    </button>
                 </footer>
             </form>
 
@@ -106,6 +119,7 @@ export default {
         return {
             store: inventoryStore,
             stage: 'form',
+            formStep: 1,
             form: source
                 ? {
                       name: source.name,
@@ -139,6 +153,14 @@ export default {
     methods: {
         close() {
             this.$emit('close')
+        },
+        nextStep() {
+            this.formError = ''
+            if (!this.form.name || !this.form.category || !this.form.unit) {
+                this.formError = 'Complete the product name, category and unit first.'
+                return
+            }
+            this.formStep = 2
         },
         save() {
             this.formError = ''

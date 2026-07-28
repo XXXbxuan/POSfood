@@ -13,17 +13,10 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input v-model.trim="search" type="search" placeholder="Search name, SKU or barcode" />
             </label>
-            <select v-model="category">
-                <option value="">All categories</option>
-                <option v-for="item in categories" :key="item">{{ item }}</option>
-            </select>
-            <select v-model="status">
-                <option value="">All stock status</option>
-                <option>In Stock</option>
-                <option>Low Stock</option>
-                <option>Out of Stock</option>
-                <option>Inactive</option>
-            </select>
+            <button class="button secondary product-filter-button" type="button" @click="openFilters">
+                <i class="fa-solid fa-sliders"></i>Filter
+                <span v-if="activeFilterCount">{{ activeFilterCount }}</span>
+            </button>
             <span class="result-count">{{ filteredProducts.length }} items</span>
         </section>
 
@@ -133,6 +126,36 @@
             @close="editOpen = false"
             @registered="handleEdited"
         />
+
+        <div v-if="filterOpen" class="modal-backdrop" @click.self="filterOpen = false">
+            <section class="form-modal product-filter-modal">
+                <header class="modal-header">
+                    <div><span class="eyebrow">PRODUCTS</span><h2>Filter products</h2><p>Choose category and stock status.</p></div>
+                    <button class="icon-button" type="button" aria-label="Close" @click="filterOpen = false"><i class="fa-solid fa-xmark"></i></button>
+                </header>
+                <form class="form-grid" @submit.prevent="applyFilters">
+                    <label><span>Category</span>
+                        <select v-model="filterDraft.category">
+                            <option value="">All categories</option>
+                            <option v-for="item in categories" :key="item">{{ item }}</option>
+                        </select>
+                    </label>
+                    <label><span>Stock Status</span>
+                        <select v-model="filterDraft.status">
+                            <option value="">All stock status</option>
+                            <option>In Stock</option>
+                            <option>Low Stock</option>
+                            <option>Out of Stock</option>
+                            <option>Inactive</option>
+                        </select>
+                    </label>
+                    <footer class="product-filter-actions">
+                        <button class="button secondary" type="button" @click="clearFilters">Clear</button>
+                        <button class="button primary" type="submit">Apply Filter</button>
+                    </footer>
+                </form>
+            </section>
+        </div>
     </div>
 </template>
 
@@ -155,11 +178,16 @@ export default {
             detailQr: '',
             operation: '',
             editOpen: false,
+            filterOpen: false,
+            filterDraft: { category: '', status: '' },
         }
     },
     computed: {
         categories() {
             return [...new Set(this.store.state.products.map((product) => product.category))].sort()
+        },
+        activeFilterCount() {
+            return Number(Boolean(this.category)) + Number(Boolean(this.status))
         },
         filteredProducts() {
             const search = this.search.toLowerCase()
@@ -180,6 +208,21 @@ export default {
     methods: {
         statusClass(product) {
             return `status-${this.store.productStatus(product).toLowerCase().replaceAll(' ', '-')}`
+        },
+        openFilters() {
+            this.filterDraft = { category: this.category, status: this.status }
+            this.filterOpen = true
+        },
+        applyFilters() {
+            this.category = this.filterDraft.category
+            this.status = this.filterDraft.status
+            this.filterOpen = false
+        },
+        clearFilters() {
+            this.filterDraft = { category: '', status: '' }
+            this.category = ''
+            this.status = ''
+            this.filterOpen = false
         },
         async openDetails(product) {
             this.selectedProduct = product

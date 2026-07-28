@@ -6789,3 +6789,1171 @@ button,
         min-width: 0;
     }
 }
+
+/* ======================================================================
+   2026-07-28 Readability + layout refresh
+   Goal: make the tablet UI easier to read, cleaner, and more aligned.
+   ====================================================================== */
+
+body,
+button,
+input,
+select,
+textarea {
+    font-size: 16px;
+}
+
+input,
+select,
+textarea {
+    min-height: 54px;
+    padding: 0 16px;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 118px;
+    padding-top: 14px;
+}
+
+.button {
+    min-height: 56px;
+    padding: 0 22px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.icon-button {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    border-radius: 12px;
+    font-size: 17px;
+}
+
+.eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.16em;
+}
+
+.panel,
+.form-modal,
+.scanner-modal,
+.tool-picker,
+.quick-workspace-modal,
+.product-details-modal,
+.label-designer-modal {
+    border-radius: 18px;
+}
+
+.modal-header {
+    padding: 22px 24px;
+}
+
+.modal-header h2 {
+    font-size: 28px;
+}
+
+.modal-header p,
+.registration-result > p,
+.tool-picker-placeholder p,
+.empty-state p,
+.summary-placeholder p,
+.scan-hero p,
+.manual-lookup label,
+.audit-note,
+.receive-actions p {
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.inv-page {
+    max-width: 1680px;
+    padding: 30px 34px 48px;
+}
+
+.page-stack {
+    gap: 24px;
+}
+
+.page-heading {
+    min-height: 72px;
+    gap: 22px;
+}
+
+.page-heading h1 {
+    font-size: clamp(34px, 2.4vw, 42px);
+}
+
+.page-heading p {
+    font-size: 16px;
+}
+
+.panel-header {
+    min-height: 78px;
+    padding: 18px 22px;
+}
+
+.panel-header h2 {
+    font-size: 22px;
+}
+
+.panel-header > a,
+.dashboard-list-count,
+.result-count,
+.date-chip,
+.topbar-context span,
+.profile-button small,
+.profile-summary small,
+.notification-popover > a small,
+.notification-popover > a strong,
+.profile-popover > button,
+.inv-sidebar-footer strong,
+.inv-sidebar-footer small,
+.login-subtitle,
+.demo-credentials,
+.form-error,
+.login-device-status,
+.back-link,
+.workflow-steps,
+.section-header p,
+.summary-equation small,
+.receive-summary dt,
+.receive-summary dd,
+.completion-details small,
+.completion-details strong,
+.product-type,
+.detail-list dt,
+.detail-list dd,
+.batch-list strong,
+.batch-list small,
+.movement-preview-list strong,
+.movement-preview-list small,
+.history-summary small,
+.label-meta dt,
+.label-meta dd,
+.label-preview-panel > .panel-header > span,
+.label-stage > p,
+.product-label-code,
+.inventory-label dt,
+.inventory-label dd,
+.manual-code label,
+.label-controls > label,
+.toggle-label strong,
+.toggle-label small,
+.login-fields label,
+.form-grid label,
+.product-selector label,
+.selected-product small,
+.selected-product strong,
+.quick-action strong,
+.quick-action small,
+.metric-grid small,
+.metric-grid p,
+.alert-list strong,
+.alert-list small,
+.activity-list strong,
+.activity-list small,
+.daily-strip p,
+.daily-strip strong,
+.history-table .movement-type,
+.tool-picker > header small,
+.tool-picker-list small,
+.tool-picker-list b,
+.product-details-identity p,
+.registration-summary small,
+.registration-summary strong,
+.registration-qr-card p,
+.registration-qr-card small,
+.registration-qr-card span,
+.sidebar-profile strong,
+.sidebar-profile small {
+    font-size: 14px;
+}
+
+.topbar-context strong {
+    font-size: 26px;
+}
+
+.inv-sidebar {
+    background: linear-gradient(180deg, #edf2f4 0%, #ffffff 100%);
+    color: var(--inv-text);
+    border-right: 1px solid var(--inv-border);
+}
+
+.inv-brand {
+    min-height: 86px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--inv-border);
+}
+
+.inv-brand-mark {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+    border-radius: 13px;
+    border-color: transparent;
+    background: linear-gradient(135deg, #18b4c4, #1495b4);
+    color: #fff;
+}
+
+.inv-brand strong {
+    font-size: 18px;
+    color: var(--inv-text);
+}
+
+.inv-brand small {
+    font-size: 11px;
+    color: #5f7381;
+}
+
+.inv-sidebar nav {
+    gap: 8px;
+    padding: 18px 10px;
+}
+
+.inv-sidebar nav a {
+    min-height: 54px;
+    gap: 14px;
+    padding: 0 14px;
+    border-left-width: 4px;
+    border-radius: 14px;
+    color: #61727d;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.inv-sidebar nav a i {
+    width: 22px;
+    color: #8aa1ab;
+    font-size: 19px;
+}
+
+.inv-sidebar nav a:hover,
+.inv-sidebar nav a.active {
+    background: #eaf8fb;
+    color: #0f3343;
+}
+
+.inv-sidebar nav a.active {
+    border-left-color: #18b4c4;
+}
+
+.inv-sidebar nav a.active i {
+    color: #18b4c4;
+}
+
+.sidebar-profile {
+    min-height: 72px;
+    margin: 12px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    background: #f2fbfc;
+}
+
+.sidebar-profile > span {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+    font-size: 15px;
+}
+
+.inv-topbar {
+    min-height: 84px;
+    padding: 0 26px;
+    border-bottom: 1px solid var(--inv-border);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.topbar-quick-tools {
+    gap: 10px;
+}
+
+.topbar-quick-tools button {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    font-size: 17px;
+}
+
+.dashboard-register-button {
+    min-width: 220px;
+}
+
+.metric-grid {
+    gap: 14px;
+}
+
+.metric-grid article,
+.metric-grid .metric-card {
+    min-height: 128px;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 18px;
+}
+
+.metric-icon {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+    font-size: 20px;
+}
+
+.metric-grid strong {
+    margin-top: 4px;
+    font-size: 38px;
+}
+
+.dashboard-grid,
+.detail-grid,
+.receive-layout,
+.labels-layout,
+.history-summary {
+    gap: 18px;
+}
+
+.dashboard-list-count {
+    font-weight: 700;
+}
+
+.dashboard-scroll {
+    min-height: 0;
+}
+
+.alert-list > button,
+.alert-list > a,
+.activity-list > button,
+.activity-list > div {
+    min-height: 84px;
+    gap: 14px;
+    padding: 13px 18px;
+}
+
+.product-symbol,
+.product-cell > span,
+.activity-list > div > span,
+.activity-list > button > span,
+.movement-preview-list > div > span,
+.movement-type {
+    width: 42px;
+    height: 42px;
+    font-size: 12px;
+}
+
+.stock-value {
+    font-size: 20px;
+}
+
+.stock-value small {
+    font-size: 12px;
+}
+
+.status-badge {
+    min-height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.activity-quantity {
+    font-size: 18px;
+}
+
+.activity-quantity small {
+    font-size: 13px;
+}
+
+.dashboard-panel-footer > div {
+    min-height: 70px;
+    padding: 14px 18px;
+}
+
+.dashboard-panel-footer small {
+    font-size: 13px;
+}
+
+.dashboard-panel-footer strong {
+    font-size: 19px;
+}
+
+.filter-bar {
+    gap: 12px;
+}
+
+.filter-bar > select,
+.filter-bar > input,
+.search-field input {
+    min-height: 52px;
+    font-size: 15px;
+}
+
+.search-field i {
+    left: 14px;
+    font-size: 15px;
+}
+
+.search-field input {
+    padding-left: 42px;
+}
+
+.inventory-table th {
+    height: 52px;
+    padding: 0 16px;
+    font-size: 12px;
+}
+
+.inventory-table td {
+    height: 86px;
+    padding: 12px 16px;
+    font-size: 15px;
+}
+
+.inventory-table td > small,
+.product-cell small {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.product-cell {
+    gap: 12px;
+}
+
+.product-cell strong,
+.inventory-table td > strong,
+.alert-list strong,
+.activity-list strong,
+.selected-product strong,
+.batch-list strong,
+.movement-preview-list strong,
+.quick-action strong,
+.operation-button strong,
+.tool-picker-list strong,
+.product-details-identity h3,
+.registration-result > h3 {
+    font-size: 17px;
+}
+
+.table-stock,
+.change-quantity {
+    font-size: 21px !important;
+    font-weight: 700;
+}
+
+.row-actions button {
+    width: 38px;
+    height: 38px;
+}
+
+.empty-state {
+    min-height: 240px;
+    gap: 10px;
+}
+
+.empty-state > i {
+    font-size: 34px;
+}
+
+.empty-state strong,
+.tool-picker-placeholder strong,
+.summary-placeholder strong {
+    font-size: 20px;
+}
+
+.workflow-steps {
+    gap: 9px;
+    font-size: 12px;
+}
+
+.workflow-steps b {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+}
+
+.section-header {
+    gap: 12px;
+    padding: 20px 22px;
+}
+
+.section-header > span {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+}
+
+.section-header h2,
+.receive-summary h2,
+.product-detail-title h1,
+.scan-hero strong,
+.tool-picker > header h2 {
+    font-size: 24px;
+}
+
+.receive-form > .form-grid,
+.form-grid {
+    gap: 16px;
+    padding: 20px 22px 22px;
+}
+
+.form-grid.two-column {
+    column-gap: 18px;
+}
+
+.receive-actions {
+    padding: 18px 22px;
+}
+
+.selected-product {
+    margin: 14px 22px 0;
+    padding: 13px;
+    border-radius: 14px;
+}
+
+.selected-product > span {
+    width: 44px;
+    height: 44px;
+    font-size: 12px;
+}
+
+.receive-summary {
+    top: 98px;
+    padding: 22px;
+}
+
+.summary-equation,
+.stock-equation {
+    gap: 14px;
+    padding: 18px 16px;
+    border-radius: 16px;
+}
+
+.summary-equation strong,
+.stock-equation strong,
+.completion-equation strong,
+.hero-stock strong {
+    font-size: 34px;
+}
+
+.summary-placeholder {
+    min-height: 210px;
+    gap: 12px;
+}
+
+.summary-placeholder i {
+    font-size: 36px;
+}
+
+.audit-note {
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 14px;
+}
+
+.receive-complete {
+    min-height: 580px;
+}
+
+.receive-complete h1 {
+    font-size: 36px;
+}
+
+.success-mark,
+.registration-success {
+    width: 72px;
+    height: 72px;
+    font-size: 28px;
+}
+
+.completion-equation {
+    gap: 26px;
+    padding: 20px 30px;
+}
+
+.scan-landing {
+    gap: 24px;
+}
+
+.scan-hero {
+    width: min(100%, 520px);
+    min-height: 320px;
+    border-radius: 20px;
+}
+
+.scan-hero-icon {
+    width: 88px;
+    height: 88px;
+    font-size: 34px;
+}
+
+.manual-lookup {
+    width: min(100%, 520px);
+}
+
+.product-detail-hero {
+    min-height: 170px;
+    grid-template-columns: 104px 1fr auto;
+    gap: 22px;
+    padding: 24px;
+}
+
+.product-detail-symbol {
+    width: 96px;
+    height: 96px;
+    font-size: 22px;
+}
+
+.product-detail-title p,
+.hero-stock small,
+.hero-stock span {
+    font-size: 14px;
+}
+
+.product-operations {
+    gap: 12px;
+}
+
+.operation-button {
+    min-height: 84px;
+    gap: 12px;
+    padding: 15px;
+    border-radius: 16px;
+}
+
+.operation-button > span {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+    font-size: 18px;
+}
+
+.operation-button small {
+    font-size: 13px;
+}
+
+.detail-list > div {
+    min-height: 74px;
+    padding: 16px 18px;
+}
+
+.batch-list > div,
+.movement-preview-list > div {
+    min-height: 76px;
+    padding: 11px 18px;
+}
+
+.batch-box {
+    width: 40px;
+    height: 40px;
+}
+
+.history-summary article {
+    min-height: 104px;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: 18px;
+}
+
+.history-summary article > span {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+}
+
+.history-summary strong {
+    font-size: 34px;
+}
+
+.history-action-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.history-action-card button {
+    min-height: 48px;
+    border: 1px solid var(--inv-border);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.history-action-card button span {
+    display: inline-grid;
+    min-width: 22px;
+    height: 22px;
+    place-items: center;
+    margin-left: 8px;
+    padding-inline: 6px;
+    border-radius: 11px;
+    background: var(--inv-primary);
+    color: #fff;
+    font-size: 12px;
+}
+
+.label-controls {
+    gap: 18px;
+}
+
+.label-meta {
+    padding: 12px;
+    border-radius: 14px;
+}
+
+.label-meta > div {
+    min-height: 34px;
+}
+
+.label-stage {
+    min-height: 560px;
+}
+
+.inventory-label {
+    width: 470px;
+    min-height: 312px;
+    padding: 22px;
+}
+
+.inventory-label.label-small {
+    width: 400px;
+    min-height: 250px;
+}
+
+.inventory-label.label-large {
+    width: 540px;
+    min-height: 338px;
+}
+
+.inventory-label > header {
+    grid-template-columns: 30px 1fr auto;
+}
+
+.inventory-label > header strong {
+    font-size: 15px;
+}
+
+.inventory-label > header small {
+    font-size: 10px;
+}
+
+.inventory-label > h2 {
+    font-size: 28px;
+}
+
+.label-code-row > img {
+    width: 68px;
+    height: 68px;
+}
+
+.tool-picker {
+    width: min(920px, calc(100vw - 38px));
+    height: min(680px, calc(100dvh - 38px));
+}
+
+.tool-picker > header {
+    grid-template-columns: 48px 1fr auto;
+    gap: 13px;
+    padding: 18px;
+}
+
+.tool-picker > header > span {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 18px;
+}
+
+.tool-picker-body {
+    grid-template-columns: 380px minmax(0, 1fr);
+}
+
+.tool-picker-products > .search-field,
+.tool-picker > .search-field {
+    margin: 14px 14px 0;
+}
+
+.tool-picker-list {
+    margin: 12px 14px 14px;
+    border-radius: 14px;
+}
+
+.tool-picker-list > button {
+    min-height: 76px;
+    grid-template-columns: 42px minmax(0, 1fr) auto 16px;
+    gap: 12px;
+    padding: 10px 12px;
+}
+
+.tool-picker-list > button > span {
+    width: 42px;
+    height: 42px;
+    font-size: 12px;
+}
+
+.tool-picker-list b {
+    font-size: 16px;
+}
+
+.tool-picker-list > button > i {
+    font-size: 11px;
+}
+
+.tool-picker-placeholder {
+    padding: 36px;
+}
+
+.tool-picker-placeholder > i {
+    margin-bottom: 14px;
+    font-size: 36px;
+}
+
+.quick-workspace-modal {
+    width: min(1120px, calc(100vw - 38px));
+    height: min(730px, calc(100dvh - 38px));
+}
+
+.quick-workspace-body {
+    min-height: 0;
+}
+
+.registration-modal {
+    width: min(880px, calc(100vw - 38px));
+    max-height: min(800px, calc(100dvh - 28px));
+}
+
+.registration-form {
+    max-height: calc(100dvh - 130px);
+}
+
+.registration-summary {
+    width: min(100%, 560px);
+}
+
+.registration-qr-card {
+    width: 300px;
+    padding: 22px;
+}
+
+.registration-qr-card img {
+    width: 196px;
+    height: 196px;
+}
+
+.label-designer-modal {
+    width: min(1180px, calc(100vw - 38px));
+    max-height: min(820px, calc(100vh - 30px));
+}
+
+.label-designer-body {
+    grid-template-columns: minmax(0, 1fr) 380px;
+}
+
+.label-designer-controls {
+    padding: 24px;
+}
+
+/* Tablet and smaller desktop still keep larger fonts without breaking layout */
+@media (max-width: 1180px) {
+    .inv-page {
+        padding: 24px 22px 40px;
+    }
+
+    .page-heading h1 {
+        font-size: clamp(30px, 3.8vw, 38px);
+    }
+
+    .tool-picker {
+        width: min(860px, calc(100vw - 26px));
+    }
+
+    .tool-picker-body {
+        grid-template-columns: 330px minmax(0, 1fr);
+    }
+
+    .registration-modal,
+    .quick-workspace-modal,
+    .label-designer-modal {
+        width: min(100%, calc(100vw - 26px));
+    }
+}
+
+@media (max-width: 900px) {
+    .inv-topbar {
+        min-height: 74px;
+        padding: 0 18px;
+    }
+
+    .topbar-context strong {
+        font-size: 22px;
+    }
+
+    .inv-page {
+        padding: 20px 16px 34px;
+    }
+
+    .tool-picker-body,
+    .quick-workspace-body,
+    .label-designer-body {
+        grid-template-columns: 1fr;
+    }
+
+    .tool-picker-products {
+        border-right: 0;
+        border-bottom: 1px solid var(--inv-border);
+    }
+
+    .tool-picker {
+        height: auto;
+        max-height: calc(100dvh - 24px);
+    }
+}
+
+@media (max-width: 650px) {
+    body,
+    button,
+    input,
+    select,
+    textarea {
+        font-size: 15px;
+    }
+
+    .button {
+        min-height: 50px;
+        font-size: 15px;
+    }
+
+    .icon-button,
+    .topbar-quick-tools button {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+        font-size: 15px;
+    }
+
+    .page-heading h1,
+    .section-header h2,
+    .receive-summary h2,
+    .product-detail-title h1,
+    .scan-hero strong,
+    .tool-picker > header h2,
+    .modal-header h2 {
+        font-size: 22px;
+    }
+
+    .metric-grid strong,
+    .history-summary strong,
+    .summary-equation strong,
+    .stock-equation strong,
+    .completion-equation strong,
+    .hero-stock strong {
+        font-size: 28px;
+    }
+
+    .inventory-table td {
+        font-size: 14px;
+    }
+}
+
+/* Registration wizard */
+.registration-modal {
+    width: min(860px, calc(100vw - 38px));
+}
+
+.registration-form {
+    display: flex;
+    min-height: 520px;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.registration-steps {
+    display: grid;
+    grid-template-columns: auto minmax(80px, 1fr) auto;
+    align-items: center;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--inv-border);
+    background: #f7fbfb;
+}
+
+.registration-steps button {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 0;
+    background: transparent;
+    color: var(--inv-text-secondary);
+    font-weight: 800;
+}
+
+.registration-steps button span {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border-radius: 50%;
+    background: #dfecee;
+}
+
+.registration-steps button.active,
+.registration-steps button.complete {
+    color: var(--inv-primary-dark);
+}
+
+.registration-steps button.active span,
+.registration-steps button.complete span {
+    background: var(--inv-primary);
+    color: #fff;
+}
+
+.registration-steps > i {
+    height: 2px;
+    margin-inline: 14px;
+    background: #dce8ea;
+}
+
+.registration-step-panel {
+    align-content: start;
+    flex: 1;
+    padding: 24px 28px;
+}
+
+.registration-step-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 28px 22px;
+    border-top: 1px solid var(--inv-border);
+    background: #fff;
+}
+
+.registration-step-actions .button {
+    width: 100%;
+}
+
+/* Product search with one filter popout */
+.products-page {
+    grid-template-rows: 78px 62px minmax(0, 1fr);
+}
+
+.products-page .filter-bar {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.product-filter-button {
+    min-width: 130px;
+}
+
+.product-filter-button > span {
+    display: grid;
+    min-width: 22px;
+    height: 22px;
+    place-items: center;
+    border-radius: 11px;
+    background: var(--inv-primary);
+    color: #fff;
+    font-size: 10px;
+}
+
+.product-filter-modal {
+    width: min(520px, calc(100vw - 36px));
+}
+
+.product-filter-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* Taller fixed cells keep all History content inside the 4-column row. */
+.history-page {
+    grid-template-rows: 78px 108px minmax(0, 1fr);
+}
+
+.history-page .history-summary article {
+    min-height: 108px;
+}
+
+.history-action-card {
+    padding: 8px !important;
+}
+
+.history-action-card button {
+    min-height: 40px;
+}
+
+/* More room for the divider touch target without covering list content. */
+.activity-divider-toggle {
+    height: 66px;
+}
+
+/* Free positioning and scaling for every editable label item. */
+.label-designer-modal {
+    height: min(850px, calc(100dvh - 24px));
+}
+
+.label-designer-body {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.label-designer-stage {
+    min-height: 0;
+}
+
+.label-designer-controls {
+    gap: 14px;
+}
+
+.label-position-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 46px;
+    align-items: end;
+    gap: 8px 10px;
+}
+
+.label-position-controls label {
+    gap: 6px;
+}
+
+.label-position-controls input {
+    width: 100%;
+    min-height: auto;
+    padding: 0;
+    accent-color: var(--inv-primary);
+}
+
+.label-position-controls > strong {
+    padding-bottom: 1px;
+    color: var(--inv-primary-dark);
+    font-size: 12px;
+    text-align: right;
+}
+
+.label-designer-stage .label-edit-target {
+    position: relative;
+    z-index: 1;
+    transition: outline-color 120ms ease, background 120ms ease;
+}
+
+.label-designer-stage .label-code-row .label-edit-target {
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .registration-step-panel {
+        overflow-y: auto;
+    }
+
+    .label-designer-modal {
+        height: calc(100dvh - 20px);
+    }
+
+    .label-designer-body {
+        overflow-y: auto;
+    }
+}
