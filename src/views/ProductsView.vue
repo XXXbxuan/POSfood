@@ -7,16 +7,30 @@
         <section class="filter-bar">
             <label class="search-field">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input v-model.trim="search" type="search" placeholder="Search name, SKU or barcode" />
+                <input v-model.trim="search" type="search" placeholder="Search name, SKU or BAR" />
             </label>
             <button class="button secondary product-filter-button" type="button" @click="openFilters">
                 <i class="fa-solid fa-sliders"></i>Filter
                 <span v-if="activeFilterCount">{{ activeFilterCount }}</span>
             </button>
-            <span class="result-count">{{ filteredProducts.length }} items</span>
         </section>
 
-        <section class="panel table-panel">
+        <section class="products-list-shell">
+            <nav class="product-category-bar" aria-label="Product categories">
+                <button type="button" :class="{ active: category === '' }" :aria-pressed="category === ''" @click="category = ''">All</button>
+                <button
+                    v-for="item in categories"
+                    :key="item"
+                    type="button"
+                    :class="{ active: category === item }"
+                    :aria-pressed="category === item"
+                    @click="category = item"
+                >
+                    {{ item }}
+                </button>
+            </nav>
+
+            <section class="panel table-panel">
             <div class="table-scroll">
                 <table class="inventory-table products-table">
                     <thead>
@@ -49,7 +63,7 @@
                             </td>
                             <td><strong>{{ product.category }}</strong></td>
                             <td><strong>{{ product.location || 'Not assigned' }}</strong></td>
-                            <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small><small>Minimum {{ product.minimumStock }}</small></td>
+                            <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small></td>
                             <td>
                                 <span class="status-badge" :class="statusClass(product)">{{ store.productStatus(product) }}</span>
                                 <i class="fa-solid fa-chevron-right product-row-chevron"></i>
@@ -61,6 +75,7 @@
             <div v-if="!filteredProducts.length" class="empty-state">
                 <i class="fa-solid fa-box-open"></i><strong>No products found</strong><p>Change the filters or register a product.</p>
             </div>
+            </section>
         </section>
 
         <div v-if="selectedProduct" class="modal-backdrop" @click.self="closeDetails">
@@ -88,10 +103,8 @@
                             <img v-if="detailQr" :src="detailQr" :alt="`${selectedProduct.name} QR code`" />
                             <i v-else class="fa-solid fa-qrcode"></i>
                         </div>
-                        <div>
+                        <div class="product-details-status">
                             <span class="status-badge" :class="statusClass(selectedProduct)">{{ store.productStatus(selectedProduct) }}</span>
-                            <h3>{{ selectedProduct.name }}</h3>
-                            <p class="mono">{{ selectedProduct.barcode }}</p>
                         </div>
                         <div class="details-stock">
                             <small>Current Stock</small>
@@ -187,7 +200,7 @@ export default {
     },
     computed: {
         categories() {
-            return [...new Set(this.store.state.products.map((product) => product.category))].sort()
+            return ['Dairy', 'Dry Goods', 'Packaging', 'Prepared Food']
         },
         activeFilterCount() {
             return Number(Boolean(this.category)) + Number(Boolean(this.status))
@@ -197,7 +210,7 @@ export default {
             return this.store.state.products.filter((product) => {
                 const matchesSearch =
                     !search ||
-                    [product.name, product.sku, product.barcode].some((value) =>
+                    [product.name, product.sku, product.bar].some((value) =>
                         String(value).toLowerCase().includes(search),
                     )
                 return (
@@ -277,7 +290,7 @@ export default {
                 p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
             </style></head><body><div class="label"><img src="${this.detailQr}" alt=""><div class="info">
                 <h1>${safe(product.name)}</h1><p>${safe(product.sku)}</p>
-                <small>${safe(product.barcode)}</small><small>${safe(product.location || 'No location')}</small>
+                <small>${safe(product.bar)}</small><small>${safe(product.location || 'No location')}</small>
             </div></div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
             printWindow.document.close()
         },

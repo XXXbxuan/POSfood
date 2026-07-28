@@ -824,7 +824,7 @@ button:disabled {
     max-width: 31.875rem;
     margin-top: 1.25rem;
     color: #aeb3ba;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     line-height: 1.7;
 }
 
@@ -1214,6 +1214,7 @@ label span b {
     min-height: 20.625rem;
     overflow: hidden;
     background: #12151a;
+    margin-top: 1em;
 }
 
 .scanner-reader {
@@ -1666,7 +1667,7 @@ label span b {
     font-size: 0.5625rem;
 }
 
-.dashboard-grid {
+.dashboard-page .dashboard-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(22.5rem, 0.85fr);
     gap: 0.875rem;
@@ -3114,7 +3115,7 @@ label span b {
     height: 3.875rem;
 }
 
-.barcode-visual {
+.bar-visual {
     display: flex;
     height: 3.0625rem;
     align-items: stretch;
@@ -3123,12 +3124,12 @@ label span b {
     border-bottom: 0.75rem solid #fff;
 }
 
-.barcode-visual > span {
+.bar-visual > span {
     display: block;
     background: #111827;
 }
 
-.barcode-visual small {
+.bar-visual small {
     position: absolute;
     align-self: flex-end;
     font-family: "Roboto Mono", Consolas, monospace;
@@ -4652,7 +4653,7 @@ textarea:focus {
 
 .inv-sidebar .inv-brand strong {
     color: #18343a;
-    font-size: 0.875rem;
+    font-size: 1rem;
     letter-spacing: 0.09em;
 }
 
@@ -6410,7 +6411,7 @@ textarea {
 .product-details-actions .button {
     width: 100%;
     min-height: 3.625rem;
-    font-size: 0.9375rem;
+    font-size: 1rem;
 }
 
 .quick-preview-actions {
@@ -8645,4 +8646,1928 @@ textarea {
     .products-table td:nth-child(2) {
         display: none;
     }
+}
+
+/* ======================================================================
+   Tablet-first workspace system
+   One visual scale for every page, form, modal and task surface.
+   ====================================================================== */
+
+:root {
+    --inv-bg: #f4f8f8;
+    --inv-surface: #ffffff;
+    --inv-surface-soft: #eef5f5;
+    --inv-border: #dce7e8;
+    --inv-border-dark: #c7d7d9;
+    --inv-text: #162b31;
+    --inv-text-secondary: #667b81;
+    --inv-text-light: #91a4a8;
+    --inv-primary: #0aa6b5;
+    --inv-primary-dark: #087f8b;
+    --inv-primary-soft: #e7f8fa;
+    --inv-success: #14986c;
+    --inv-success-dark: #0d7f5a;
+    --inv-success-soft: #e8f8f1;
+    --inv-warning: #d99018;
+    --inv-warning-soft: #fff7e6;
+    --inv-danger: #e85d52;
+    --inv-danger-dark: #c74840;
+    --inv-danger-soft: #fff0ee;
+    --inv-radius-sm: 0.625rem;
+    --inv-radius: 0.875rem;
+    --inv-shadow: 0 0.5rem 1.75rem rgba(25, 70, 78, 0.07);
+    --sidebar-width: 13.5rem;
+    --topbar-height: 4.5rem;
+    font-family: Inter, "Noto Sans SC", "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+html {
+    min-width: 20rem;
+    font-size: 100%;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-size: 1rem;
+}
+
+body {
+    overflow: hidden;
+    background: var(--inv-bg);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    touch-action: manipulation;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 0.1875rem solid rgba(10, 166, 181, 0.24);
+    outline-offset: 0.125rem;
+}
+
+input,
+select,
+textarea {
+    min-height: 3rem;
+    padding-inline: 0.875rem;
+    border-color: var(--inv-border-dark);
+    border-radius: 0.625rem;
+    background: #fff;
+    font-size: 0.9375rem;
+}
+
+textarea {
+    min-height: 5.75rem;
+    padding-top: 0.75rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--inv-primary);
+    box-shadow: 0 0 0 0.1875rem rgba(10, 166, 181, 0.11);
+}
+
+input[type="file"] {
+    padding: 0.375rem;
+    color: var(--inv-text-secondary);
+}
+
+input[type="file"]::file-selector-button {
+    min-height: 2.25rem;
+    margin-right: 0.75rem;
+    padding-inline: 0.875rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--inv-primary-soft);
+    color: var(--inv-primary-dark);
+    font: inherit;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.button {
+    min-height: 3rem;
+    gap: 0.5rem;
+    padding-inline: 1rem;
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 750;
+}
+
+.button.primary {
+    background: var(--inv-primary);
+}
+
+.button.primary:hover {
+    background: var(--inv-primary-dark);
+}
+
+.button.secondary {
+    border-color: var(--inv-border-dark);
+    background: #fff;
+}
+
+.button.secondary:hover {
+    background: var(--inv-surface-soft);
+}
+
+.icon-button {
+    width: 3rem;
+    height: 3rem;
+    flex-basis: 3rem;
+    border-color: var(--inv-border);
+    border-radius: 0.625rem;
+    background: #fff;
+    font-size: 1rem;
+}
+
+.panel,
+.form-modal,
+.scanner-modal,
+.tool-picker,
+.quick-workspace-modal,
+.product-details-modal,
+.label-designer-modal {
+    min-width: 0;
+    border-color: var(--inv-border);
+    border-radius: var(--inv-radius);
+    box-shadow: var(--inv-shadow);
+}
+
+.inv-shell,
+.inv-workspace {
+    height: 100dvh;
+    min-height: 0;
+}
+
+.inv-sidebar {
+    width: var(--sidebar-width);
+    overflow: hidden;
+    border-right: 0.0625rem solid var(--inv-border);
+    background: #fff;
+    color: var(--inv-text);
+    box-shadow: none;
+}
+
+.inv-brand {
+    min-height: var(--topbar-height);
+    gap: 0.75rem;
+    padding-inline: 1rem;
+    border-bottom-color: var(--inv-border);
+}
+
+.inv-brand-mark {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-basis: 2.5rem;
+    border: 0;
+    border-radius: 0.75rem;
+    background: var(--inv-primary);
+    color: #fff;
+}
+
+.inv-brand strong {
+    color: var(--inv-text);
+    font-size: 0.9375rem;
+    letter-spacing: 0.08em;
+}
+
+.inv-brand small {
+    color: var(--inv-primary-dark);
+    font-size: 0.6875rem;
+}
+
+.inv-sidebar nav {
+    gap: 0.375rem;
+    padding: 1rem 0.75rem;
+}
+
+.inv-sidebar nav a {
+    min-height: 3.25rem;
+    gap: 0.75rem;
+    padding-inline: 0.875rem;
+    border: 0;
+    border-radius: 0.75rem;
+    color: #6f858a;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.inv-sidebar nav a i {
+    width: 1.375rem;
+    color: #8ea3a7;
+    font-size: 1.0625rem;
+}
+
+.inv-sidebar nav a:hover {
+    background: #f1f7f7;
+    color: var(--inv-text);
+}
+
+.inv-sidebar nav a.active {
+    box-shadow: inset 0.1875rem 0 var(--inv-primary);
+    background: var(--inv-primary-soft);
+    color: var(--inv-primary-dark);
+}
+
+.inv-sidebar nav a.active i {
+    color: var(--inv-primary);
+}
+
+.sidebar-profile {
+    min-height: 4.25rem;
+    margin: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border: 0;
+    border-radius: 0.875rem;
+    background: #f1f9f9;
+}
+
+.sidebar-profile > span {
+    width: 2.625rem;
+    height: 2.625rem;
+    flex-basis: 2.625rem;
+    font-size: 0.8125rem;
+}
+
+.sidebar-profile strong {
+    font-size: 0.9375rem;
+}
+
+.sidebar-profile small {
+    font-size: 0.8125rem;
+}
+
+.inv-workspace {
+    padding-left: var(--sidebar-width);
+    overflow: hidden;
+}
+
+.inv-topbar {
+    min-height: var(--topbar-height);
+    padding-inline: 1.5rem;
+    border-bottom-color: var(--inv-border);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(0.75rem);
+}
+
+.topbar-home-link {
+    gap: 0.125rem;
+}
+
+.topbar-home-link span {
+    display: block;
+    color: var(--inv-text-light);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+}
+
+.topbar-home-link strong {
+    color: var(--inv-text);
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+
+.topbar-quick-tools {
+    gap: 0.5rem;
+}
+
+.topbar-quick-tools button {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    flex: 0 0 3rem;
+    place-items: center;
+    border: 0.0625rem solid var(--inv-border);
+    border-radius: 0.75rem;
+    background: #f8fbfb;
+    color: var(--inv-primary);
+    font-size: 1rem;
+}
+
+.topbar-quick-tools button:hover {
+    border-color: #b9dadd;
+    background: var(--inv-primary-soft);
+}
+
+.topbar-quick-tools button.stock-in {
+    color: var(--inv-success);
+}
+
+.topbar-quick-tools button.stock-out {
+    color: var(--inv-danger);
+}
+
+.inv-page {
+    width: 100%;
+    height: calc(100dvh - var(--topbar-height));
+    max-width: none;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.page-stack {
+    width: 100%;
+    min-width: 0;
+    gap: 0.875rem;
+}
+
+.page-heading {
+    min-height: 3.5rem;
+    align-items: center;
+    gap: 1rem;
+}
+
+.page-heading h1 {
+    color: var(--inv-text);
+    font-size: clamp(1.75rem, 2.4vw, 2rem);
+    line-height: 1.15;
+}
+
+.page-heading p,
+.page-heading > div > .eyebrow,
+.section-header p {
+    display: none;
+}
+
+.panel-header {
+    min-height: 3.5rem;
+    padding: 0.75rem 1rem;
+}
+
+.panel-header h2,
+.section-header h2,
+.dashboard-list-panel .panel-header h2 {
+    font-size: 1.125rem;
+}
+
+.dashboard-list-count,
+.result-count {
+    color: var(--inv-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.dashboard-page {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: 3.5rem 5.75rem minmax(0, 1fr);
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.dashboard-heading {
+    min-height: 0;
+}
+
+.dashboard-register-button {
+    min-width: 12rem;
+}
+
+.metric-grid {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.metric-grid article,
+.metric-grid .metric-card,
+.dashboard-page .metric-grid .metric-card {
+    min-width: 0;
+    min-height: 5.75rem;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border: 0.0625rem solid transparent;
+    border-radius: 0.875rem;
+    background: var(--inv-surface-soft);
+}
+
+.dashboard-page .metric-grid .metric-card:hover {
+    border-color: #c8dfe1;
+    background: #e9f3f4;
+}
+
+.dashboard-page .metric-grid .metric-card.active {
+    border-color: var(--inv-primary);
+    background: var(--inv-primary);
+    color: #fff;
+}
+
+.metric-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-basis: 2.75rem;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+}
+
+.metric-grid small {
+    font-size: 0.8125rem;
+    line-height: 1.25;
+}
+
+.metric-grid strong {
+    margin-top: 0.125rem;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.dashboard-page .dashboard-grid {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1.15fr) 2.25rem minmax(19rem, 0.85fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0;
+    overflow: hidden;
+}
+
+.stock-alert-panel {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.activity-panel {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed {
+    grid-template-columns: minmax(0, 1fr) 2.25rem 0;
+}
+
+.activity-divider-toggle {
+    position: static;
+    z-index: 3;
+    align-self: center;
+    justify-self: center;
+    width: 2.25rem;
+    height: 2.75rem;
+    min-height: 0;
+    border: 0.0625rem solid var(--inv-border);
+    border-radius: 0.625rem;
+    background: #fff;
+    box-shadow: 0 0.25rem 0.875rem rgba(25, 70, 78, 0.12);
+    color: var(--inv-primary);
+    transform: none;
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.dashboard-list-panel {
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    grid-template-rows: 3.5rem minmax(0, 1fr) 3rem;
+    overflow: hidden;
+}
+
+.dashboard-scroll {
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.alert-list > button,
+.alert-list > a,
+.activity-list > button,
+.activity-list > div,
+.dashboard-page .alert-list > button,
+.dashboard-page .activity-list > button {
+    min-width: 0;
+    min-height: 4rem;
+    gap: 0.75rem;
+    padding: 0.625rem 0.875rem;
+}
+
+.alert-list > button > div,
+.activity-list > button > div:first-of-type,
+.product-cell > div,
+.quick-product-list > button > div,
+.tool-picker-list > button > div,
+.selected-product > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.1875rem;
+}
+
+.alert-list strong,
+.activity-list strong,
+.product-cell strong {
+    overflow: hidden;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.alert-list small,
+.activity-list small,
+.product-cell small {
+    overflow: hidden;
+    font-size: 0.8125rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-symbol,
+.product-cell > span,
+.activity-list > button > span,
+.movement-preview-list > div > span,
+.movement-type {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: 0 0 2.25rem;
+    font-size: 0.625rem;
+}
+
+.stock-value {
+    font-size: 1.0625rem;
+    white-space: nowrap;
+}
+
+.stock-value small,
+.activity-quantity small {
+    font-size: 0.75rem;
+}
+
+.status-badge {
+    min-height: 1.625rem;
+    padding-inline: 0.625rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.activity-quantity {
+    min-width: 3.75rem;
+    font-size: 1rem;
+}
+
+.dashboard-panel-footer {
+    min-width: 0;
+}
+
+.dashboard-panel-footer > div,
+.dashboard-panel-footer .today-in,
+.dashboard-panel-footer .today-out {
+    min-width: 0;
+    min-height: 3rem;
+    padding: 0.5rem 0.875rem;
+}
+
+.dashboard-panel-footer small,
+.dashboard-panel-footer strong,
+.dashboard-panel-footer .today-in strong,
+.dashboard-panel-footer .today-out strong {
+    font-size: 0.875rem;
+}
+
+.products-page,
+.history-page,
+.labels-page,
+.receive-page,
+.scan-page {
+    min-height: 100%;
+}
+
+.products-page {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: 3.5rem 3.5rem minmax(0, 1fr);
+    gap: 0.875rem;
+}
+
+.filter-bar,
+.products-page .filter-bar {
+    display: grid;
+    min-height: 3.5rem;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.25rem 0.375rem;
+    border: 0.0625rem solid var(--inv-border);
+    border-radius: 0.75rem;
+    background: #fff;
+}
+
+.filter-bar input,
+.filter-bar select,
+.filter-bar > select,
+.filter-bar > input,
+.search-field input {
+    min-height: 2.875rem;
+    font-size: 1rem;
+}
+
+.filter-bar .search-field input {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.product-filter-button {
+    min-width: 7.5rem;
+}
+
+.table-panel,
+.history-table-panel {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.table-scroll {
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+.inventory-table {
+    width: 100%;
+    min-width: 44rem;
+    table-layout: fixed;
+}
+
+.inventory-table th {
+    height: 3rem;
+    padding-inline: 0.875rem;
+    background: #edf6f6;
+    color: #567278;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+}
+
+.inventory-table td,
+.products-table td,
+.history-table-summary td {
+    height: 4.5rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    vertical-align: middle;
+}
+
+.products-table th:first-child {
+    width: 31%;
+}
+
+.products-table th:nth-child(2) {
+    width: 17%;
+}
+
+.products-table th:nth-child(3) {
+    width: 20%;
+}
+
+.products-table th:nth-child(4) {
+    width: 14%;
+}
+
+.products-table th:nth-child(5) {
+    width: 18%;
+}
+
+.products-table .table-stock,
+.table-stock,
+.change-quantity {
+    font-size: 1.125rem !important;
+}
+
+.products-table .status-badge {
+    min-height: 1.875rem;
+    padding-inline: 0.75rem;
+    font-size: 0.75rem;
+}
+
+.product-row-chevron {
+    margin-left: 0.375rem;
+    color: var(--inv-text-light);
+}
+
+.receive-page {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: 3.5rem minmax(0, 1fr);
+    gap: 0.875rem;
+}
+
+.receive-page .workflow-steps {
+    position: static;
+    gap: 0.5rem;
+    transform: none;
+    font-size: 0.875rem;
+}
+
+.receive-page .workflow-steps b {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.875rem;
+}
+
+.receive-page .workflow-steps i {
+    width: 1.5rem;
+}
+
+.receive-layout {
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: 0.875rem;
+    overflow: hidden;
+}
+
+.receive-layout.is-delivery-step {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.receive-form {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.stepped-receive-form {
+    display: grid;
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.registration-modal-compact {
+    height: auto;
+    min-height: 0;
+}
+
+.registration-modal-compact .registration-result {
+    min-height: 0;
+    padding: 1.5rem 1.5rem 1.75rem;
+}
+
+.registration-modal-compact .registration-success {
+    width: 3.75rem;
+    height: 3.75rem;
+}
+
+.registration-modal-compact .registration-summary {
+    margin-top: 1.125rem;
+}
+
+.registration-modal-compact .registration-choice-actions {
+    margin-top: 1.125rem;
+}
+
+.section-header {
+    min-height: 4rem;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+.section-header > span {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+}
+
+.section-header h2,
+.receive-summary h2,
+.product-detail-title h1,
+.scan-hero strong,
+.tool-picker > header h2,
+.modal-header h2 {
+    font-size: 1.375rem;
+}
+
+.form-grid,
+.receive-form > .form-grid,
+.registration-step-panel {
+    gap: 0.875rem;
+    padding: 1rem;
+}
+
+.form-grid.two-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0.875rem;
+}
+
+.form-grid label,
+.form-grid label > span,
+.label-controls label > span {
+    min-width: 0;
+    font-size: 0.875rem;
+}
+
+.form-grid label > span,
+.label-controls label > span {
+    margin-bottom: 0.375rem;
+    color: #3c555b;
+    font-weight: 750;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+    min-height: 3rem;
+    font-size: 1rem;
+}
+
+.receive-step-fields {
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.receive-actions,
+.stepped-receive-actions {
+    min-height: 4.5rem;
+    padding: 0.75rem 1rem;
+    background: #fbfdfd;
+}
+
+.receive-summary {
+    position: static;
+    min-width: 0;
+    min-height: 0;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.summary-equation,
+.stock-equation {
+    gap: 0.625rem;
+    padding: 0.875rem;
+}
+
+.summary-equation strong,
+.stock-equation strong,
+.completion-equation strong,
+.hero-stock strong {
+    font-size: 1.625rem;
+}
+
+.history-page {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: 3.5rem 5.5rem minmax(0, 1fr);
+    gap: 0.875rem;
+}
+
+.history-summary {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(9rem, 0.8fr);
+    gap: 0.75rem;
+}
+
+.history-summary article {
+    min-width: 0;
+    min-height: 5.5rem;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border-radius: 0.875rem;
+}
+
+.history-summary article > span {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 2.5rem;
+    font-size: 1rem;
+}
+
+.history-summary small {
+    font-size: 0.8125rem;
+}
+
+.history-summary strong {
+    font-size: 1.5rem;
+}
+
+.history-action-card {
+    gap: 0.375rem;
+    padding: 0.375rem !important;
+}
+
+.history-action-card button {
+    min-height: 2.25rem;
+    border-radius: 0.625rem;
+    font-size: 0.75rem;
+}
+
+.history-table .movement-type,
+.history-detail-overview .movement-type {
+    width: auto;
+    min-width: 6.75rem;
+    min-height: 2.25rem;
+    gap: 0.4375rem;
+    padding-inline: 0.625rem;
+    font-size: 0.875rem;
+}
+
+.labels-page {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: 3.5rem minmax(0, 1fr);
+    gap: 0.875rem;
+}
+
+.labels-layout {
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    grid-template-columns: 19.5rem minmax(0, 1fr);
+    gap: 0.875rem;
+    overflow: hidden;
+}
+
+.label-controls,
+.label-preview-panel {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.label-controls {
+    gap: 0.75rem;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.label-setup-header,
+.label-preview-header {
+    min-height: 3.75rem;
+}
+
+.label-stage {
+    min-height: 0;
+    overflow: auto;
+}
+
+.inventory-label {
+    max-width: calc(100% - 2rem);
+}
+
+.toggle-label {
+    min-height: 3.25rem;
+    padding: 0.75rem;
+}
+
+.toggle-label input {
+    min-height: auto;
+}
+
+.modal-backdrop {
+    padding: 1rem;
+    background: rgba(15, 35, 40, 0.46);
+    backdrop-filter: blur(0.25rem);
+}
+
+.form-modal,
+.scanner-modal,
+.tool-picker,
+.quick-workspace-modal,
+.product-details-modal,
+.label-designer-modal {
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100dvh - 2rem);
+    overflow: hidden;
+}
+
+.modal-header {
+    min-height: 4.5rem;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+}
+
+.modal-header > div {
+    min-width: 0;
+}
+
+.modal-header h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modal-header p {
+    overflow: hidden;
+    font-size: 0.875rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.registration-modal {
+    width: min(50rem, calc(100vw - 2rem));
+    height: min(45rem, calc(100dvh - 2rem));
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+}
+
+.registration-form {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.registration-steps {
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+}
+
+.registration-steps button {
+    font-size: 0.9375rem;
+}
+
+.registration-step-panel {
+    align-content: start;
+    overflow-y: auto;
+}
+
+.registration-step-actions {
+    min-height: 4.5rem;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+.product-filter-modal {
+    width: min(30rem, calc(100vw - 2rem));
+}
+
+.product-filter-actions {
+    grid-column: 1 / -1;
+}
+
+.product-details-modal {
+    width: min(50rem, calc(100vw - 2rem));
+}
+
+.product-details-workspace,
+.quick-workspace-body,
+.tool-picker-body,
+.label-designer-body {
+    min-width: 0;
+    min-height: 0;
+}
+
+.product-details-body {
+    min-width: 0;
+    overflow-y: auto;
+}
+
+.product-details-identity {
+    grid-template-columns: 5.5rem 5.5rem minmax(0, 1fr) auto;
+    gap: 0.875rem;
+}
+
+.product-detail-photo {
+    width: 5.5rem;
+    height: 5.5rem;
+}
+
+.quick-workspace-modal {
+    width: min(64rem, calc(100vw - 2rem));
+    height: min(42rem, calc(100dvh - 2rem));
+}
+
+.tool-picker {
+    width: min(54rem, calc(100vw - 2rem));
+    height: min(40rem, calc(100dvh - 2rem));
+}
+
+.tool-picker-body {
+    grid-template-columns: minmax(18rem, 0.9fr) minmax(0, 1.1fr);
+}
+
+.tool-picker-list > button,
+.quick-product-list > button {
+    min-height: 4rem;
+}
+
+.embedded-operation {
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.embedded-operation-header {
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+}
+
+.embedded-operation-form {
+    padding: 1rem;
+}
+
+.quantity-stepper {
+    min-width: 0;
+}
+
+.quantity-stepper button {
+    min-width: 2.75rem;
+}
+
+.scanner-choice-modal {
+    width: min(34rem, calc(100vw - 2rem));
+}
+
+.scanner-method-toggle {
+    margin: 0.75rem 1rem 0;
+}
+
+.manual-code {
+    padding: 1.25rem;
+}
+
+.login-page-simple {
+    min-height: 100dvh;
+    padding: 1rem;
+    background: var(--inv-bg);
+}
+
+.simple-login-panel {
+    width: min(28rem, 100%);
+    min-height: 36rem;
+    border-color: var(--inv-border);
+    border-radius: 1.25rem;
+    box-shadow: 0 1rem 3rem rgba(25, 70, 78, 0.1);
+}
+
+.login-card-brand > span {
+    background: var(--inv-primary);
+}
+
+@media (max-width: 73.75rem) {
+    :root {
+        --sidebar-width: 5rem;
+    }
+
+    .inv-sidebar .inv-brand {
+        justify-content: center;
+        padding-inline: 0;
+    }
+
+    .inv-sidebar .inv-brand > span:last-child,
+    .inv-sidebar nav a span,
+    .sidebar-profile > div {
+        display: none;
+    }
+
+    .inv-sidebar nav {
+        align-items: center;
+        padding-inline: 0.625rem;
+    }
+
+    .inv-sidebar nav a {
+        width: 3.5rem;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .inv-sidebar nav a i {
+        width: auto;
+        font-size: 1.125rem;
+    }
+
+    .sidebar-profile {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .inv-page {
+        padding: 1rem 1.25rem 1.25rem;
+    }
+
+    .page-heading h1 {
+        font-size: 1.5rem;
+    }
+
+    .products-table th:nth-child(2),
+    .products-table td:nth-child(2) {
+        display: table-cell;
+    }
+}
+
+@media (max-width: 56.25rem) {
+    :root {
+        --sidebar-width: 0rem;
+    }
+
+    .inv-sidebar {
+        width: 5rem;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+    }
+
+    .inv-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .inv-sidebar-scrim {
+        position: fixed;
+        z-index: 25;
+        inset: 0;
+        border: 0;
+        background: rgba(15, 35, 40, 0.42);
+    }
+
+    .mobile-menu {
+        display: grid;
+    }
+
+    .inv-topbar {
+        padding-inline: 0.875rem;
+    }
+
+    .topbar-context {
+        margin-right: auto;
+        margin-left: 0.75rem;
+    }
+
+    .inv-page {
+        overflow-y: auto;
+        padding: 1rem;
+    }
+
+    .dashboard-page,
+    .products-page,
+    .receive-page,
+    .history-page,
+    .labels-page {
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
+    }
+
+    .dashboard-page {
+        grid-template-rows: 3.5rem auto auto;
+    }
+
+    .dashboard-page .dashboard-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 0.875rem;
+        overflow: visible;
+    }
+
+    .stock-alert-panel,
+    .activity-panel {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .dashboard-list-panel {
+        min-height: 25rem;
+    }
+
+    .activity-divider-toggle {
+        display: none;
+    }
+
+    .activity-panel.collapsed {
+        display: none;
+    }
+
+    .products-page {
+        grid-template-rows: 3.5rem 3.5rem minmax(34rem, auto);
+    }
+
+    .receive-page,
+    .labels-page {
+        grid-template-rows: 3.5rem auto;
+    }
+
+    .receive-layout,
+    .labels-layout {
+        grid-template-columns: 1fr;
+        overflow: visible;
+    }
+
+    .receive-form,
+    .label-controls,
+    .label-preview-panel {
+        overflow: visible;
+    }
+
+    .receive-summary {
+        overflow: visible;
+    }
+
+    .label-preview-panel {
+        order: -1;
+        min-height: 27rem;
+    }
+
+    .history-page {
+        grid-template-rows: 3.5rem auto minmax(34rem, auto);
+    }
+
+    .history-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tool-picker-body,
+    .quick-workspace-body,
+    .label-designer-body {
+        grid-template-columns: 1fr;
+    }
+
+    .product-details-identity {
+        grid-template-columns: 5rem 5rem minmax(0, 1fr);
+    }
+
+    .details-stock {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 43.75rem) {
+    .topbar-home-link span {
+        display: none;
+    }
+
+    .topbar-home-link strong {
+        font-size: 0.9375rem;
+    }
+
+    .topbar-quick-tools {
+        gap: 0.375rem;
+    }
+
+    .topbar-quick-tools button {
+        width: 2.625rem;
+        height: 2.625rem;
+        flex-basis: 2.625rem;
+    }
+
+    .page-heading {
+        align-items: stretch;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .dashboard-heading {
+        align-items: center;
+        flex-direction: row;
+    }
+
+    .dashboard-register-button {
+        min-width: 0;
+        padding-inline: 0.875rem;
+    }
+
+    .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-page {
+        grid-template-rows: auto auto auto;
+    }
+
+    .filter-bar,
+    .products-page .filter-bar {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .filter-bar .result-count {
+        display: none;
+    }
+
+    .form-grid.two-column,
+    .product-filter-actions,
+    .history-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .receive-page .page-heading {
+        min-height: 6rem;
+    }
+
+    .receive-page .workflow-steps {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .registration-modal,
+    .product-details-modal,
+    .quick-workspace-modal,
+    .tool-picker {
+        max-width: 100vw;
+        max-height: 100dvh;
+        border-radius: 0;
+    }
+
+    .modal-backdrop {
+        padding: 0;
+    }
+}
+
+/* Final dashboard list alignment: stable two-line product info and inline quantity. */
+.dashboard-page .alert-list > button {
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto auto;
+    gap: 0.875rem;
+}
+
+.dashboard-page .alert-list > button > div {
+    display: flex !important;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1875rem;
+}
+
+.dashboard-page .alert-list > button > div > strong,
+.dashboard-page .alert-list > button > div > small {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dashboard-page .alert-list .stock-value {
+    display: inline-flex;
+    align-items: baseline;
+    justify-self: end;
+    gap: 0.375rem;
+    white-space: nowrap;
+}
+
+.dashboard-page .alert-list .stock-value small {
+    display: inline;
+    margin: 0;
+}
+
+/* When Recent activity is collapsed, the product list owns the full workspace. */
+.dashboard-page .dashboard-grid.activity-collapsed {
+    grid-template-columns: minmax(0, 1fr) 2.25rem;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .stock-alert-panel {
+    grid-column: 1;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .activity-divider-toggle {
+    grid-column: 2;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .activity-panel {
+    display: none;
+}
+
+/* Product table stock stays as one readable quantity/unit pair. */
+.products-table td:nth-child(4) {
+    white-space: nowrap;
+}
+
+.products-table td:nth-child(4) > small {
+    display: inline !important;
+    margin: 0 0 0 0.25rem;
+}
+
+@media (max-width: 56.25rem) {
+    .dashboard-page .dashboard-grid.activity-collapsed {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard-page .dashboard-grid.activity-collapsed .activity-divider-toggle {
+        display: none;
+    }
+}
+/* Final stock-column alignment: every quantity starts from the same x-position. */
+.dashboard-page .alert-list > button {
+  grid-template-columns: 2.75rem minmax(0, 1fr) 5.5rem 5.75rem;
+  column-gap: 0.875rem;
+}
+
+.dashboard-page .alert-list .stock-value {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  align-items: baseline;
+  justify-self: stretch;
+  width: 100%;
+  gap: 0.375rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dashboard-page .alert-list .stock-value > strong {
+  min-width: 0;
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+}
+
+.dashboard-page .alert-list .stock-value > small {
+  margin: 0;
+  text-align: left;
+}
+
+.dashboard-page .alert-list .status-badge {
+  justify-self: end;
+}
+
+/* Registered-product state: content-sized card instead of the full form canvas. */
+.registration-modal.registration-modal-compact {
+  position: relative;
+  display: block;
+  width: min(34rem, calc(100vw - 2rem));
+  height: auto;
+  min-height: 0;
+  max-height: calc(100dvh - 2rem);
+}
+
+.registration-modal.registration-modal-compact .modal-header {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  z-index: 2;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.registration-modal.registration-modal-compact .modal-header > div {
+  display: none;
+}
+
+.registration-modal.registration-modal-compact .registration-result {
+  min-height: 0;
+  height: auto;
+  flex: none;
+  justify-content: flex-start;
+  padding: 3rem 1.5rem 1.75rem;
+}
+
+.registration-modal.registration-modal-compact .registration-summary {
+  width: 100%;
+}
+
+/* Dashboard product columns change layout only when Recent activity is open. */
+.dashboard-page .stock-alert-panel .panel-header {
+  display: block;
+}
+
+.dashboard-page .stock-alert-panel .dashboard-column-label {
+  display: none;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .stock-alert-panel .panel-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(7rem, 0.5fr) minmax(8rem, 0.6fr) 5.5rem 5.75rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .dashboard-column-label {
+  display: block;
+  color: var(--inv-text-light);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .stock-alert-panel .panel-header h2 {
+  color: var(--inv-text-light);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .dashboard-column-label:last-child {
+  text-align: center;
+  transform: translateX(-0.6875rem);
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .alert-list > button {
+  grid-template-columns: 2.75rem minmax(0, 1fr) minmax(7rem, 0.5fr) minmax(8rem, 0.6fr) 5.5rem 5.75rem;
+  grid-template-rows: auto;
+  gap: 0.75rem;
+}
+
+.dashboard-page .alert-list .product-main {
+  min-width: 0;
+}
+
+.dashboard-page .alert-list .product-main > strong,
+.dashboard-page .alert-list .product-meta small {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .alert-list .product-meta {
+  display: contents !important;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .alert-list .product-sku {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .alert-list .product-location {
+  grid-column: 4;
+  grid-row: 1;
+  align-self: center;
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .alert-list .stock-value {
+  grid-column: 5;
+  grid-row: 1;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+}
+
+.dashboard-page .dashboard-grid.activity-collapsed .alert-list .status-badge {
+  grid-column: 6;
+  grid-row: 1;
+  justify-self: center;
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list > button {
+  grid-template-columns: 2.25rem minmax(0, 1fr) 4.5rem 5.25rem;
+  grid-template-rows: auto auto;
+  column-gap: 0.625rem;
+  row-gap: 0.1875rem;
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .product-symbol {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .product-main {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .product-meta {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.375rem;
+  overflow: hidden;
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .product-location::before {
+  margin-inline-end: 0.375rem;
+  content: "·";
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .stock-value {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .status-badge {
+  grid-column: 4;
+  grid-row: 1 / 3;
+}
+
+/* Recent activity rows keep only the icon, product name and movement quantity. */
+.dashboard-page .activity-list > button {
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.dashboard-page .activity-list > button > div {
+  align-self: center;
+}
+
+.dashboard-page .activity-list .activity-quantity {
+  display: block;
+  align-self: center;
+  justify-self: end;
+  text-align: right;
+}
+
+/* Products toolbar and table alignment. */
+.products-page .filter-bar {
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.products-page .filter-bar .search-field {
+  display: flex;
+  min-width: 0;
+  min-height: 3.5rem;
+  align-items: center;
+  padding-inline: 0.875rem;
+  border: 0.0625rem solid var(--inv-border);
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.products-page .filter-bar .product-filter-button {
+  min-height: 3.5rem;
+  background: #fff;
+}
+
+.products-page {
+  grid-template-rows: 3.5rem 3.5rem 3rem minmax(0, 1fr);
+}
+
+.product-category-bar {
+  display: flex;
+  min-width: 0;
+  min-height: 3rem;
+  overflow-x: auto;
+  border: 0.0625rem solid var(--inv-border);
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.product-category-bar button {
+  min-width: max-content;
+  flex: 1 0 auto;
+  padding-inline: 1.125rem;
+  border: 0;
+  border-inline-start: 0.0625rem solid var(--inv-border);
+  background: transparent;
+  color: var(--inv-text-secondary);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.product-category-bar button:first-child {
+  border-inline-start: 0;
+}
+
+.product-category-bar button.active {
+  background: var(--inv-primary-soft);
+  color: var(--inv-primary-dark);
+}
+
+.products-table th:nth-child(5),
+.products-table td:nth-child(5) {
+  text-align: center;
+}
+
+.products-table td:nth-child(5) {
+  position: relative;
+}
+
+.products-table td:nth-child(5) .status-badge {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+}
+
+.products-table td:nth-child(5) .product-row-chevron {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 0.875rem;
+  margin: 0;
+  transform: translateY(-50%);
+}
+
+/* Keep the product photo, QR and identity text in separate non-overlapping cells. */
+.product-details-identity {
+  grid-template-columns: 5.5rem 5.5rem minmax(0, 1fr) auto;
+  column-gap: 1rem;
+}
+
+.product-details-qr {
+  width: 5.5rem;
+  height: 5.5rem;
+}
+
+.product-details-qr img {
+  width: 5rem;
+  height: 5rem;
+}
+
+/* Keep the compact dashboard metadata directly below the product name. */
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .product-meta {
+  display: flex !important;
+  min-width: 0;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 0.375rem;
+}
+
+.dashboard-page .dashboard-grid:not(.activity-collapsed) .alert-list .product-meta small {
+  width: auto;
+  min-width: 0;
+  margin: 0 !important;
+  flex: 0 1 auto;
+}
+
+/* Category tabs and their list form one connected control. */
+.products-page {
+  grid-template-rows: 3.5rem 3.5rem minmax(0, 1fr);
+}
+
+.products-list-shell {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: 3rem minmax(0, 1fr);
+}
+
+.products-list-shell .product-category-bar {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.products-list-shell .product-category-bar button {
+  position: relative;
+}
+
+.products-list-shell .product-category-bar button.active {
+  background: var(--inv-primary-soft);
+}
+
+.products-list-shell .product-category-bar button.active::after {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -0.0625rem;
+  height: 0.125rem;
+  background: var(--inv-primary-soft);
+  content: "";
+}
+
+.products-list-shell > .table-panel {
+  border-block-start: 0;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+/* Dashboard footer metrics are centred and visually prominent. */
+.dashboard-panel-footer > div,
+.dashboard-panel-footer .today-in,
+.dashboard-panel-footer .today-out {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.125rem;
+  text-align: center;
+}
+
+.dashboard-panel-footer small {
+  color: var(--inv-text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.dashboard-panel-footer strong,
+.dashboard-panel-footer .today-in strong,
+.dashboard-panel-footer .today-out strong {
+  justify-content: center;
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.dashboard-panel-footer .today-in strong,
+.dashboard-panel-footer .today-out strong {
+  gap: 0.5rem;
+}
+
+/* The modal header is the only product identity bar. */
+.product-details-status {
+  display: flex;
+  min-width: 0;
+  align-items: center;
 }

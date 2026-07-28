@@ -16,7 +16,7 @@ const DEFAULT_STAFF = [
         pin: '1234',
         role: 'Superadmin',
         status: 'active',
-        staffQr: 'IMS:STAFF:INV001',
+        barcode: 'STAFF-INV001',
     },
     {
         name: 'Daniel Wong',
@@ -25,7 +25,7 @@ const DEFAULT_STAFF = [
         pin: '2468',
         role: 'Inventory Manager',
         status: 'active',
-        staffQr: 'IMS:STAFF:INV002',
+        barcode: 'STAFF-INV002',
     },
     {
         name: 'Siti Rahman',
@@ -34,7 +34,7 @@ const DEFAULT_STAFF = [
         pin: '1357',
         role: 'Warehouse Staff',
         status: 'active',
-        staffQr: 'IMS:STAFF:INV003',
+        barcode: 'STAFF-INV003',
     },
 ]
 
@@ -43,7 +43,7 @@ const DEFAULT_PRODUCTS = [
         id: 'prd-milk-001',
         name: 'Fresh Milk',
         sku: 'MILK-001',
-        barcode: '9551001000012',
+        bar: '9551001000012',
         qrCode: 'IMS:PRODUCT:MILK-001',
         category: 'Dairy',
         type: 'Ingredient',
@@ -74,7 +74,7 @@ const DEFAULT_PRODUCTS = [
         id: 'prd-coffee-001',
         name: 'Arabica Coffee Beans',
         sku: 'BEAN-001',
-        barcode: '9551001000029',
+        bar: '9551001000029',
         qrCode: 'IMS:PRODUCT:BEAN-001',
         category: 'Dry Goods',
         type: 'Ingredient',
@@ -105,7 +105,7 @@ const DEFAULT_PRODUCTS = [
         id: 'prd-cup-001',
         name: '12oz Paper Cup',
         sku: 'CUP-012',
-        barcode: '9551001000036',
+        bar: '9551001000036',
         qrCode: 'IMS:PRODUCT:CUP-012',
         category: 'Packaging',
         type: 'Retail Product',
@@ -127,7 +127,7 @@ const DEFAULT_PRODUCTS = [
         id: 'prd-sandwich-001',
         name: 'Chicken Sandwich',
         sku: 'PREP-014',
-        barcode: '9551001000043',
+        bar: '9551001000043',
         qrCode: 'IMS:PRODUCT:PREP-014',
         category: 'Prepared Food',
         type: 'Prepared Product',
@@ -158,7 +158,7 @@ const DEFAULT_PRODUCTS = [
         id: 'prd-sugar-001',
         name: 'Fine Sugar',
         sku: 'SUGAR-001',
-        barcode: '9551001000050',
+        bar: '9551001000050',
         qrCode: 'IMS:PRODUCT:SUGAR-001',
         category: 'Dry Goods',
         type: 'Ingredient',
@@ -303,19 +303,42 @@ function persistInventory() {
 function initialize() {
     if (state.initialized) return
     clearLegacyData()
-    state.products = read(STORAGE.products, DEFAULT_PRODUCTS)
+    state.products = read(STORAGE.products, DEFAULT_PRODUCTS).map((product) => {
+        const { barcode: legacyBarcode, ...productData } = product
+        return {
+            ...productData,
+            bar: normalizeCode(product.bar || legacyBarcode),
+        }
+    })
     state.movements = read(STORAGE.movements, DEFAULT_MOVEMENTS)
-    state.staff = read(STORAGE.staff, DEFAULT_STAFF)
+    state.staff = read(STORAGE.staff, DEFAULT_STAFF).map((account) => {
+        const { staffQr: legacyStaffQr, ...accountData } = account
+        return {
+            ...accountData,
+            barcode: normalizeCode(
+                account.barcode ||
+                    `STAFF-${account.employeeId}`,
+            ),
+        }
+    })
     state.activeAccount = read(STORAGE.session, null)
     state.sessionLocked = localStorage.getItem(STORAGE.locked) === '1'
+    write(STORAGE.products, state.products)
+    write(STORAGE.staff, state.staff)
     state.initialized = true
 }
 
-function findStaff(employeeId) {
-    const code = normalizeCode(employeeId).replace('IMS:STAFF:', '')
+function findStaff(identifier) {
+    const code = normalizeCode(identifier)
+    const employeeId = code
+        .replace('IMS:STAFF:', '')
+        .replace('STAFF-', '')
     return (
         state.staff.find(
-            (account) => account.employeeId === code && account.status === 'active',
+            (account) =>
+                account.status === 'active' &&
+                (account.employeeId === employeeId ||
+                    normalizeCode(account.barcode) === code),
         ) || null
     )
 }
@@ -383,7 +406,7 @@ function findProduct(value) {
             (product) =>
                 product.id === value ||
                 normalizeCode(product.sku) === clean ||
-                normalizeCode(product.barcode) === clean ||
+                normalizeCode(product.bar) === clean ||
                 normalizeCode(product.qrCode) === code,
         ) || null
     )
@@ -403,7 +426,7 @@ function nextSku(category = 'Product') {
     return sku
 }
 
-function nextBarcode() {
+function nextBar() {
     const stem = `95588${String(Date.now()).slice(-7)}`
     const digits = stem.slice(0, 12).split('').map(Number)
     const total = digits.reduce(
@@ -430,8 +453,11 @@ function saveProduct(input, productId = '') {
         id: current?.id || `prd-${Date.now().toString(36)}`,
         name,
         sku,
-        barcode: normalizeCode(
-            input.barcode || current?.barcode || nextBarcode(),
+        bar: normalizeCode(
+            input.bar ||
+                input.barcode ||
+                current?.bar ||
+                nextBar(),
         ),
         qrCode: `IMS:PRODUCT:${sku}`,
         category: String(input.category || 'General').trim(),

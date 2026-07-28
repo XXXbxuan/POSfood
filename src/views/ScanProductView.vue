@@ -12,11 +12,11 @@
             <button class="scan-hero" type="button" @click="scannerOpen = true">
                 <span class="scan-hero-icon"><i class="fa-solid fa-qrcode"></i></span>
                 <strong>Tap to scan</strong>
-                <p>Product QR · Barcode · Batch label</p>
+                <p>Product QR · BAR · Batch label</p>
                 <span class="scan-line-decoration"></span>
             </button>
             <form class="manual-lookup panel" @submit.prevent="lookup(manualCode)">
-                <label><span>Enter code instead</span><div><i class="fa-solid fa-keyboard"></i><input v-model.trim="manualCode" type="text" placeholder="Product code or barcode" /><button class="button secondary" type="submit">Find</button></div></label>
+                <label><span>Enter code instead</span><div><i class="fa-solid fa-keyboard"></i><input v-model.trim="manualCode" type="text" placeholder="Product code or BAR" /><button class="button secondary" type="submit">Find</button></div></label>
                 <p v-if="error" class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ error }}</p>
             </form>
         </section>
@@ -28,7 +28,7 @@
                 <div class="product-detail-title">
                     <div><span class="status-badge" :class="statusClass">{{ store.productStatus(product) }}</span><span class="product-type">{{ product.type }}</span></div>
                     <h1>{{ product.name }}</h1>
-                    <p class="mono">{{ product.sku }} · {{ product.barcode }}</p>
+                    <p class="mono">{{ product.sku }} · {{ product.bar }}</p>
                 </div>
                 <div class="hero-stock">
                     <small>Current Stock</small>

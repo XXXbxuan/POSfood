@@ -72,12 +72,15 @@ try {
     inventoryStore.initialize()
 
     assert.equal(localStorage.getItem('posfood_old_data'), null)
+    assert.equal(inventoryStore.findStaff('STAFF-INV001').employeeId, 'INV001')
     assert.equal(inventoryStore.findStaff('IMS:STAFF:INV001').employeeId, 'INV001')
+    assert.equal(inventoryStore.findStaff('INV001').barcode, 'STAFF-INV001')
     inventoryStore.startSession(inventoryStore.findStaff('INV001'))
 
     const product = inventoryStore.saveProduct({
         name: 'Logic Test Item',
         sku: 'TEST-001',
+        bar: 'TEST-BAR-001',
         category: 'Testing',
         type: 'Retail Product',
         unit: 'pcs',
@@ -90,7 +93,10 @@ try {
 
     assert.equal(inventoryStore.state.products[0].id, product.id)
     assert.equal(product.currentStock, 0)
+    assert.equal(product.bar, 'TEST-BAR-001')
+    assert.equal(Object.hasOwn(product, 'barcode'), false)
     assert.equal(product.qrCode, 'IMS:PRODUCT:TEST-001')
+    assert.equal(inventoryStore.findProduct(product.bar).id, product.id)
     assert.equal(inventoryStore.findProduct(product.qrCode).id, product.id)
     assert.throws(
         () =>

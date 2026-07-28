@@ -41,7 +41,7 @@
                         </dl>
                         <div class="label-code-row">
                             <img v-if="qrDataUrl" :src="qrDataUrl" :style="labelStyle('qr')" alt="Product QR code" />
-                            <div class="barcode-visual" :style="labelStyle('barcode')"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar / 16}rem` }"></span><small>{{ product.barcode }}</small></div>
+                            <div class="bar-visual" :style="labelStyle('bar')"><span v-for="(line, index) in barLines" :key="index" :style="{ width: `${line / 16}rem` }"></span><small>{{ product.bar }}</small></div>
                         </div>
                     </article>
                 </div>
@@ -79,7 +79,7 @@
                             </dl>
                             <div class="label-code-row">
                                 <span v-if="qrDataUrl" class="label-edit-target label-qr-target" :class="{ selected: selectedTextKey === 'qr' }" :style="labelStyle('qr', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'qr')"><img :src="qrDataUrl" alt="Product QR code" /></span>
-                                <div class="barcode-visual label-edit-target" :class="{ selected: selectedTextKey === 'barcode' }" :style="labelStyle('barcode', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'barcode')"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar / 16}rem` }"></span><small>{{ product.barcode }}</small></div>
+                                <div class="bar-visual label-edit-target" :class="{ selected: selectedTextKey === 'bar' }" :style="labelStyle('bar', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'bar')"><span v-for="(line, index) in barLines" :key="index" :style="{ width: `${line / 16}rem` }"></span><small>{{ product.bar }}</small></div>
                             </div>
                         </article>
                     </div>
@@ -117,7 +117,23 @@ import { inventoryStore } from '@/services/inventoryStore'
 
 function readSavedLabelEdits() {
     try {
-        return JSON.parse(localStorage.getItem('ims_label_text_styles')) || {}
+        const saved =
+            JSON.parse(localStorage.getItem('ims_label_text_styles')) || {}
+        return Object.fromEntries(
+            Object.entries(saved).map(([productId, edits]) => {
+                const { barcode: legacyBarcodeStyle, ...currentEdits } =
+                    edits || {}
+                return [
+                    productId,
+                    {
+                        ...currentEdits,
+                        ...(currentEdits.bar || !legacyBarcodeStyle
+                            ? {}
+                            : { bar: legacyBarcodeStyle }),
+                    },
+                ]
+            }),
+        )
     } catch (error) {
         return {}
     }
@@ -164,8 +180,8 @@ export default {
         printCount() {
             return Math.min(250, Math.max(1, Number(this.quantity) || 1))
         },
-        barcodeBars() {
-            const code = String(this.product?.barcode || '')
+        barLines() {
+            const code = String(this.product?.bar || '')
             return code.split('').flatMap((digit, index) => {
                 const value = Number(digit) || 1
                 return [1 + ((value + index) % 3), 1, 1 + (value % 2)]
@@ -188,11 +204,11 @@ export default {
                 location: 'Location',
                 price: 'Price',
                 qr: 'QR Code',
-                barcode: 'Barcode',
+                bar: 'BAR',
             }[this.selectedTextKey] || 'Text'
         },
         isTextElement() {
-            return !['logo', 'qr', 'barcode'].includes(this.selectedTextKey)
+            return !['logo', 'qr', 'bar'].includes(this.selectedTextKey)
         },
     },
     watch: {

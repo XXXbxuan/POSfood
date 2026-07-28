@@ -15,7 +15,7 @@
 
                         <div v-if="!isUnlocking" class="login-tabs">
                             <button :class="{ active: mode === 'qr' }" type="button" @click="setMode('qr')">
-                                <i class="fa-solid fa-qrcode"></i>Staff QR
+                                <i class="fa-solid fa-barcode"></i>Staff Barcode
                             </button>
                             <button :class="{ active: mode === 'password' }" type="button" @click="setMode('password')">
                                 <i class="fa-solid fa-key"></i>ID & Password
@@ -24,8 +24,8 @@
 
                         <button v-if="mode === 'qr' && !isUnlocking" class="staff-card-scan" type="button" @click="scannerOpen = true">
                             <span><i class="fa-solid fa-camera"></i></span>
-                            <strong>Scan staff card</strong>
-                            <small>Identity first, then PIN</small>
+                            <strong>Scan staff barcode</strong>
+                            <small>Barcode first, then PIN</small>
                             <i class="fa-solid fa-chevron-right"></i>
                         </button>
 
@@ -79,10 +79,10 @@
         <ScannerModal
             v-if="scannerOpen"
             mode="staff"
-            title="Scan staff card"
-            subtitle="Position the employee QR card inside the frame."
-            demo-code="IMS:STAFF:INV001"
-            demo-label="Use demo staff card"
+            title="Scan staff barcode"
+            subtitle="Position the employee barcode inside the frame."
+            demo-code="STAFF-INV001"
+            demo-label="Use demo staff barcode"
             @close="scannerOpen = false"
             @scanned="handleStaffScan"
         />
@@ -157,7 +157,7 @@ export default {
             this.scannerOpen = false
             const account = this.store.findStaff(value)
             if (!account) {
-                this.message = 'Staff QR was not recognised.'
+                this.message = 'Staff barcode was not recognised.'
                 return
             }
             this.pendingAccount = account

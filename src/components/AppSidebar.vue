@@ -14,6 +14,8 @@
                 :key="item.id"
                 :to="item.to"
                 :class="{ active: active === item.id }"
+                :aria-label="item.label"
+                :title="item.label"
                 @click="$emit('close')"
             >
                 <i class="fa-solid" :class="item.icon"></i>

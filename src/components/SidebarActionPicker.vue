@@ -83,7 +83,7 @@ export default {
                 (product) =>
                     product.active &&
                     (!search ||
-                        [product.name, product.sku, product.barcode].some((value) =>
+                        [product.name, product.sku, product.bar].some((value) =>
                             String(value).toLowerCase().includes(search),
                         )),
             )

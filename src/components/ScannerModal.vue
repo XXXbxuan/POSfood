@@ -39,9 +39,9 @@
             <form v-else class="manual-code manual-code-only" @submit.prevent="submitManual">
                 <span class="manual-code-icon"><i class="fa-solid fa-barcode"></i></span>
                 <h3>{{ mode === 'staff' ? 'Enter staff code' : 'Enter product code' }}</h3>
-                <p>Use a QR value, SKU or barcode.</p>
+                <p>{{ mode === 'staff' ? 'Use the barcode printed on the staff card.' : 'Use a product QR value, SKU or BAR.' }}</p>
                 <label>
-                    <span>{{ mode === 'staff' ? 'Staff code' : 'Product code / barcode' }}</span>
+                    <span>{{ mode === 'staff' ? 'Staff barcode' : 'Product code / BAR' }}</span>
                     <input v-model.trim="manualCode" type="text" :placeholder="placeholder" autocomplete="off" autofocus />
                 </label>
                 <button class="button primary full-width" type="submit" :disabled="!manualCode">
@@ -74,7 +74,7 @@ export default {
     },
     computed: {
         placeholder() {
-            return this.mode === 'staff' ? 'IMS:STAFF:INV001' : 'MILK-001'
+            return this.mode === 'staff' ? 'STAFF-INV001' : 'MILK-001'
         },
     },
     mounted() {

@@ -4,7 +4,8 @@
             <i class="fa-solid fa-bars"></i>
         </button>
         <RouterLink class="topbar-context topbar-home-link" to="/inventory/dashboard" aria-label="Return to Dashboard">
-            <strong>MAIN WAREHOUSE</strong>
+            <span>INVENTORY WORKSPACE</span>
+            <strong>Main Warehouse</strong>
         </RouterLink>
         <div class="topbar-quick-tools" aria-label="Quick inventory tools">
             <button

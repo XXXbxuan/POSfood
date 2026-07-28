@@ -10,19 +10,19 @@
         </section>
 
         <section class="metric-grid">
-            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'products' }" @click="selectedMetric = 'products'">
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'products' }" :aria-pressed="selectedMetric === 'products'" @click="selectedMetric = 'products'">
                 <span class="metric-icon blue"><i class="fa-solid fa-box"></i></span>
                 <div><small>Total Products</small><strong>{{ stats.totalProducts }}</strong></div>
             </button>
-            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'stock' }" @click="selectedMetric = 'stock'">
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'stock' }" :aria-pressed="selectedMetric === 'stock'" @click="selectedMetric = 'stock'">
                 <span class="metric-icon charcoal"><i class="fa-solid fa-boxes-stacked"></i></span>
                 <div><small>Total Stock</small><strong>{{ compact(stats.totalQuantity) }}</strong></div>
             </button>
-            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'low' }" @click="selectedMetric = 'low'">
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'low' }" :aria-pressed="selectedMetric === 'low'" @click="selectedMetric = 'low'">
                 <span class="metric-icon amber"><i class="fa-solid fa-triangle-exclamation"></i></span>
                 <div><small>Low Stock</small><strong>{{ stats.lowStock.length }}</strong></div>
             </button>
-            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'out' }" @click="selectedMetric = 'out'">
+            <button type="button" class="metric-card" :class="{ active: selectedMetric === 'out' }" :aria-pressed="selectedMetric === 'out'" @click="selectedMetric = 'out'">
                 <span class="metric-icon red"><i class="fa-solid fa-circle-xmark"></i></span>
                 <div><small>Out of Stock</small><strong>{{ stats.outOfStock.length }}</strong></div>
             </button>
@@ -32,7 +32,10 @@
             <article class="panel dashboard-list-panel stock-alert-panel">
                 <header class="panel-header">
                     <div><h2>{{ metricTitle }}</h2></div>
-                    <span class="dashboard-list-count">{{ metricProducts.length }} items</span>
+                    <span class="dashboard-column-label">SKU</span>
+                    <span class="dashboard-column-label">Location</span>
+                    <span class="dashboard-column-label">Quantity</span>
+                    <span class="dashboard-column-label">Status</span>
                 </header>
                 <div class="dashboard-scroll alert-list">
                     <button
@@ -42,8 +45,15 @@
                         @click="openProduct(product)"
                     >
                         <span class="product-symbol">{{ product.name.slice(0, 2).toUpperCase() }}</span>
-                        <div><strong>{{ product.name }}</strong><small class="mono">{{ product.sku }} &middot; {{ product.location }}</small></div>
-                        <span class="stock-value">{{ product.currentStock }} <small>{{ product.unit }}</small></span>
+                        <div class="product-main"><strong>{{ product.name }}</strong></div>
+                        <div class="product-meta">
+                            <small class="mono product-sku">{{ product.sku }}</small>
+                            <small class="mono product-location">{{ product.location || 'Not assigned' }}</small>
+                        </div>
+                        <span class="stock-value">
+                            <strong>{{ product.currentStock }}</strong>
+                            <small>{{ product.unit }}</small>
+                        </span>
                         <span class="status-badge" :class="statusClass(product)">{{ store.productStatus(product) }}</span>
                     </button>
                     <div v-if="!metricProducts.length" class="empty-state compact">
@@ -75,10 +85,9 @@
                         <span :class="movement.changedQuantity > 0 ? 'in' : 'out'">
                             <i class="fa-solid" :class="movement.changedQuantity > 0 ? 'fa-arrow-down' : 'fa-arrow-up'"></i>
                         </span>
-                        <div><strong>{{ movement.productName }}</strong><small>{{ movement.reason }} &middot; {{ movement.staffName }}</small></div>
+                        <div><strong>{{ movement.productName }}</strong></div>
                         <div class="activity-quantity" :class="movement.changedQuantity > 0 ? 'positive' : 'negative'">
                             {{ movement.changedQuantity > 0 ? '+' : '' }}{{ movement.changedQuantity }}
-                            <small>{{ time(movement.createdAt) }}</small>
                         </div>
                     </button>
                 </div>
@@ -137,7 +146,7 @@
                                 <span>{{ selectedProduct.unit }}</span>
                             </div>
                             <dl>
-                                <div><dt>Barcode</dt><dd class="mono">{{ selectedProduct.barcode }}</dd></div>
+                                <div><dt>BAR</dt><dd class="mono">{{ selectedProduct.bar }}</dd></div>
                                 <div><dt>Category</dt><dd>{{ selectedProduct.category }}</dd></div>
                                 <div><dt>Location</dt><dd>{{ selectedProduct.location }}</dd></div>
                                 <div><dt>Minimum</dt><dd>{{ selectedProduct.minimumStock }} {{ selectedProduct.unit }}</dd></div>
@@ -243,7 +252,7 @@ export default {
                 (product) =>
                     product.active &&
                     (!search ||
-                        [product.name, product.sku, product.barcode].some((value) =>
+                        [product.name, product.sku, product.bar].some((value) =>
                             String(value).toLowerCase().includes(search),
                         )),
             )

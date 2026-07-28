@@ -1,6 +1,6 @@
 <template>
     <div class="modal-backdrop" @click.self="close">
-        <section class="form-modal registration-modal">
+        <section class="form-modal registration-modal" :class="{ 'registration-modal-compact': stage !== 'form' }">
             <header class="modal-header">
                 <div>
                     <span class="eyebrow">{{ stage === 'form' ? (editing ? 'EDIT PRODUCT' : 'NEW ITEM') : 'PRODUCT REGISTERED' }}</span>
@@ -41,7 +41,7 @@
                     </label>
                     <label><span>Unit <b>*</b></span><input v-model.trim="form.unit" type="text" required placeholder="pcs, kg, cartons" /></label>
                     <label><span>Product Code / SKU</span><input v-model.trim="form.sku" class="mono" type="text" :placeholder="suggestedSku" /></label>
-                    <label class="full"><span>Barcode</span><input v-model.trim="form.barcode" class="mono" type="text" placeholder="Generated automatically when empty" /></label>
+                    <label class="full"><span>BAR</span><input v-model.trim="form.bar" class="mono" type="text" placeholder="Generated automatically when empty" /></label>
                 </section>
 
                 <section v-else class="registration-step-panel form-grid two-column">
@@ -85,7 +85,7 @@
                     <img :src="qrDataUrl" :alt="`${product.name} QR code`" />
                     <h3>{{ product.name }}</h3>
                     <p class="mono">{{ product.sku }}</p>
-                    <small>{{ product.barcode }}</small>
+                    <small>{{ product.bar }}</small>
                     <span>{{ product.location || 'Location not assigned' }}</span>
                 </div>
                 <div class="registration-choice-actions">
@@ -104,7 +104,7 @@ import { inventoryStore } from '@/services/inventoryStore'
 const emptyForm = () => ({
     name: '',
     sku: '',
-    barcode: '',
+    bar: '',
     category: '',
     type: 'Retail Product',
     unit: 'pcs',
@@ -134,7 +134,7 @@ export default {
                 ? {
                       name: source.name,
                       sku: source.sku,
-                      barcode: source.barcode,
+                      bar: source.bar,
                       category: source.category,
                       type: source.type,
                       unit: source.unit,
@@ -237,7 +237,7 @@ export default {
                 p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
             </style></head><body><div class="label"><img src="${this.qrDataUrl}" alt=""><div class="info">
                 <h1>${safe(this.product.name)}</h1><p>${safe(this.product.sku)}</p>
-                <small>${safe(this.product.barcode)}</small><small>${safe(this.product.location || 'No location')}</small>
+                <small>${safe(this.product.bar)}</small><small>${safe(this.product.location || 'No location')}</small>
             </div></div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
             printWindow.document.close()
         },
