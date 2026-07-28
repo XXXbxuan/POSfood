@@ -41,7 +41,7 @@
                         </dl>
                         <div class="label-code-row">
                             <img v-if="qrDataUrl" :src="qrDataUrl" :style="labelStyle('qr')" alt="Product QR code" />
-                            <div class="barcode-visual" :style="labelStyle('barcode')"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar}px` }"></span><small>{{ product.barcode }}</small></div>
+                            <div class="barcode-visual" :style="labelStyle('barcode')"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar / 16}rem` }"></span><small>{{ product.barcode }}</small></div>
                         </div>
                     </article>
                 </div>
@@ -79,7 +79,7 @@
                             </dl>
                             <div class="label-code-row">
                                 <span v-if="qrDataUrl" class="label-edit-target label-qr-target" :class="{ selected: selectedTextKey === 'qr' }" :style="labelStyle('qr', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'qr')"><img :src="qrDataUrl" alt="Product QR code" /></span>
-                                <div class="barcode-visual label-edit-target" :class="{ selected: selectedTextKey === 'barcode' }" :style="labelStyle('barcode', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'barcode')"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar}px` }"></span><small>{{ product.barcode }}</small></div>
+                                <div class="barcode-visual label-edit-target" :class="{ selected: selectedTextKey === 'barcode' }" :style="labelStyle('barcode', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'barcode')"><span v-for="(bar, index) in barcodeBars" :key="index" :style="{ width: `${bar / 16}rem` }"></span><small>{{ product.barcode }}</small></div>
                             </div>
                         </article>
                     </div>
@@ -227,9 +227,9 @@ export default {
             const saved = source[key] || this.defaultTextStyle(key)
             const style = useDraft && this.selectedTextKey === key ? this.textDraft : saved
             return {
-                fontSize: style.size ? `${style.size}px` : undefined,
+                fontSize: style.size ? `${style.size / 16}rem` : undefined,
                 textAlign: style.align || undefined,
-                transform: `translate(${style.x || 0}px, ${style.y || 0}px) scale(${(style.scale || 100) / 100})`,
+                transform: `translate(${(style.x || 0) / 16}rem, ${(style.y || 0) / 16}rem) scale(${(style.scale || 100) / 100})`,
                 transformOrigin: 'center',
             }
         },

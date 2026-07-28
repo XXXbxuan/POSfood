@@ -22,6 +22,8 @@
                     <thead>
                         <tr>
                             <th>Product</th>
+                            <th>Category</th>
+                            <th>Location</th>
                             <th>Stock</th>
                             <th>Status</th>
                         </tr>
@@ -45,7 +47,9 @@
                                     <div><strong>{{ product.name }}</strong><small class="mono">{{ product.sku }}</small></div>
                                 </div>
                             </td>
-                            <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small></td>
+                            <td><strong>{{ product.category }}</strong></td>
+                            <td><strong>{{ product.location || 'Not assigned' }}</strong></td>
+                            <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small><small>Minimum {{ product.minimumStock }}</small></td>
                             <td>
                                 <span class="status-badge" :class="statusClass(product)">{{ store.productStatus(product) }}</span>
                                 <i class="fa-solid fa-chevron-right product-row-chevron"></i>
@@ -268,7 +272,7 @@ export default {
             }
             printWindow.document.write(`<!doctype html><html><head><title>${safe(product.name)}</title><style>
                 @page{size:60mm 45mm;margin:3mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}
-                .label{width:54mm;height:39mm;border:1px solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
+                .label{width:54mm;height:39mm;border:.0625rem solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
                 img{width:24mm;height:24mm}.info{min-width:0}h1{font-size:11pt;margin:0 0 2mm;line-height:1.15}
                 p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
             </style></head><body><div class="label"><img src="${this.detailQr}" alt=""><div class="info">

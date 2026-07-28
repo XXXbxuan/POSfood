@@ -232,7 +232,7 @@ export default {
                     .replaceAll('"', '&quot;')
             printWindow.document.write(`<!doctype html><html><head><title>${safe(this.product.name)}</title><style>
                 @page{size:60mm 45mm;margin:3mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}
-                .label{width:54mm;height:39mm;border:1px solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
+                .label{width:54mm;height:39mm;border:.0625rem solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
                 img{width:24mm;height:24mm}.info{min-width:0}h1{font-size:11pt;margin:0 0 2mm;line-height:1.15}
                 p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
             </style></head><body><div class="label"><img src="${this.qrDataUrl}" alt=""><div class="info">
