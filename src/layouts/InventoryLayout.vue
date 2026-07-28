@@ -3,16 +3,15 @@
         <AppSidebar
             :active="$route.meta.nav"
             :open="menuOpen"
+            :account="store.state.activeAccount"
             @close="menuOpen = false"
-            @action="handleSidebarAction"
+            @profile="profileOpen = !profileOpen"
         />
         <div class="inv-workspace">
             <AppTopbar
                 :title="$route.meta.title"
-                :account="store.state.activeAccount"
                 @menu="menuOpen = true"
-                @scan="scannerOpen = true"
-                @profile="profileOpen = !profileOpen"
+                @action="handleSidebarAction"
             />
             <main class="inv-page">
                 <RouterView />
@@ -34,7 +33,7 @@
             @close="pickerDirection = ''"
         />
 
-        <section v-if="profileOpen" class="topbar-popover profile-popover compact-profile-menu">
+        <section v-if="profileOpen" class="topbar-popover profile-popover compact-profile-menu sidebar-profile-menu">
             <button type="button" @click="lock">
                 <i class="fa-solid fa-lock"></i>Lock session
             </button>

@@ -15,12 +15,11 @@
             <article><span class="neutral"><i class="fa-solid fa-list-check"></i></span><div><small>Movements</small><strong>{{ filteredMovements.length }}</strong></div></article>
         </section>
 
-        <section class="filter-bar history-filters">
-            <label class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input v-model.trim="search" type="search" placeholder="Search product, movement or reference" /></label>
-            <select v-model="type"><option value="">All movements</option><option>Stock In</option><option>Stock Out</option></select>
-            <select v-model="staff"><option value="">All staff</option><option v-for="item in staffNames" :key="item">{{ item }}</option></select>
-            <input v-model="date" type="date" aria-label="Filter by date" />
-            <button v-if="hasFilters" class="button subtle" type="button" @click="clearFilters">Clear</button>
+        <section class="history-filter-trigger">
+            <button class="button secondary" type="button" @click="openFilters">
+                <i class="fa-solid fa-sliders"></i>Filter
+                <span v-if="activeFilterCount">{{ activeFilterCount }}</span>
+            </button>
         </section>
 
         <section class="panel table-panel history-table-panel">
@@ -41,6 +40,26 @@
             </div>
             <div v-if="!filteredMovements.length" class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i><strong>No movements found</strong><p>Change the filters to see more records.</p></div>
         </section>
+
+        <div v-if="filterOpen" class="modal-backdrop" @click.self="filterOpen = false">
+            <section class="form-modal history-filter-modal">
+                <header class="modal-header">
+                    <div><span class="eyebrow">STOCK HISTORY</span><h2>Filter records</h2><p>Choose only what you need.</p></div>
+                    <button class="icon-button" type="button" aria-label="Close" @click="filterOpen = false"><i class="fa-solid fa-xmark"></i></button>
+                </header>
+                <form class="form-grid two-column" @submit.prevent="applyFilters">
+                    <label class="full"><span>Search</span><input v-model.trim="filterDraft.search" type="search" autofocus placeholder="Product, movement or reference" /></label>
+                    <label><span>Movement</span><select v-model="filterDraft.type"><option value="">All movements</option><option>Stock In</option><option>Stock Out</option></select></label>
+                    <label><span>Staff</span><select v-model="filterDraft.staff"><option value="">All staff</option><option v-for="item in staffNames" :key="item">{{ item }}</option></select></label>
+                    <label class="full"><span>Date</span><input v-model="filterDraft.date" type="date" /></label>
+                    <footer class="history-filter-actions full">
+                        <button class="button secondary" type="button" @click="clearDraft">Clear</button>
+                        <span></span>
+                        <button class="button primary" type="submit">Apply Filter</button>
+                    </footer>
+                </form>
+            </section>
+        </div>
     </div>
 </template>
 
@@ -56,6 +75,8 @@ export default {
             type: '',
             staff: '',
             date: '',
+            filterOpen: false,
+            filterDraft: { search: '', type: '', staff: '', date: '' },
         }
     },
     computed: {
@@ -82,6 +103,9 @@ export default {
         hasFilters() {
             return Boolean(this.search || this.type || this.staff || this.date)
         },
+        activeFilterCount() {
+            return [this.search, this.type, this.staff, this.date].filter(Boolean).length
+        },
     },
     methods: {
         clearFilters() {
@@ -89,6 +113,25 @@ export default {
             this.type = ''
             this.staff = ''
             this.date = ''
+        },
+        openFilters() {
+            this.filterDraft = {
+                search: this.search,
+                type: this.type,
+                staff: this.staff,
+                date: this.date,
+            }
+            this.filterOpen = true
+        },
+        clearDraft() {
+            this.filterDraft = { search: '', type: '', staff: '', date: '' }
+        },
+        applyFilters() {
+            this.search = this.filterDraft.search
+            this.type = this.filterDraft.type
+            this.staff = this.filterDraft.staff
+            this.date = this.filterDraft.date
+            this.filterOpen = false
         },
         formattedDate(value) {
             return new Intl.DateTimeFormat('en-MY', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value))

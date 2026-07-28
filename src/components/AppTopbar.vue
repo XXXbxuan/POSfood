@@ -7,12 +7,17 @@
             <span>MAIN WAREHOUSE</span>
             <strong>{{ title }}</strong>
         </div>
-        <div class="topbar-actions">
-            <button class="icon-button topbar-qr-button" type="button" aria-label="Scan product QR" @click="$emit('scan')">
-                <i class="fa-solid fa-qrcode"></i>
-            </button>
-            <button class="profile-button compact-profile" type="button" aria-label="Open account menu" @click="$emit('profile')">
-                <span>{{ initials }}</span>
+        <div class="topbar-quick-tools" aria-label="Quick inventory tools">
+            <button
+                v-for="tool in tools"
+                :key="tool.id"
+                type="button"
+                :class="tool.tone"
+                :aria-label="tool.label"
+                :title="tool.label"
+                @click="$emit('action', tool.id)"
+            >
+                <i class="fa-solid" :class="tool.icon"></i>
             </button>
         </div>
     </header>
@@ -23,18 +28,17 @@ export default {
     name: 'AppTopbar',
     props: {
         title: { type: String, default: 'Dashboard' },
-        account: { type: Object, required: true },
     },
-    emits: ['menu', 'scan', 'profile'],
-    computed: {
-        initials() {
-            return this.account.name
-                .split(' ')
-                .map((part) => part[0])
-                .join('')
-                .slice(0, 2)
-                .toUpperCase()
-        },
+    emits: ['menu', 'action'],
+    data() {
+        return {
+            tools: [
+                { id: 'register', label: 'Register Product', icon: 'fa-plus', tone: 'register' },
+                { id: 'scan', label: 'Scan Product', icon: 'fa-qrcode', tone: 'scan' },
+                { id: 'in', label: 'Stock In', icon: 'fa-arrow-down', tone: 'stock-in' },
+                { id: 'out', label: 'Stock Out', icon: 'fa-arrow-up', tone: 'stock-out' },
+            ],
+        }
     },
 }
 </script>

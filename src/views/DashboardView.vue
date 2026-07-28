@@ -30,7 +30,7 @@
             </button>
         </section>
 
-        <section class="dashboard-grid">
+        <section class="dashboard-grid" :class="{ 'activity-collapsed': !activityOpen }">
             <article class="panel dashboard-list-panel stock-alert-panel">
                 <header class="panel-header">
                     <div><span class="eyebrow">{{ metricEyebrow }}</span><h2>{{ metricTitle }}</h2></div>
@@ -58,12 +58,15 @@
                 </footer>
             </article>
 
-            <article class="panel dashboard-list-panel activity-panel">
+            <article class="panel dashboard-list-panel activity-panel" :class="{ collapsed: !activityOpen }">
                 <header class="panel-header">
-                    <div><span class="eyebrow">TODAY</span><h2>Recent activity</h2></div>
-                    <span class="dashboard-list-count">{{ store.state.movements.length }} records</span>
+                    <div v-if="activityOpen"><span class="eyebrow">TODAY</span><h2>Recent activity</h2></div>
+                    <span v-if="activityOpen" class="dashboard-list-count">{{ store.state.movements.length }} records</span>
+                    <button class="activity-toggle" type="button" :aria-label="activityOpen ? 'Collapse recent activity' : 'Open recent activity'" @click="activityOpen = !activityOpen">
+                        <i class="fa-solid" :class="activityOpen ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+                    </button>
                 </header>
-                <div class="dashboard-scroll activity-list">
+                <div v-if="activityOpen" class="dashboard-scroll activity-list">
                     <button
                         v-for="movement in store.state.movements"
                         :key="movement.id"
@@ -80,7 +83,7 @@
                         </div>
                     </button>
                 </div>
-                <footer class="dashboard-panel-footer">
+                <footer v-if="activityOpen" class="dashboard-panel-footer">
                     <div><small>Expiring Soon</small><strong class="expiry-value">{{ stats.expiring.length }}</strong></div>
                     <div><small>Stock Value</small><strong class="primary-value">RM {{ money(stats.stockValue) }}</strong></div>
                 </footer>
@@ -96,9 +99,10 @@
                         <p v-if="pickerAction !== 'details'">Select one item. The operation stays on Dashboard.</p>
                         <p v-else>Product details and stock actions.</p>
                     </div>
-                    <button class="icon-button" type="button" aria-label="Close" @click="closePicker">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <div class="product-detail-header-actions">
+                        <button v-if="selectedProduct" class="icon-button" type="button" aria-label="Edit product" title="Edit product" @click="editOpen = true"><i class="fa-solid fa-pen"></i></button>
+                        <button class="icon-button" type="button" aria-label="Close" @click="closePicker"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
                 </header>
                 <div class="quick-workspace-body" :class="{ 'details-only': pickerAction === 'details', 'with-operation': operation }">
                     <section v-if="pickerAction !== 'details'" class="quick-product-column">
@@ -150,7 +154,6 @@
                                 Continue to {{ pickerAction === 'in' ? 'Stock In' : 'Stock Out' }}
                             </button>
                             <div v-else class="quick-preview-actions">
-                                <button class="button secondary" type="button" @click="editOpen = true"><i class="fa-solid fa-pen"></i>Edit</button>
                                 <button class="button stock-in" type="button" @click="startSelectedOperation('in')">Stock In</button>
                                 <button class="button stock-out" type="button" @click="startSelectedOperation('out')">Stock Out</button>
                             </div>
@@ -204,6 +207,7 @@ export default {
             selectedMetric: 'products',
             registerOpen: false,
             editOpen: false,
+            activityOpen: true,
         }
     },
     computed: {

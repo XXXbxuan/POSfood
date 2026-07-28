@@ -5977,6 +5977,529 @@ textarea:focus {
     }
 }
 
+/* Readability, swapped quick tools, collapsible activity and editors */
+body {
+    font-size: 18px;
+}
+
+.inv-brand strong {
+    font-size: 16px !important;
+}
+
+.inv-brand small {
+    font-size: 8px !important;
+}
+
+.inv-sidebar nav a {
+    font-size: 13px;
+}
+
+.topbar-context span {
+    font-size: 10px;
+}
+
+.topbar-context strong {
+    font-size: 19px;
+}
+
+.page-heading h1 {
+    font-size: 28px;
+}
+
+.page-heading p {
+    font-size: 13px;
+}
+
+.eyebrow {
+    font-size: 10px;
+}
+
+.button {
+    min-height: 46px;
+    padding-inline: 18px;
+    font-size: 14px;
+}
+
+input,
+select,
+textarea {
+    min-height: 46px;
+    font-size: 14px !important;
+}
+
+.form-grid label > span,
+.label-controls > label > span,
+.product-selector label > span {
+    font-size: 12px;
+}
+
+.modal-header h2 {
+    font-size: 23px;
+}
+
+.modal-header p {
+    font-size: 12px;
+}
+
+.panel-header h2,
+.dashboard-list-panel .panel-header h2 {
+    font-size: 16px;
+}
+
+.dashboard-list-count {
+    font-size: 11px;
+}
+
+.dashboard-page .metric-grid small {
+    font-size: 11px;
+}
+
+.dashboard-page .metric-grid strong {
+    font-size: 29px;
+}
+
+.dashboard-page .metric-grid p {
+    font-size: 10px;
+}
+
+.dashboard-page .alert-list strong,
+.dashboard-page .activity-list strong {
+    font-size: 13px;
+}
+
+.dashboard-page .alert-list small,
+.dashboard-page .activity-list small {
+    font-size: 10px;
+}
+
+.dashboard-page .stock-value,
+.dashboard-page .activity-quantity {
+    font-size: 14px;
+}
+
+.dashboard-page .status-badge {
+    font-size: 9px;
+}
+
+.dashboard-panel-footer small {
+    font-size: 9px;
+}
+
+.dashboard-panel-footer strong {
+    font-size: 13px;
+}
+
+.inventory-table th {
+    font-size: 11px;
+}
+
+.inventory-table td,
+.product-cell strong {
+    font-size: 14px;
+}
+
+.inventory-table td > small,
+.product-cell small {
+    font-size: 10px;
+}
+
+.history-summary small {
+    font-size: 11px;
+}
+
+.history-summary strong {
+    font-size: 23px;
+}
+
+.section-header h2 {
+    font-size: 18px;
+}
+
+.section-header p {
+    font-size: 11px;
+}
+
+.receive-summary h2 {
+    font-size: 21px;
+}
+
+.receive-summary dt,
+.completion-details small {
+    font-size: 10px;
+}
+
+.receive-summary dd,
+.completion-details strong {
+    font-size: 12px;
+}
+
+.product-details-identity h3,
+.quick-product-preview h3 {
+    font-size: 21px;
+}
+
+.product-details-identity p,
+.quick-product-preview > p {
+    font-size: 11px;
+}
+
+.details-stock small,
+.details-stock span,
+.quick-preview-stock small,
+.quick-preview-stock span {
+    font-size: 10px;
+}
+
+.details-stock strong,
+.quick-preview-stock strong {
+    font-size: 28px;
+}
+
+.batch-list strong,
+.movement-preview-list strong {
+    font-size: 13px;
+}
+
+.batch-list small,
+.movement-preview-list small {
+    font-size: 10px;
+}
+
+.label-controls h2,
+.label-preview-panel h2 {
+    font-size: 18px;
+}
+
+.label-controls p,
+.label-stage > p {
+    font-size: 10px;
+}
+
+.result-count,
+.status-badge {
+    font-size: 10px;
+}
+
+.tool-picker-list strong,
+.quick-product-list strong {
+    font-size: 13px;
+}
+
+.tool-picker-list small,
+.quick-product-list small {
+    font-size: 10px;
+}
+
+.detail-list dt,
+.product-details-grid dt,
+.quick-product-preview dt,
+.label-meta dt {
+    font-size: 10px;
+}
+
+.detail-list dd,
+.product-details-grid dd,
+.quick-product-preview dd,
+.label-meta dd {
+    font-size: 12px;
+}
+
+/* Profile now lives at the bottom-left */
+.sidebar-profile {
+    display: flex;
+    min-height: 64px;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 10px 12px;
+    padding: 8px;
+    border: 1px solid var(--inv-border);
+    border-radius: 13px;
+    background: #f7fbfb;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar-profile > span {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--inv-primary-soft);
+    color: var(--inv-primary-dark);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.sidebar-profile > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-profile strong {
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar-profile small {
+    color: var(--inv-text-secondary);
+    font-size: 9px;
+}
+
+.sidebar-profile-menu {
+    top: auto;
+    right: auto;
+    bottom: 82px;
+    left: 12px;
+}
+
+/* Quick actions now live at the top-right */
+.topbar-quick-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topbar-quick-tools button {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border: 1px solid var(--inv-border);
+    border-radius: 12px;
+    background: #f7fbfb;
+    color: var(--inv-primary);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.topbar-quick-tools button:hover {
+    border-color: var(--inv-primary);
+    background: var(--inv-primary-soft);
+}
+
+.topbar-quick-tools button.stock-in {
+    color: var(--inv-success-dark);
+}
+
+.topbar-quick-tools button.stock-out {
+    color: var(--inv-danger);
+}
+
+/* Collapsible recent activity */
+.dashboard-page .dashboard-grid.activity-collapsed {
+    grid-template-columns: minmax(0, 1fr) 58px;
+}
+
+.activity-panel.collapsed {
+    overflow: hidden;
+}
+
+.activity-panel.collapsed .panel-header {
+    height: 100%;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.activity-toggle {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    place-items: center;
+    margin-left: 5px;
+    border: 1px solid var(--inv-border);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--inv-primary);
+    cursor: pointer;
+}
+
+.activity-panel.collapsed .activity-toggle {
+    margin: 0;
+}
+
+/* Product detail header/footer action placement */
+.product-detail-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-detail-header-actions .icon-button {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+    font-size: 14px;
+}
+
+.product-details-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 14px 18px;
+}
+
+.product-details-actions .button {
+    width: 100%;
+    min-height: 58px;
+    font-size: 15px;
+}
+
+.quick-preview-actions {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* One History filter button + popout */
+.history-filter-trigger {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.history-filter-trigger .button span {
+    display: grid;
+    min-width: 22px;
+    height: 22px;
+    place-items: center;
+    padding-inline: 5px;
+    border-radius: 11px;
+    background: var(--inv-primary);
+    color: #fff;
+    font-size: 10px;
+}
+
+.history-filter-modal {
+    width: min(600px, calc(100vw - 32px));
+}
+
+.history-filter-actions {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 9px;
+}
+
+/* Interactive label text editor */
+.label-heading-actions {
+    display: flex;
+    gap: 9px;
+}
+
+.label-heading-actions .button.active {
+    border-color: var(--inv-primary);
+    background: var(--inv-primary-soft);
+    color: var(--inv-primary-dark);
+}
+
+.inventory-label.is-editing .label-edit-target {
+    border-radius: 3px;
+    outline: 1px dashed var(--inv-primary);
+    outline-offset: 3px;
+    cursor: pointer;
+}
+
+.inventory-label.is-editing .label-edit-target:hover,
+.inventory-label.is-editing .label-edit-target:focus {
+    background: rgba(8, 166, 182, 0.08);
+    outline: 2px solid var(--inv-primary);
+}
+
+.label-text-editor {
+    width: min(520px, calc(100vw - 32px));
+}
+
+.label-size-control {
+    display: grid;
+    grid-template-columns: 1fr 58px;
+    align-items: center;
+    gap: 12px;
+}
+
+.label-size-control input {
+    min-height: auto;
+    padding: 0;
+    accent-color: var(--inv-primary);
+}
+
+.label-size-control strong {
+    font-size: 13px;
+    text-align: right;
+}
+
+.label-align-control {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 4px;
+    border-radius: 10px;
+    background: #edf5f6;
+}
+
+.label-align-control button {
+    min-height: 42px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--inv-text-secondary);
+    cursor: pointer;
+}
+
+.label-align-control button.active {
+    background: #fff;
+    box-shadow: 0 3px 10px rgba(27, 83, 91, 0.08);
+    color: var(--inv-primary);
+}
+
+@media (max-width: 1100px) {
+    .sidebar-profile {
+        justify-content: center;
+        margin-inline: 14px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+    }
+
+    .sidebar-profile > div {
+        display: none;
+    }
+
+    .sidebar-profile-menu {
+        bottom: 78px;
+        left: 72px;
+    }
+}
+
+@media (max-width: 780px) {
+    .topbar-quick-tools {
+        gap: 4px;
+    }
+
+    .topbar-quick-tools button {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .dashboard-page .dashboard-grid.activity-collapsed {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-panel.collapsed {
+        display: none;
+    }
+
+    .label-heading-actions .button {
+        padding-inline: 11px;
+    }
+}
+
 @media print {
     @page {
         margin: 6mm;

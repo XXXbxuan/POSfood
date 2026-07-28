@@ -21,20 +21,10 @@
             </RouterLink>
         </nav>
 
-        <div class="sidebar-tools" aria-label="Quick inventory tools">
-            <button
-                v-for="tool in tools"
-                :key="tool.id"
-                type="button"
-                :class="tool.tone"
-                :aria-label="tool.label"
-                :title="tool.label"
-                @click="$emit('action', tool.id)"
-            >
-                <i class="fa-solid" :class="tool.icon"></i>
-                <span>{{ tool.label }}</span>
-            </button>
-        </div>
+        <button class="sidebar-profile" type="button" aria-label="Open account menu" @click="$emit('profile')">
+            <span>{{ initials }}</span>
+            <div><strong>{{ account.name }}</strong><small>{{ account.role }}</small></div>
+        </button>
     </aside>
     <button
         v-if="open"
@@ -51,8 +41,9 @@ export default {
     props: {
         active: { type: String, default: '' },
         open: { type: Boolean, default: false },
+        account: { type: Object, required: true },
     },
-    emits: ['close', 'action'],
+    emits: ['close', 'profile'],
     data() {
         return {
             items: [
@@ -62,13 +53,17 @@ export default {
                 { id: 'history', label: 'Stock History', icon: 'fa-clock-rotate-left', to: '/inventory/history' },
                 { id: 'labels', label: 'Print Labels', icon: 'fa-print', to: '/inventory/labels' },
             ],
-            tools: [
-                { id: 'register', label: 'Register Product', icon: 'fa-plus', tone: 'register' },
-                { id: 'scan', label: 'Scan Product', icon: 'fa-qrcode', tone: 'scan' },
-                { id: 'in', label: 'Stock In', icon: 'fa-arrow-down', tone: 'stock-in' },
-                { id: 'out', label: 'Stock Out', icon: 'fa-arrow-up', tone: 'stock-out' },
-            ],
         }
+    },
+    computed: {
+        initials() {
+            return this.account.name
+                .split(' ')
+                .map((part) => part[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()
+        },
     },
 }
 </script>

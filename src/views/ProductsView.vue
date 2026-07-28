@@ -79,9 +79,11 @@
                         <h2>{{ selectedProduct.name }}</h2>
                         <p class="mono">{{ selectedProduct.sku }}</p>
                     </div>
-                    <button class="icon-button" type="button" aria-label="Close" @click="closeDetails">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <div class="product-detail-header-actions">
+                        <button class="icon-button" type="button" aria-label="Print QR" title="Print QR" @click="printQr"><i class="fa-solid fa-print"></i></button>
+                        <button class="icon-button" type="button" aria-label="Edit product" title="Edit product" @click="editOpen = true"><i class="fa-solid fa-pen"></i></button>
+                        <button class="icon-button" type="button" aria-label="Close" @click="closeDetails"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
                 </header>
                 <div class="product-details-workspace">
                 <div class="product-details-body">
@@ -119,9 +121,6 @@
                 />
                 </div>
                 <footer class="product-details-actions">
-                    <button class="button secondary" type="button" @click="printQr"><i class="fa-solid fa-print"></i>Print QR</button>
-                    <button class="button secondary" type="button" @click="editOpen = true"><i class="fa-solid fa-pen"></i>Edit</button>
-                    <span></span>
                     <button class="button stock-in" :class="{ active: operation === 'in' }" type="button" @click="startOperation('in')"><i class="fa-solid fa-arrow-down"></i>Stock In</button>
                     <button class="button stock-out" :class="{ active: operation === 'out' }" type="button" @click="startOperation('out')"><i class="fa-solid fa-arrow-up"></i>Stock Out</button>
                 </footer>
