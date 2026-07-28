@@ -11,6 +11,7 @@
             </button>
         </section>
 
+        <div class="scan-content-scroll">
         <section v-if="!product" class="scan-landing">
             <button class="scan-hero" type="button" @click="scannerOpen = true">
                 <span class="scan-hero-icon"><i class="fa-solid fa-qrcode"></i></span>
@@ -99,6 +100,7 @@
                 </div>
             </section>
         </template>
+        </div>
 
         <ScannerModal v-if="scannerOpen" @close="scannerOpen = false" @scanned="handleScan" />
         <StockOperationModal

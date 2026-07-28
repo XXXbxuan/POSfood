@@ -9,29 +9,6 @@
             <span class="date-chip"><i class="fa-regular fa-calendar"></i>{{ formattedDate }}</span>
         </section>
 
-        <section class="quick-actions">
-            <button class="quick-action primary-action" type="button" @click="registerOpen = true">
-                <span><i class="fa-solid fa-plus"></i></span>
-                <div><strong>Register Product</strong><small>Create item & QR</small></div>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button class="quick-action" type="button" @click="openScanner">
-                <span><i class="fa-solid fa-qrcode"></i></span>
-                <div><strong>Scan Product</strong><small>Find & update stock</small></div>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button class="quick-action" type="button" @click="openPicker('in')">
-                <span class="teal"><i class="fa-solid fa-arrow-down"></i></span>
-                <div><strong>Stock In</strong><small>Top up an item</small></div>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button class="quick-action" type="button" @click="openPicker('out')">
-                <span class="red"><i class="fa-solid fa-arrow-up"></i></span>
-                <div><strong>Stock Out</strong><small>Deduct an item</small></div>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </section>
-
         <section class="metric-grid">
             <button type="button" class="metric-card" :class="{ active: selectedMetric === 'products' }" @click="selectedMetric = 'products'">
                 <span class="metric-icon blue"><i class="fa-solid fa-box"></i></span>
@@ -184,16 +161,6 @@
             </section>
         </div>
 
-        <ProductRegistrationModal
-            v-if="registerOpen"
-            @close="registerOpen = false"
-            @registered="handleRegistered"
-        />
-        <ScannerModal
-            v-if="scannerOpen"
-            @close="scannerOpen = false"
-            @scanned="handleScan"
-        />
         <StockOperationModal
             v-if="operation"
             :product="selectedProduct"
@@ -205,14 +172,12 @@
 </template>
 
 <script>
-import ProductRegistrationModal from '@/components/ProductRegistrationModal.vue'
-import ScannerModal from '@/components/ScannerModal.vue'
 import StockOperationModal from '@/components/StockOperationModal.vue'
 import { inventoryStore } from '@/services/inventoryStore'
 
 export default {
     name: 'DashboardView',
-    components: { ProductRegistrationModal, ScannerModal, StockOperationModal },
+    components: { StockOperationModal },
     data() {
         return {
             store: inventoryStore,
@@ -220,9 +185,7 @@ export default {
             pickerAction: '',
             productSearch: '',
             selectedProduct: null,
-            scannerOpen: false,
             operation: '',
-            registerOpen: false,
             selectedMetric: 'products',
         }
     },
@@ -313,18 +276,6 @@ export default {
         openProduct(product) {
             if (product) this.openPicker('details', product)
         },
-        openScanner() {
-            this.scannerOpen = true
-        },
-        handleScan(value) {
-            this.scannerOpen = false
-            const product = this.store.findProduct(value)
-            if (!product) {
-                this.store.addToast('Product code was not recognised.', 'danger')
-                return
-            }
-            this.openProduct(product)
-        },
         continueOperation() {
             this.pickerOpen = false
             this.operation = this.pickerAction
@@ -336,9 +287,6 @@ export default {
         completeOperation() {
             this.operation = ''
             this.selectedProduct = null
-        },
-        handleRegistered() {
-            this.selectedMetric = 'products'
         },
     },
 }

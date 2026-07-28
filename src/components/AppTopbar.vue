@@ -8,9 +8,6 @@
             <strong>{{ title }}</strong>
         </div>
         <div class="topbar-actions">
-            <RouterLink class="button primary scan-topbar" to="/inventory/scan">
-                <i class="fa-solid fa-qrcode"></i><span>Scan</span>
-            </RouterLink>
             <button class="icon-button notification-button" type="button" aria-label="Notifications" @click="$emit('notifications')">
                 <i class="fa-regular fa-bell"></i>
                 <span v-if="alertCount">{{ alertCount }}</span>

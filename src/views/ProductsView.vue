@@ -6,9 +6,6 @@
                 <h1>Products</h1>
                 <p>Tap any product to see its details.</p>
             </div>
-            <button class="button primary" type="button" @click="registerOpen = true">
-                <i class="fa-solid fa-plus"></i>Register Product
-            </button>
         </section>
 
         <section class="filter-bar">
@@ -74,12 +71,6 @@
             </div>
         </section>
 
-        <ProductRegistrationModal
-            v-if="registerOpen"
-            @close="registerOpen = false"
-            @registered="handleRegistered"
-        />
-
         <div v-if="selectedProduct" class="modal-backdrop" @click.self="closeDetails">
             <section class="form-modal product-details-modal">
                 <header class="modal-header">
@@ -139,20 +130,18 @@
 
 <script>
 import QRCode from 'qrcode'
-import ProductRegistrationModal from '@/components/ProductRegistrationModal.vue'
 import StockOperationModal from '@/components/StockOperationModal.vue'
 import { inventoryStore } from '@/services/inventoryStore'
 
 export default {
     name: 'ProductsView',
-    components: { ProductRegistrationModal, StockOperationModal },
+    components: { StockOperationModal },
     data() {
         return {
             store: inventoryStore,
             search: '',
             category: '',
             status: '',
-            registerOpen: false,
             selectedProduct: null,
             detailQr: '',
             operation: '',
@@ -182,11 +171,6 @@ export default {
     methods: {
         statusClass(product) {
             return `status-${this.store.productStatus(product).toLowerCase().replaceAll(' ', '-')}`
-        },
-        handleRegistered() {
-            this.search = ''
-            this.category = ''
-            this.status = ''
         },
         async openDetails(product) {
             this.selectedProduct = product

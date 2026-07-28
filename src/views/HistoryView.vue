@@ -1,5 +1,5 @@
 <template>
-    <div class="page-stack">
+    <div class="page-stack history-page">
         <section class="page-heading">
             <div>
                 <span class="eyebrow">AUDIT TRAIL</span>
