@@ -3,9 +3,9 @@
         <section class="form-modal registration-modal">
             <header class="modal-header">
                 <div>
-                    <span class="eyebrow">{{ stage === 'form' ? 'NEW ITEM' : 'PRODUCT REGISTERED' }}</span>
-                    <h2>{{ stage === 'form' ? 'Register Product' : product.name }}</h2>
-                    <p v-if="stage === 'form'">Create the product first. Stock can be added after registration.</p>
+                    <span class="eyebrow">{{ stage === 'form' ? (editing ? 'EDIT PRODUCT' : 'NEW ITEM') : 'PRODUCT REGISTERED' }}</span>
+                    <h2>{{ stage === 'form' ? (editing ? editProduct.name : 'Register Product') : product.name }}</h2>
+                    <p v-if="stage === 'form'">{{ editing ? 'Update product identity and stock rules.' : 'Create the product first. Stock can be added after registration.' }}</p>
                     <p v-else class="mono">{{ product.sku }}</p>
                 </div>
                 <button class="icon-button" type="button" aria-label="Close" @click="close">
@@ -39,7 +39,7 @@
                 <footer class="form-actions full">
                     <span></span>
                     <button class="button secondary" type="button" @click="close">Cancel</button>
-                    <button class="button primary" type="submit"><i class="fa-solid fa-check"></i>Register Product</button>
+                    <button class="button primary" type="submit"><i class="fa-solid fa-check"></i>{{ editing ? 'Save Changes' : 'Register Product' }}</button>
                 </footer>
             </form>
 
@@ -97,18 +97,41 @@ const emptyForm = () => ({
 
 export default {
     name: 'ProductRegistrationModal',
+    props: {
+        editProduct: { type: Object, default: null },
+    },
     emits: ['close', 'registered'],
     data() {
+        const source = this.editProduct
         return {
             store: inventoryStore,
             stage: 'form',
-            form: emptyForm(),
+            form: source
+                ? {
+                      name: source.name,
+                      sku: source.sku,
+                      barcode: source.barcode,
+                      category: source.category,
+                      type: source.type,
+                      unit: source.unit,
+                      minimumStock: source.minimumStock,
+                      costPrice: source.costPrice,
+                      sellingPrice: source.sellingPrice,
+                      supplier: source.supplier,
+                      location: source.location,
+                      expiryTracking: source.expiryTracking,
+                      active: source.active,
+                  }
+                : emptyForm(),
             formError: '',
             product: null,
             qrDataUrl: '',
         }
     },
     computed: {
+        editing() {
+            return Boolean(this.editProduct)
+        },
         suggestedSku() {
             return this.form.category ? this.store.nextSku(this.form.category) : 'Generated when saved'
         },
@@ -120,7 +143,13 @@ export default {
         save() {
             this.formError = ''
             try {
-                this.product = this.store.saveProduct(this.form)
+                this.product = this.store.saveProduct(this.form, this.editProduct?.id)
+                if (this.editing) {
+                    this.$emit('registered', this.product)
+                    this.store.addToast(`${this.product.name} updated.`)
+                    this.close()
+                    return
+                }
                 this.stage = 'choice'
                 this.$emit('registered', this.product)
                 this.store.addToast(`${this.product.name} registered.`)

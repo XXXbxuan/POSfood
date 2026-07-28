@@ -8,14 +8,11 @@
             <strong>{{ title }}</strong>
         </div>
         <div class="topbar-actions">
-            <button class="icon-button notification-button" type="button" aria-label="Notifications" @click="$emit('notifications')">
-                <i class="fa-regular fa-bell"></i>
-                <span v-if="alertCount">{{ alertCount }}</span>
+            <button class="icon-button topbar-qr-button" type="button" aria-label="Scan product QR" @click="$emit('scan')">
+                <i class="fa-solid fa-qrcode"></i>
             </button>
-            <button class="profile-button" type="button" @click="$emit('profile')">
+            <button class="profile-button compact-profile" type="button" aria-label="Open account menu" @click="$emit('profile')">
                 <span>{{ initials }}</span>
-                <div><strong>{{ account.name }}</strong><small>{{ account.role }}</small></div>
-                <i class="fa-solid fa-chevron-down"></i>
             </button>
         </div>
     </header>
@@ -27,9 +24,8 @@ export default {
     props: {
         title: { type: String, default: 'Dashboard' },
         account: { type: Object, required: true },
-        alertCount: { type: Number, default: 0 },
     },
-    emits: ['menu', 'notifications', 'profile'],
+    emits: ['menu', 'scan', 'profile'],
     computed: {
         initials() {
             return this.account.name

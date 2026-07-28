@@ -26,6 +26,7 @@
         </section>
 
         <template v-else>
+            <div class="scan-hero-workspace" :class="{ 'with-operation': operation }">
             <section class="product-detail-hero panel">
                 <div class="product-detail-symbol">{{ product.name.slice(0, 2).toUpperCase() }}</div>
                 <div class="product-detail-title">
@@ -39,6 +40,14 @@
                     <span>{{ product.unit }}</span>
                 </div>
             </section>
+            <StockOperationForm
+                v-if="operation"
+                :product="product"
+                :direction="operation"
+                @close="operation = ''"
+                @completed="completeOperation"
+            />
+            </div>
 
             <section class="product-operations">
                 <button class="operation-button stock-in" type="button" @click="openOperation('in')">
@@ -103,24 +112,17 @@
         </div>
 
         <ScannerModal v-if="scannerOpen" @close="scannerOpen = false" @scanned="handleScan" />
-        <StockOperationModal
-            v-if="operation"
-            :product="product"
-            :direction="operation"
-            @close="operation = ''"
-            @completed="completeOperation"
-        />
     </div>
 </template>
 
 <script>
 import ScannerModal from '@/components/ScannerModal.vue'
-import StockOperationModal from '@/components/StockOperationModal.vue'
+import StockOperationForm from '@/components/StockOperationForm.vue'
 import { inventoryStore } from '@/services/inventoryStore'
 
 export default {
     name: 'ScanProductView',
-    components: { ScannerModal, StockOperationModal },
+    components: { ScannerModal, StockOperationForm },
     data() {
         return {
             store: inventoryStore,

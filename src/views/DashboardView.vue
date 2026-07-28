@@ -6,7 +6,9 @@
                 <h1>Inventory Dashboard</h1>
                 <p>Live stock position across Main Warehouse.</p>
             </div>
-            <span class="date-chip"><i class="fa-regular fa-calendar"></i>{{ formattedDate }}</span>
+            <button class="button primary dashboard-register-button" type="button" @click="registerOpen = true">
+                <i class="fa-solid fa-plus"></i>Register Product
+            </button>
         </section>
 
         <section class="metric-grid">
@@ -86,7 +88,7 @@
         </section>
 
         <div v-if="pickerOpen" class="modal-backdrop" @click.self="closePicker">
-            <section class="form-modal quick-workspace-modal" :class="{ 'details-only': pickerAction === 'details' }">
+            <section class="form-modal quick-workspace-modal" :class="{ 'details-only': pickerAction === 'details', 'with-operation': operation }">
                 <header class="modal-header">
                     <div>
                         <span class="eyebrow">{{ pickerEyebrow }}</span>
@@ -98,7 +100,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>
-                <div class="quick-workspace-body" :class="{ 'details-only': pickerAction === 'details' }">
+                <div class="quick-workspace-body" :class="{ 'details-only': pickerAction === 'details', 'with-operation': operation }">
                     <section v-if="pickerAction !== 'details'" class="quick-product-column">
                         <label class="search-field">
                             <i class="fa-solid fa-magnifying-glass"></i>
@@ -148,6 +150,7 @@
                                 Continue to {{ pickerAction === 'in' ? 'Stock In' : 'Stock Out' }}
                             </button>
                             <div v-else class="quick-preview-actions">
+                                <button class="button secondary" type="button" @click="editOpen = true"><i class="fa-solid fa-pen"></i>Edit</button>
                                 <button class="button stock-in" type="button" @click="startSelectedOperation('in')">Stock In</button>
                                 <button class="button stock-out" type="button" @click="startSelectedOperation('out')">Stock Out</button>
                             </div>
@@ -157,27 +160,39 @@
                             <p>Select a product from the list.</p>
                         </div>
                     </section>
+                    <StockOperationForm
+                        v-if="operation && selectedProduct"
+                        :product="selectedProduct"
+                        :direction="operation"
+                        @close="operation = ''"
+                        @completed="completeOperation"
+                    />
                 </div>
             </section>
         </div>
 
-        <StockOperationModal
-            v-if="operation"
-            :product="selectedProduct"
-            :direction="operation"
-            @close="operation = ''"
-            @completed="completeOperation"
+        <ProductRegistrationModal
+            v-if="registerOpen"
+            @close="registerOpen = false"
+            @registered="selectedMetric = 'products'"
+        />
+        <ProductRegistrationModal
+            v-if="editOpen && selectedProduct"
+            :edit-product="selectedProduct"
+            @close="editOpen = false"
+            @registered="editOpen = false"
         />
     </div>
 </template>
 
 <script>
-import StockOperationModal from '@/components/StockOperationModal.vue'
+import ProductRegistrationModal from '@/components/ProductRegistrationModal.vue'
+import StockOperationForm from '@/components/StockOperationForm.vue'
 import { inventoryStore } from '@/services/inventoryStore'
 
 export default {
     name: 'DashboardView',
-    components: { StockOperationModal },
+    components: { ProductRegistrationModal, StockOperationForm },
     data() {
         return {
             store: inventoryStore,
@@ -187,6 +202,8 @@ export default {
             selectedProduct: null,
             operation: '',
             selectedMetric: 'products',
+            registerOpen: false,
+            editOpen: false,
         }
     },
     computed: {
@@ -231,14 +248,6 @@ export default {
             const hour = new Date().getHours()
             return `${hour < 12 ? 'GOOD MORNING' : hour < 18 ? 'GOOD AFTERNOON' : 'GOOD EVENING'}, ${this.store.state.activeAccount.name.split(' ')[0].toUpperCase()}`
         },
-        formattedDate() {
-            return new Intl.DateTimeFormat('en-MY', {
-                weekday: 'short',
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric',
-            }).format(new Date())
-        },
         pickerTitle() {
             if (this.pickerAction === 'in') return 'Choose product for Stock In'
             if (this.pickerAction === 'out') return 'Choose product for Stock Out'
@@ -270,23 +279,22 @@ export default {
             this.pickerOpen = true
         },
         closePicker() {
+            if (this.editOpen) return
             this.pickerOpen = false
             this.productSearch = ''
+            this.operation = ''
         },
         openProduct(product) {
             if (product) this.openPicker('details', product)
         },
         continueOperation() {
-            this.pickerOpen = false
             this.operation = this.pickerAction
         },
         startSelectedOperation(direction) {
-            this.pickerOpen = false
-            this.operation = direction
+            this.operation = this.operation === direction ? '' : direction
         },
         completeOperation() {
             this.operation = ''
-            this.selectedProduct = null
         },
     },
 }

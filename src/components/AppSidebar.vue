@@ -35,11 +35,6 @@
                 <span>{{ tool.label }}</span>
             </button>
         </div>
-
-        <div class="inv-sidebar-footer">
-            <span class="status-dot"></span>
-            <div><strong>System online</strong><small>Main Warehouse</small></div>
-        </div>
     </aside>
     <button
         v-if="open"

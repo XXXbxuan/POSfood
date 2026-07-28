@@ -121,6 +121,19 @@ try {
     assert.equal(receiving.movement.staffId, 'INV001')
     assert.equal(inventoryStore.findProduct('IMS:BATCH:TEST-001:BTEST001').id, product.id)
 
+    const editedProduct = inventoryStore.saveProduct(
+        {
+            ...product,
+            name: 'Edited Logic Test Item',
+            location: 'Rack T-02',
+        },
+        product.id,
+    )
+    assert.equal(editedProduct.name, 'Edited Logic Test Item')
+    assert.equal(editedProduct.location, 'Rack T-02')
+    assert.equal(editedProduct.currentStock, 50)
+    assert.equal(editedProduct.batches[0].quantity, 50)
+
     const stockOut = inventoryStore.adjustStock({
         productId: product.id,
         direction: 'out',
@@ -155,7 +168,7 @@ try {
         [45, 50],
     )
 
-    console.log('Inventory logic checks passed: register -> QR -> receive 50 -> deduct 5 -> stock 45.')
+    console.log('Inventory logic checks passed: register -> QR -> receive -> edit -> deduct -> stock 45.')
 } finally {
     if (fs.existsSync(compiledPath)) fs.rmSync(compiledPath)
 }

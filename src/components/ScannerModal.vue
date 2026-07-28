@@ -1,23 +1,33 @@
 <template>
     <div class="modal-backdrop" @click.self="$emit('close')">
-        <section class="scanner-modal">
+        <section class="scanner-modal scanner-choice-modal">
             <header class="modal-header">
                 <div>
                     <span class="eyebrow">{{ mode === 'staff' ? 'STAFF IDENTITY' : 'PRODUCT LOOKUP' }}</span>
                     <h2>{{ title }}</h2>
-                    <p>{{ subtitle }}</p>
+                    <p>Choose one method below.</p>
                 </div>
                 <button class="icon-button" type="button" aria-label="Close scanner" @click="$emit('close')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </header>
 
-            <div class="scanner-viewport">
+            <div class="scanner-method-toggle">
+                <button type="button" :class="{ active: method === 'camera' }" @click="setMethod('camera')">
+                    <i class="fa-solid fa-camera"></i>Scan Camera
+                </button>
+                <button type="button" :class="{ active: method === 'manual' }" @click="setMethod('manual')">
+                    <i class="fa-solid fa-keyboard"></i>Enter Code
+                </button>
+            </div>
+
+            <div v-if="method === 'camera'" class="scanner-viewport">
                 <div :id="readerId" class="scanner-reader"></div>
                 <div v-if="cameraError" class="scanner-fallback">
                     <span><i class="fa-solid fa-camera"></i></span>
                     <strong>Camera is not available</strong>
                     <p>{{ cameraError }}</p>
+                    <button class="button secondary" type="button" @click="setMethod('manual')">Enter code instead</button>
                 </div>
                 <div v-else class="scanner-frame" aria-hidden="true">
                     <i></i><i></i><i></i><i></i>
@@ -26,16 +36,16 @@
                 <small class="scanner-secure"><i class="fa-solid fa-shield-halved"></i> Camera is used only while this window is open</small>
             </div>
 
-            <form class="manual-code" @submit.prevent="submitManual">
+            <form v-else class="manual-code manual-code-only" @submit.prevent="submitManual">
+                <span class="manual-code-icon"><i class="fa-solid fa-barcode"></i></span>
+                <h3>{{ mode === 'staff' ? 'Enter staff code' : 'Enter product code' }}</h3>
+                <p>Use a QR value, SKU or barcode.</p>
                 <label>
                     <span>{{ mode === 'staff' ? 'Staff code' : 'Product code / barcode' }}</span>
-                    <div class="input-with-button">
-                        <input v-model.trim="manualCode" type="text" :placeholder="placeholder" autocomplete="off" />
-                        <button class="button secondary" type="submit">Use code</button>
-                    </div>
+                    <input v-model.trim="manualCode" type="text" :placeholder="placeholder" autocomplete="off" autofocus />
                 </label>
-                <button class="demo-link" type="button" @click="$emit('scanned', demoCode)">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>{{ demoLabel }}
+                <button class="button primary full-width" type="submit" :disabled="!manualCode">
+                    <i class="fa-solid fa-arrow-right"></i>Use Code
                 </button>
             </form>
         </section>
@@ -49,14 +59,12 @@ export default {
     name: 'ScannerModal',
     props: {
         mode: { type: String, default: 'product' },
-        title: { type: String, default: 'Scan product code' },
-        subtitle: { type: String, default: 'Point the rear camera at a QR code or barcode.' },
-        demoCode: { type: String, default: 'MILK-001' },
-        demoLabel: { type: String, default: 'Scan demo product' },
+        title: { type: String, default: 'Find product' },
     },
     emits: ['close', 'scanned'],
     data() {
         return {
+            method: 'camera',
             manualCode: '',
             scanner: null,
             cameraError: '',
@@ -69,34 +77,47 @@ export default {
             return this.mode === 'staff' ? 'IMS:STAFF:INV001' : 'MILK-001'
         },
     },
-    async mounted() {
-        try {
-            this.scanner = new Html5Qrcode(this.readerId, {
-                formatsToSupport: [
-                    Html5QrcodeSupportedFormats.QR_CODE,
-                    Html5QrcodeSupportedFormats.CODE_128,
-                    Html5QrcodeSupportedFormats.EAN_13,
-                    Html5QrcodeSupportedFormats.EAN_8,
-                    Html5QrcodeSupportedFormats.UPC_A,
-                ],
-                verbose: false,
-            })
-            await this.scanner.start(
-                { facingMode: 'environment' },
-                { fps: 10, qrbox: { width: 240, height: 180 } },
-                this.onScan,
-                () => {},
-            )
-        } catch (error) {
-            this.cameraError = 'Allow camera access or enter the code below.'
-        }
+    mounted() {
+        this.startCamera()
     },
     beforeUnmount() {
         this.stop()
     },
     methods: {
+        async setMethod(method) {
+            if (method === this.method) return
+            await this.stop()
+            this.method = method
+            this.cameraError = ''
+            if (method === 'camera') {
+                await this.$nextTick()
+                this.startCamera()
+            }
+        },
         submitManual() {
             if (this.manualCode) this.$emit('scanned', this.manualCode)
+        },
+        async startCamera() {
+            try {
+                this.scanner = new Html5Qrcode(this.readerId, {
+                    formatsToSupport: [
+                        Html5QrcodeSupportedFormats.QR_CODE,
+                        Html5QrcodeSupportedFormats.CODE_128,
+                        Html5QrcodeSupportedFormats.EAN_13,
+                        Html5QrcodeSupportedFormats.EAN_8,
+                        Html5QrcodeSupportedFormats.UPC_A,
+                    ],
+                    verbose: false,
+                })
+                await this.scanner.start(
+                    { facingMode: 'environment' },
+                    { fps: 10, qrbox: { width: 260, height: 190 } },
+                    this.onScan,
+                    () => {},
+                )
+            } catch (error) {
+                this.cameraError = 'Allow camera access or choose Enter Code.'
+            }
         },
         async onScan(value) {
             if (this.scanned) return

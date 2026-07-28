@@ -72,7 +72,7 @@
         </section>
 
         <div v-if="selectedProduct" class="modal-backdrop" @click.self="closeDetails">
-            <section class="form-modal product-details-modal">
+            <section class="form-modal product-details-modal" :class="{ 'with-operation': operation }">
                 <header class="modal-header">
                     <div>
                         <span class="eyebrow">PRODUCT DETAILS</span>
@@ -83,6 +83,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>
+                <div class="product-details-workspace">
                 <div class="product-details-body">
                     <section class="product-details-identity">
                         <div class="product-details-qr">
@@ -109,33 +110,42 @@
                         <div><dt>Batches</dt><dd>{{ selectedProduct.batches.length }}</dd></div>
                     </dl>
                 </div>
+                <StockOperationForm
+                    v-if="operation"
+                    :product="selectedProduct"
+                    :direction="operation"
+                    @close="operation = ''"
+                    @completed="completeOperation"
+                />
+                </div>
                 <footer class="product-details-actions">
                     <button class="button secondary" type="button" @click="printQr"><i class="fa-solid fa-print"></i>Print QR</button>
+                    <button class="button secondary" type="button" @click="editOpen = true"><i class="fa-solid fa-pen"></i>Edit</button>
                     <span></span>
-                    <button class="button stock-in" type="button" @click="startOperation('in')"><i class="fa-solid fa-arrow-down"></i>Stock In</button>
-                    <button class="button stock-out" type="button" @click="startOperation('out')"><i class="fa-solid fa-arrow-up"></i>Stock Out</button>
+                    <button class="button stock-in" :class="{ active: operation === 'in' }" type="button" @click="startOperation('in')"><i class="fa-solid fa-arrow-down"></i>Stock In</button>
+                    <button class="button stock-out" :class="{ active: operation === 'out' }" type="button" @click="startOperation('out')"><i class="fa-solid fa-arrow-up"></i>Stock Out</button>
                 </footer>
             </section>
         </div>
 
-        <StockOperationModal
-            v-if="operation"
-            :product="operationProduct"
-            :direction="operation"
-            @close="operation = ''"
-            @completed="completeOperation"
+        <ProductRegistrationModal
+            v-if="editOpen && selectedProduct"
+            :edit-product="selectedProduct"
+            @close="editOpen = false"
+            @registered="handleEdited"
         />
     </div>
 </template>
 
 <script>
 import QRCode from 'qrcode'
-import StockOperationModal from '@/components/StockOperationModal.vue'
+import ProductRegistrationModal from '@/components/ProductRegistrationModal.vue'
+import StockOperationForm from '@/components/StockOperationForm.vue'
 import { inventoryStore } from '@/services/inventoryStore'
 
 export default {
     name: 'ProductsView',
-    components: { StockOperationModal },
+    components: { ProductRegistrationModal, StockOperationForm },
     data() {
         return {
             store: inventoryStore,
@@ -145,7 +155,7 @@ export default {
             selectedProduct: null,
             detailQr: '',
             operation: '',
-            operationProduct: null,
+            editOpen: false,
         }
     },
     computed: {
@@ -186,17 +196,20 @@ export default {
             }
         },
         closeDetails() {
+            if (this.editOpen) return
             this.selectedProduct = null
             this.detailQr = ''
+            this.operation = ''
         },
         startOperation(direction) {
-            this.operationProduct = this.selectedProduct
-            this.operation = direction
-            this.closeDetails()
+            this.operation = this.operation === direction ? '' : direction
         },
         completeOperation() {
             this.operation = ''
-            this.operationProduct = null
+        },
+        handleEdited(product) {
+            this.selectedProduct = product
+            this.editOpen = false
         },
         printQr() {
             if (!this.selectedProduct || !this.detailQr) return
