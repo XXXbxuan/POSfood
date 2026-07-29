@@ -1414,3 +1414,60 @@ textarea:focus {
         grid-template-columns: minmax(0, 1fr) auto;
     }
 }
+
+/* Keep summary/table and modal actions visibly separated at every scale. */
+.history-page {
+    gap: 2rem;
+}
+
+.product-details-actions {
+    padding: 1rem 1.25rem 1.5rem;
+}
+
+@media (max-width: 43.75rem) {
+    .history-page {
+        gap: 2rem;
+    }
+
+    .product-details-actions {
+        padding-block-end: 1.5rem;
+    }
+}
+
+/* The sticker editor must fit inside short tablet viewports. */
+.label-designer-modal {
+    height: calc(100dvh - 2rem);
+    min-height: 0;
+    max-height: calc(100dvh - 2rem);
+}
+
+.label-designer-modal > .modal-header {
+    min-height: 4.25rem;
+    padding: 0.75rem 1rem;
+}
+
+.label-designer-body {
+    min-height: 0;
+}
+
+.label-designer-controls {
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+}
+
+.label-add-text-button {
+    min-height: 2.625rem;
+}
+
+.label-designer-controls input,
+.label-designer-controls .label-align-control {
+    min-height: 3rem;
+}
+
+.label-designer-actions .button {
+    min-height: 2.875rem;
+}
+
+body:has(.label-designer-modal) {
+    overflow: hidden;
+}

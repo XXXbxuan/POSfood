@@ -43,27 +43,55 @@
         <div v-if="selectedMovement" class="modal-backdrop" @click.self="selectedMovement = null">
             <section class="form-modal history-detail-modal">
                 <header class="modal-header">
-                    <div><h2>{{ selectedMovement.productName }}</h2><p class="mono">{{ selectedMovement.id }}</p></div>
+                    <div><span class="eyebrow">STOCK MOVEMENT</span><h2>Movement details</h2></div>
                     <button class="icon-button" type="button" aria-label="Close" @click="selectedMovement = null"><i class="fa-solid fa-xmark"></i></button>
                 </header>
 
                 <div class="history-detail-overview">
-                    <span class="movement-type" :class="selectedMovement.changedQuantity > 0 ? 'in' : 'out'"><i class="fa-solid" :class="selectedMovement.changedQuantity > 0 ? 'fa-arrow-down' : 'fa-arrow-up'"></i>{{ selectedMovement.type }}</span>
-                    <strong class="history-detail-change" :class="selectedMovement.changedQuantity > 0 ? 'positive' : 'negative'">{{ selectedMovement.changedQuantity > 0 ? '+' : '' }}{{ selectedMovement.changedQuantity }}</strong>
+                    <span class="history-detail-direction" :class="selectedMovement.changedQuantity > 0 ? 'in' : 'out'">
+                        <i class="fa-solid" :class="selectedMovement.changedQuantity > 0 ? 'fa-arrow-down' : 'fa-arrow-up'"></i>
+                    </span>
+                    <div class="history-detail-quantity">
+                        <small>{{ selectedMovement.changedQuantity > 0 ? 'Added to stock' : 'Removed from stock' }}</small>
+                        <strong class="history-detail-change" :class="selectedMovement.changedQuantity > 0 ? 'positive' : 'negative'">{{ selectedMovement.changedQuantity > 0 ? '+' : '' }}{{ selectedMovement.changedQuantity }}</strong>
+                    </div>
                     <div><strong>{{ formattedDate(selectedMovement.createdAt) }}</strong><small>{{ formattedTime(selectedMovement.createdAt) }}</small></div>
                 </div>
 
-                <dl class="history-detail-grid">
-                    <div><dt>Product Code</dt><dd class="mono">{{ selectedMovement.sku }}</dd></div>
-                    <div><dt>Batch</dt><dd class="mono">{{ selectedMovement.batch || '—' }}</dd></div>
-                    <div><dt>Before Stock</dt><dd>{{ selectedMovement.beforeQuantity }}</dd></div>
-                    <div><dt>After Stock</dt><dd>{{ selectedMovement.afterQuantity }}</dd></div>
-                    <div><dt>Reason</dt><dd>{{ selectedMovement.reason }}</dd></div>
-                    <div><dt>Location</dt><dd>{{ selectedMovement.location || '—' }}</dd></div>
-                    <div><dt>Operator</dt><dd>{{ selectedMovement.staffName }}</dd></div>
-                    <div><dt>Staff ID</dt><dd class="mono">{{ selectedMovement.staffId }}</dd></div>
-                    <div class="full"><dt>Reference</dt><dd class="mono">{{ selectedMovement.reference || '—' }}</dd></div>
-                </dl>
+                <div class="history-detail-content">
+                    <section class="history-detail-section history-product-section">
+                        <div class="history-detail-section-title">
+                            <span><i class="fa-solid fa-box"></i></span>
+                            <div><small>PRODUCT</small><h3>{{ selectedMovement.productName }}</h3></div>
+                        </div>
+                        <dl class="history-detail-facts">
+                            <div><dt>Product code</dt><dd class="mono">{{ selectedMovement.sku }}</dd></div>
+                            <div><dt>Batch</dt><dd class="mono">{{ selectedMovement.batch || '—' }}</dd></div>
+                            <div><dt>Location</dt><dd>{{ selectedMovement.location || '—' }}</dd></div>
+                            <div><dt>Movement ID</dt><dd class="mono">{{ selectedMovement.id }}</dd></div>
+                        </dl>
+                    </section>
+
+                    <section class="history-detail-section history-change-section">
+                        <div class="history-detail-section-title">
+                            <span><i class="fa-solid fa-arrow-right-arrow-left"></i></span>
+                            <div><small>STOCK CHANGE</small><h3>{{ selectedMovement.reason }}</h3></div>
+                        </div>
+                        <div class="history-stock-flow">
+                            <div><small>Before</small><strong>{{ selectedMovement.beforeQuantity }}</strong></div>
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div><small>After</small><strong>{{ selectedMovement.afterQuantity }}</strong></div>
+                        </div>
+                        <dl class="history-detail-inline-facts">
+                            <div><dt>Reference</dt><dd class="mono">{{ selectedMovement.reference || '—' }}</dd></div>
+                        </dl>
+                    </section>
+
+                    <section class="history-operator-card">
+                        <span><i class="fa-solid fa-user"></i></span>
+                        <div><small>OPERATOR</small><strong>{{ selectedMovement.staffName }}</strong><p class="mono">{{ selectedMovement.staffId }}</p></div>
+                    </section>
+                </div>
 
                 <footer class="history-detail-actions">
                     <button class="button primary" type="button" @click="selectedMovement = null">Done</button>

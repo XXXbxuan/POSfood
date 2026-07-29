@@ -87,9 +87,11 @@
                 </footer>
             </article>
 
-            <button class="activity-divider-toggle" type="button" :aria-label="activityOpen ? 'Collapse recent activity' : 'Open recent activity'" @click="activityOpen = !activityOpen">
-                <i class="fa-solid" :class="activityOpen ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
-            </button>
+            <div class="activity-divider-rail" :class="{ collapsed: !activityOpen }">
+                <button class="activity-divider-toggle" type="button" :aria-label="activityOpen ? 'Collapse recent activity' : 'Open recent activity'" @click="activityOpen = !activityOpen">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
 
             <article class="panel dashboard-list-panel activity-panel" :class="{ collapsed: !activityOpen }">
                 <header class="panel-header">

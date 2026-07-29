@@ -32,13 +32,19 @@
                         <h2 :style="labelStyle('name')">{{ labelText('name', product.name) }}</h2>
                         <p class="mono product-label-code" :style="labelStyle('sku')">{{ labelText('sku', product.sku) }}</p>
                         <dl>
-                            <div v-if="batch"><dt>Batch</dt><dd class="mono" :style="labelStyle('batch')">{{ labelText('batch', batch.id) }}</dd></div>
-                            <div><dt>Quantity</dt><dd :style="labelStyle('quantity')">{{ labelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`) }}</dd></div>
-                            <div><dt>Received</dt><dd :style="labelStyle('received')">{{ labelText('received', formatDate(batch?.receivedDate)) }}</dd></div>
-                            <div v-if="showExpiry && batch?.expiryDate"><dt>Expiry</dt><dd :style="labelStyle('expiry')">{{ labelText('expiry', formatDate(batch.expiryDate)) }}</dd></div>
-                            <div><dt>Location</dt><dd :style="labelStyle('location')">{{ labelText('location', batch?.location || product.location) }}</dd></div>
-                            <div v-if="showPrice && product.sellingPrice"><dt>Price</dt><dd :style="labelStyle('price')">{{ labelText('price', `RM ${Number(product.sellingPrice).toFixed(2)}`) }}</dd></div>
+                            <div v-if="batch" :style="labelFieldStyle('batch')"><dt>Batch</dt><dd class="mono" :style="labelTextStyle('batch')">{{ labelText('batch', batch.id) }}</dd></div>
+                            <div :style="labelFieldStyle('quantity')"><dt>Quantity</dt><dd :style="labelTextStyle('quantity')">{{ labelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`) }}</dd></div>
+                            <div :style="labelFieldStyle('received')"><dt>Received</dt><dd :style="labelTextStyle('received')">{{ labelText('received', formatDate(batch?.receivedDate)) }}</dd></div>
+                            <div v-if="showExpiry && batch?.expiryDate" :style="labelFieldStyle('expiry')"><dt>Expiry</dt><dd :style="labelTextStyle('expiry')">{{ labelText('expiry', formatDate(batch.expiryDate)) }}</dd></div>
+                            <div :style="labelFieldStyle('location')"><dt>Location</dt><dd :style="labelTextStyle('location')">{{ labelText('location', batch?.location || product.location) }}</dd></div>
+                            <div v-if="showPrice && product.sellingPrice" :style="labelFieldStyle('price')"><dt>Price</dt><dd :style="labelTextStyle('price')">{{ labelText('price', `RM ${Number(product.sellingPrice).toFixed(2)}`) }}</dd></div>
                         </dl>
+                        <span
+                            v-for="key in savedCustomTextKeys"
+                            :key="key"
+                            class="label-custom-text"
+                            :style="labelStyle(key)"
+                        >{{ labelText(key, 'Text') }}</span>
                         <div class="label-code-row">
                             <img v-if="qrDataUrl" :src="qrDataUrl" :style="labelStyle('qr')" alt="Product QR code" />
                             <div class="bar-visual" :style="labelStyle('bar')"><span v-for="(line, index) in barLines" :key="index" :style="{ width: `${line / 16}rem` }"></span><small>{{ product.bar }}</small></div>
@@ -70,13 +76,21 @@
                             <h2 class="label-edit-target" :class="{ selected: selectedTextKey === 'name' }" :style="labelStyle('name', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'name', product.name)">{{ labelText('name', product.name, true) }}</h2>
                             <p class="mono product-label-code label-edit-target" :class="{ selected: selectedTextKey === 'sku' }" :style="labelStyle('sku', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'sku', product.sku)">{{ labelText('sku', product.sku, true) }}</p>
                             <dl>
-                                <div v-if="batch"><dt>Batch</dt><dd class="mono label-edit-target" :class="{ selected: selectedTextKey === 'batch' }" :style="labelStyle('batch', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'batch', batch.id)">{{ labelText('batch', batch.id, true) }}</dd></div>
-                                <div><dt>Quantity</dt><dd class="label-edit-target" :class="{ selected: selectedTextKey === 'quantity' }" :style="labelStyle('quantity', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`)">{{ labelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`, true) }}</dd></div>
-                                <div><dt>Received</dt><dd class="label-edit-target" :class="{ selected: selectedTextKey === 'received' }" :style="labelStyle('received', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'received', formatDate(batch?.receivedDate))">{{ labelText('received', formatDate(batch?.receivedDate), true) }}</dd></div>
-                                <div v-if="showExpiry && batch?.expiryDate"><dt>Expiry</dt><dd class="label-edit-target" :class="{ selected: selectedTextKey === 'expiry' }" :style="labelStyle('expiry', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'expiry', formatDate(batch.expiryDate))">{{ labelText('expiry', formatDate(batch.expiryDate), true) }}</dd></div>
-                                <div><dt>Location</dt><dd class="label-edit-target" :class="{ selected: selectedTextKey === 'location' }" :style="labelStyle('location', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'location', batch?.location || product.location)">{{ labelText('location', batch?.location || product.location, true) }}</dd></div>
-                                <div v-if="showPrice && product.sellingPrice"><dt>Price</dt><dd class="label-edit-target" :class="{ selected: selectedTextKey === 'price' }" :style="labelStyle('price', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'price', `RM ${Number(product.sellingPrice).toFixed(2)}`)">{{ labelText('price', `RM ${Number(product.sellingPrice).toFixed(2)}`, true) }}</dd></div>
+                                <div v-if="batch" class="label-edit-target label-field-target" :class="{ selected: selectedTextKey === 'batch' }" :style="labelFieldStyle('batch', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'batch', batch.id)"><dt>Batch</dt><dd class="mono" :style="labelTextStyle('batch', true)">{{ labelText('batch', batch.id, true) }}</dd></div>
+                                <div class="label-edit-target label-field-target" :class="{ selected: selectedTextKey === 'quantity' }" :style="labelFieldStyle('quantity', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`)"><dt>Quantity</dt><dd :style="labelTextStyle('quantity', true)">{{ labelText('quantity', `${batch?.quantity ?? product.currentStock} ${product.unit}`, true) }}</dd></div>
+                                <div class="label-edit-target label-field-target" :class="{ selected: selectedTextKey === 'received' }" :style="labelFieldStyle('received', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'received', formatDate(batch?.receivedDate))"><dt>Received</dt><dd :style="labelTextStyle('received', true)">{{ labelText('received', formatDate(batch?.receivedDate), true) }}</dd></div>
+                                <div v-if="showExpiry && batch?.expiryDate" class="label-edit-target label-field-target" :class="{ selected: selectedTextKey === 'expiry' }" :style="labelFieldStyle('expiry', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'expiry', formatDate(batch.expiryDate))"><dt>Expiry</dt><dd :style="labelTextStyle('expiry', true)">{{ labelText('expiry', formatDate(batch.expiryDate), true) }}</dd></div>
+                                <div class="label-edit-target label-field-target" :class="{ selected: selectedTextKey === 'location' }" :style="labelFieldStyle('location', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'location', batch?.location || product.location)"><dt>Location</dt><dd :style="labelTextStyle('location', true)">{{ labelText('location', batch?.location || product.location, true) }}</dd></div>
+                                <div v-if="showPrice && product.sellingPrice" class="label-edit-target label-field-target" :class="{ selected: selectedTextKey === 'price' }" :style="labelFieldStyle('price', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'price', `RM ${Number(product.sellingPrice).toFixed(2)}`)"><dt>Price</dt><dd :style="labelTextStyle('price', true)">{{ labelText('price', `RM ${Number(product.sellingPrice).toFixed(2)}`, true) }}</dd></div>
                             </dl>
+                            <span
+                                v-for="key in designerCustomTextKeys"
+                                :key="key"
+                                class="label-custom-text label-edit-target"
+                                :class="{ selected: selectedTextKey === key }"
+                                :style="labelStyle(key, true)"
+                                @pointerdown.stop.prevent="beginDesignerPointer($event, key, 'Text')"
+                            >{{ labelText(key, 'Text', true) }}</span>
                             <div class="label-code-row">
                                 <span v-if="qrDataUrl" class="label-edit-target label-qr-target" :class="{ selected: selectedTextKey === 'qr' }" :style="labelStyle('qr', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'qr')"><img :src="qrDataUrl" alt="Product QR code" /></span>
                                 <div class="bar-visual label-edit-target" :class="{ selected: selectedTextKey === 'bar' }" :style="labelStyle('bar', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'bar')"><span v-for="(line, index) in barLines" :key="index" :style="{ width: `${line / 16}rem` }"></span><small>{{ product.bar }}</small></div>
@@ -85,6 +99,7 @@
                     </div>
                     <form class="label-designer-controls form-grid" @submit.prevent="saveLabelText">
                         <div class="designer-selection"><span>SELECTED ITEM</span><strong>{{ editorLabel }}</strong></div>
+                        <button class="button secondary label-add-text-button" type="button" @click="addTextBox"><i class="fa-solid fa-plus"></i>Add Text Box</button>
                         <label v-if="isTextElement"><span>Display Text</span><input v-model="textDraft.text" type="text" /></label>
                         <label v-if="isTextElement"><span>Font Size</span>
                             <div class="label-font-size-control">
@@ -99,6 +114,7 @@
                                 </button>
                             </div>
                         </label>
+                        <button v-if="isCustomText" class="button label-delete-text-button" type="button" @click="deleteTextBox"><i class="fa-solid fa-trash-can"></i>Delete Text Box</button>
                         <footer class="form-actions label-designer-actions">
                             <button class="button secondary" type="button" @click="resetAllLabelElements">Reset</button>
                             <span></span>
@@ -190,7 +206,14 @@ export default {
         labelEdits() {
             return this.labelEditsByProduct[this.productId] || {}
         },
+        savedCustomTextKeys() {
+            return this.labelEdits.__customTextKeys || []
+        },
+        designerCustomTextKeys() {
+            return this.designerEdits.__customTextKeys || []
+        },
         editorLabel() {
+            if (this.isCustomText) return 'Text Box'
             return {
                 logo: 'Logo',
                 brand: 'Brand',
@@ -209,6 +232,9 @@ export default {
         },
         isTextElement() {
             return !['logo', 'qr', 'bar'].includes(this.selectedTextKey)
+        },
+        isCustomText() {
+            return this.selectedTextKey.startsWith('custom-text-')
         },
     },
     watch: {
@@ -229,7 +255,15 @@ export default {
     methods: {
         defaultTextStyle(key) {
             const sizes = { brand: 12, name: 22, sku: 9, quantity: 8, location: 8 }
-            return { text: '', size: sizes[key] || 10, align: 'left', scale: 100, x: 0, y: 0 }
+            const custom = key.startsWith('custom-text-')
+            return {
+                text: custom ? 'Text' : '',
+                size: custom ? 12 : sizes[key] || 10,
+                align: 'left',
+                scale: 100,
+                x: 0,
+                y: 0,
+            }
         },
         labelText(key, fallback, useDraft = false) {
             if (useDraft && this.selectedTextKey === key && this.isTextElement) return this.textDraft.text
@@ -243,9 +277,27 @@ export default {
             const saved = source[key] || this.defaultTextStyle(key)
             const style = useDraft && this.selectedTextKey === key ? this.textDraft : saved
             return {
-                fontSize: style.size ? `${style.size / 16}rem` : undefined,
+                fontSize: style.size ? `${style.size}px` : undefined,
                 textAlign: style.align || undefined,
-                transform: `translate(${(style.x || 0) / 16}rem, ${(style.y || 0) / 16}rem) scale(${(style.scale || 100) / 100})`,
+                transform: `translate(${style.x || 0}px, ${style.y || 0}px) scale(${(style.scale || 100) / 100})`,
+                transformOrigin: 'center',
+            }
+        },
+        labelTextStyle(key, useDraft = false) {
+            const source = useDraft ? this.designerEdits : this.labelEdits
+            const saved = source[key] || this.defaultTextStyle(key)
+            const style = useDraft && this.selectedTextKey === key ? this.textDraft : saved
+            return {
+                fontSize: style.size ? `${style.size}px` : undefined,
+                textAlign: style.align || undefined,
+            }
+        },
+        labelFieldStyle(key, useDraft = false) {
+            const source = useDraft ? this.designerEdits : this.labelEdits
+            const saved = source[key] || this.defaultTextStyle(key)
+            const style = useDraft && this.selectedTextKey === key ? this.textDraft : saved
+            return {
+                transform: `translate(${style.x || 0}px, ${style.y || 0}px) scale(${(style.scale || 100) / 100})`,
                 transformOrigin: 'center',
             }
         },
@@ -270,6 +322,34 @@ export default {
                 ...this.designerEdits,
                 [this.selectedTextKey]: { ...this.textDraft },
             }
+        },
+        addTextBox() {
+            this.commitDesignerDraft()
+            const key = `custom-text-${Date.now()}`
+            const customCount = this.designerCustomTextKeys.length
+            this.designerEdits = {
+                ...this.designerEdits,
+                __customTextKeys: [...this.designerCustomTextKeys, key],
+                [key]: {
+                    ...this.defaultTextStyle(key),
+                    text: 'Text',
+                    x: 150,
+                    y: 82 + customCount * 18,
+                },
+            }
+            this.selectedTextKey = ''
+            this.selectLabelText(key, 'Text')
+        },
+        deleteTextBox() {
+            if (!this.isCustomText) return
+            const key = this.selectedTextKey
+            const { [key]: removed, ...remainingEdits } = this.designerEdits
+            this.designerEdits = {
+                ...remainingEdits,
+                __customTextKeys: this.designerCustomTextKeys.filter((item) => item !== key),
+            }
+            this.selectedTextKey = ''
+            this.selectLabelText('name', this.product.name)
         },
         beginDesignerPointer(event, key, fallback = '') {
             if (this.designerPointer) this.endDesignerPointer()
