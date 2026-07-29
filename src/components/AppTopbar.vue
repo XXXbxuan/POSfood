@@ -32,7 +32,7 @@ export default {
         return {
             tools: [
                 { id: 'register', label: 'Register Product', short: 'New', icon: 'fa-plus', tone: 'register' },
-                { id: 'scan', label: 'Scan Product', short: 'Scan', icon: 'fa-qrcode', tone: 'scan' },
+                { id: 'scan', label: 'Scan Product', short: 'Scan', icon: 'fa-barcode', tone: 'scan' },
                 { id: 'in', label: 'Stock In', short: 'In', icon: 'fa-arrow-down', tone: 'stock-in' },
                 { id: 'out', label: 'Stock Out', short: 'Out', icon: 'fa-arrow-up', tone: 'stock-out' },
             ],

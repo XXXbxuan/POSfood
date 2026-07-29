@@ -46,8 +46,7 @@
                             :style="labelStyle(key)"
                         >{{ labelText(key, 'Text') }}</span>
                         <div class="label-code-row">
-                            <img v-if="qrDataUrl" :src="qrDataUrl" :style="labelStyle('qr')" alt="Product QR code" />
-                            <div class="bar-visual" :style="labelStyle('bar')"><span v-for="(line, index) in barLines" :key="index" :style="{ width: `${line / 16}rem` }"></span><small>{{ product.bar }}</small></div>
+                            <img v-if="barcodeDataUrl" class="label-barcode-image" :src="barcodeDataUrl" :style="labelStyle('barcode')" alt="Product barcode" />
                         </div>
                     </article>
                 </div>
@@ -92,8 +91,7 @@
                                 @pointerdown.stop.prevent="beginDesignerPointer($event, key, 'Text')"
                             >{{ labelText(key, 'Text', true) }}</span>
                             <div class="label-code-row">
-                                <span v-if="qrDataUrl" class="label-edit-target label-qr-target" :class="{ selected: selectedTextKey === 'qr' }" :style="labelStyle('qr', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'qr')"><img :src="qrDataUrl" alt="Product QR code" /></span>
-                                <div class="bar-visual label-edit-target" :class="{ selected: selectedTextKey === 'bar' }" :style="labelStyle('bar', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'bar')"><span v-for="(line, index) in barLines" :key="index" :style="{ width: `${line / 16}rem` }"></span><small>{{ product.bar }}</small></div>
+                                <span v-if="barcodeDataUrl" class="label-edit-target label-barcode-target" :class="{ selected: selectedTextKey === 'barcode' }" :style="labelStyle('barcode', true)" @pointerdown.stop.prevent="beginDesignerPointer($event, 'barcode')"><img :src="barcodeDataUrl" alt="Product barcode" /></span>
                             </div>
                         </article>
                     </div>
@@ -128,8 +126,8 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
 import { inventoryStore } from '@/services/inventoryStore'
+import { barcodeDataUrl as createBarcodeDataUrl } from '@/utils/barcode'
 
 function readSavedLabelEdits() {
     try {
@@ -137,15 +135,19 @@ function readSavedLabelEdits() {
             JSON.parse(localStorage.getItem('ims_label_text_styles')) || {}
         return Object.fromEntries(
             Object.entries(saved).map(([productId, edits]) => {
-                const { barcode: legacyBarcodeStyle, ...currentEdits } =
-                    edits || {}
+                const {
+                    barcode: savedBarcodeStyle,
+                    bar: legacyBarStyle,
+                    qr: legacyQrStyle,
+                    ...currentEdits
+                } = edits || {}
+                const barcodeStyle =
+                    savedBarcodeStyle || legacyBarStyle || legacyQrStyle
                 return [
                     productId,
                     {
                         ...currentEdits,
-                        ...(currentEdits.bar || !legacyBarcodeStyle
-                            ? {}
-                            : { bar: legacyBarcodeStyle }),
+                        ...(barcodeStyle ? { barcode: barcodeStyle } : {}),
                     },
                 ]
             }),
@@ -166,7 +168,7 @@ export default {
             quantity: 1,
             showExpiry: true,
             showPrice: false,
-            qrDataUrl: '',
+            barcodeDataUrl: '',
             printMarkup: '',
             labelDesignerOpen: false,
             selectedTextKey: '',
@@ -188,20 +190,13 @@ export default {
             return this.product?.batches.find((batch) => batch.id === this.batchId) || null
         },
         codeContent() {
-            return this.batch?.batchQr || this.product?.qrCode || ''
+            return this.product?.bar || ''
         },
         sizeLabel() {
             return { small: '50 × 30 mm', medium: '60 × 40 mm', large: '80 × 50 mm' }[this.size]
         },
         printCount() {
             return Math.min(250, Math.max(1, Number(this.quantity) || 1))
-        },
-        barLines() {
-            const code = String(this.product?.bar || '')
-            return code.split('').flatMap((digit, index) => {
-                const value = Number(digit) || 1
-                return [1 + ((value + index) % 3), 1, 1 + (value % 2)]
-            })
         },
         labelEdits() {
             return this.labelEditsByProduct[this.productId] || {}
@@ -226,19 +221,18 @@ export default {
                 expiry: 'Expiry Date',
                 location: 'Location',
                 price: 'Price',
-                qr: 'QR Code',
-                bar: 'BAR',
+                barcode: 'Barcode',
             }[this.selectedTextKey] || 'Text'
         },
         isTextElement() {
-            return !['logo', 'qr', 'bar'].includes(this.selectedTextKey)
+            return !['logo', 'barcode'].includes(this.selectedTextKey)
         },
         isCustomText() {
             return this.selectedTextKey.startsWith('custom-text-')
         },
     },
     watch: {
-        codeContent: 'generateQr',
+        codeContent: 'generateBarcode',
     },
     beforeUnmount() {
         this.endDesignerPointer()
@@ -249,7 +243,7 @@ export default {
             this.productId = product.id
             this.batchId = this.$route.query.batch || ''
             this.quantity = Math.max(1, Number(this.$route.query.quantity) || 1)
-            this.generateQr()
+            this.generateBarcode()
         }
     },
     methods: {
@@ -428,17 +422,18 @@ export default {
         },
         onProductChange() {
             this.batchId = ''
-            this.generateQr()
+            this.generateBarcode()
         },
-        async generateQr() {
+        generateBarcode() {
             if (!this.codeContent) {
-                this.qrDataUrl = ''
+                this.barcodeDataUrl = ''
                 return
             }
-            this.qrDataUrl = await QRCode.toDataURL(this.codeContent, {
+            this.barcodeDataUrl = createBarcodeDataUrl(this.codeContent, {
                 margin: 0,
-                width: 180,
-                color: { dark: '#111827', light: '#ffffff' },
+                width: 1.6,
+                height: 54,
+                fontSize: 11,
             })
         },
         formatDate(value) {

@@ -39,7 +39,7 @@
             <form v-else class="manual-code manual-code-only" @submit.prevent="submitManual">
                 <span class="manual-code-icon"><i class="fa-solid fa-barcode"></i></span>
                 <h3>{{ mode === 'staff' ? 'Enter staff code' : 'Enter product code' }}</h3>
-                <p>{{ mode === 'staff' ? 'Use the barcode printed on the staff card.' : 'Use a product QR value, SKU or BAR.' }}</p>
+                <p>{{ mode === 'staff' ? 'Use the barcode printed on the staff card.' : 'Use a product barcode, SKU or BAR.' }}</p>
                 <label>
                     <span>{{ mode === 'staff' ? 'Staff barcode' : 'Product code / BAR' }}</span>
                     <input v-model.trim="manualCode" type="text" :placeholder="placeholder" autocomplete="off" autofocus />
@@ -101,7 +101,6 @@ export default {
             try {
                 this.scanner = new Html5Qrcode(this.readerId, {
                     formatsToSupport: [
-                        Html5QrcodeSupportedFormats.QR_CODE,
                         Html5QrcodeSupportedFormats.CODE_128,
                         Html5QrcodeSupportedFormats.EAN_13,
                         Html5QrcodeSupportedFormats.EAN_8,

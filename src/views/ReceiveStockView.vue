@@ -40,7 +40,7 @@
                             </select>
                         </label>
                         <button class="button secondary scan-inline" type="button" @click="scannerOpen = true">
-                            <i class="fa-solid fa-qrcode"></i>Scan
+                            <i class="fa-solid fa-barcode"></i>Scan
                         </button>
                     </div>
                     <div v-if="selectedProduct" class="selected-product">

@@ -38,6 +38,13 @@ const DEFAULT_STAFF = [
     },
 ]
 
+const CATEGORY_CODES = Object.freeze({
+    Dairy: 'DAIR',
+    'Dry Goods': 'DRYG',
+    Packaging: 'PACK',
+    'Prepared Food': 'PREP',
+})
+
 const DEFAULT_PRODUCTS = [
     {
         id: 'prd-milk-001',
@@ -278,6 +285,60 @@ function normalizeCode(value) {
     return String(value || '').trim().toUpperCase()
 }
 
+function categoryCode(category = 'Product') {
+    const categoryName = String(category || '').trim()
+    return (
+        CATEGORY_CODES[categoryName] ||
+        normalizeCode(categoryName)
+            .replace(/[^A-Z0-9]/g, '')
+            .slice(0, 4) ||
+        'PRD'
+    )
+}
+
+function skuSequence(sku) {
+    const match = normalizeCode(sku).match(/(\d+)$/)
+    return match ? Math.max(1, Number(match[1])) : 1
+}
+
+function formatCategorySku(category, sequence) {
+    return `${categoryCode(category)}-${String(sequence).padStart(4, '0')}`
+}
+
+function migrateCategorySkus(products, movements) {
+    const used = new Set()
+    const skuByProductId = new Map()
+
+    products.forEach((product) => {
+        const previousSku = normalizeCode(product.sku)
+        let sequence = skuSequence(previousSku)
+        let nextCode = formatCategorySku(product.category, sequence)
+
+        while (used.has(nextCode)) {
+            sequence += 1
+            nextCode = formatCategorySku(product.category, sequence)
+        }
+        used.add(nextCode)
+
+        if (previousSku && previousSku !== nextCode) {
+            product.legacySku = product.legacySku || previousSku
+        }
+
+        product.sku = nextCode
+        product.qrCode = `IMS:PRODUCT:${nextCode}`
+        product.batches = (product.batches || []).map((batch) => ({
+            ...batch,
+            batchQr: `IMS:BATCH:${nextCode}:${batch.id}`,
+        }))
+        skuByProductId.set(product.id, nextCode)
+    })
+
+    movements.forEach((movement) => {
+        const currentSku = skuByProductId.get(movement.productId)
+        if (currentSku) movement.sku = currentSku
+    })
+}
+
 function buildMovementId() {
     const prefix = `MOV-${todayCode()}-`
     const sequence =
@@ -311,6 +372,7 @@ function initialize() {
         }
     })
     state.movements = read(STORAGE.movements, DEFAULT_MOVEMENTS)
+    migrateCategorySkus(state.products, state.movements)
     state.staff = read(STORAGE.staff, DEFAULT_STAFF).map((account) => {
         const { staffQr: legacyStaffQr, ...accountData } = account
         return {
@@ -324,6 +386,7 @@ function initialize() {
     state.activeAccount = read(STORAGE.session, null)
     state.sessionLocked = localStorage.getItem(STORAGE.locked) === '1'
     write(STORAGE.products, state.products)
+    write(STORAGE.movements, state.movements)
     write(STORAGE.staff, state.staff)
     state.initialized = true
 }
@@ -406,22 +469,25 @@ function findProduct(value) {
             (product) =>
                 product.id === value ||
                 normalizeCode(product.sku) === clean ||
+                normalizeCode(product.legacySku) === clean ||
                 normalizeCode(product.bar) === clean ||
-                normalizeCode(product.qrCode) === code,
+                normalizeCode(product.qrCode) === code ||
+                normalizeCode(`IMS:PRODUCT:${product.legacySku || ''}`) === code,
         ) || null
     )
 }
 
 function nextSku(category = 'Product') {
-    const prefix =
-        normalizeCode(category)
-            .replace(/[^A-Z0-9]/g, '')
-            .slice(0, 4) || 'PRD'
-    let sequence = state.products.length + 1
-    let sku = `${prefix}-${String(sequence).padStart(3, '0')}`
+    const prefix = categoryCode(category)
+    const sequences = state.products
+        .map((product) => normalizeCode(product.sku))
+        .filter((sku) => sku.startsWith(`${prefix}-`))
+        .map((sku) => skuSequence(sku))
+    let sequence = sequences.length ? Math.max(...sequences) + 1 : 1
+    let sku = formatCategorySku(category, sequence)
     while (findProduct(sku)) {
         sequence += 1
-        sku = `${prefix}-${String(sequence).padStart(3, '0')}`
+        sku = formatCategorySku(category, sequence)
     }
     return sku
 }
@@ -442,11 +508,10 @@ function saveProduct(input, productId = '') {
     const current = productId
         ? state.products.find((product) => product.id === productId)
         : null
-    const sku = normalizeCode(input.sku || current?.sku || nextSku(input.category))
-    const duplicate = state.products.find(
-        (product) => product.sku === sku && product.id !== productId,
-    )
-    if (duplicate) throw new Error('This product code already exists.')
+    const category = String(input.category || current?.category || 'General').trim()
+    const previousSku = normalizeCode(current?.sku)
+    const categoryChanged = Boolean(current && current.category !== category)
+    const sku = categoryChanged || !current ? nextSku(category) : previousSku
 
     const product = {
         ...(current || {}),
@@ -460,7 +525,7 @@ function saveProduct(input, productId = '') {
                 nextBar(),
         ),
         qrCode: `IMS:PRODUCT:${sku}`,
-        category: String(input.category || 'General').trim(),
+        category,
         type: input.type || 'Retail Product',
         unit: String(input.unit || 'pcs').trim(),
         currentStock: current ? number(current.currentStock) : 0,
@@ -476,10 +541,23 @@ function saveProduct(input, productId = '') {
         createdAt: current?.createdAt || nowIso(),
     }
 
-    if (current) Object.assign(current, product)
-    else state.products.unshift(product)
-    write(STORAGE.products, state.products)
-    return product
+    if (current) {
+        if (previousSku && previousSku !== sku) {
+            product.legacySku = current.legacySku || previousSku
+            product.batches = (product.batches || []).map((batch) => ({
+                ...batch,
+                batchQr: `IMS:BATCH:${sku}:${batch.id}`,
+            }))
+            state.movements
+                .filter((movement) => movement.productId === current.id)
+                .forEach((movement) => {
+                    movement.sku = sku
+                })
+        }
+        Object.assign(current, product)
+    } else state.products.unshift(product)
+    persistInventory()
+    return current || product
 }
 
 function setProductActive(productId, active) {

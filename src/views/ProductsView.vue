@@ -36,7 +36,7 @@
                     <thead>
                         <tr>
                             <th>Product</th>
-                            <th>Category</th>
+                            <th>Product Code</th>
                             <th>Location</th>
                             <th>Stock</th>
                             <th>Status</th>
@@ -58,10 +58,14 @@
                                         <img v-if="product.photo" :src="product.photo" :alt="product.name" />
                                         <template v-else>{{ product.name.slice(0, 2).toUpperCase() }}</template>
                                     </span>
-                                    <div><strong>{{ product.name }}</strong><small class="mono">{{ product.sku }}</small></div>
+                                    <div><strong>{{ product.name }}</strong></div>
                                 </div>
                             </td>
-                            <td><strong>{{ product.category }}</strong></td>
+                            <td>
+                                <div class="product-category-cell">
+                                    <strong class="mono">{{ product.sku }}</strong>
+                                </div>
+                            </td>
                             <td><strong>{{ product.location || 'Not assigned' }}</strong></td>
                             <td><strong class="table-stock">{{ product.currentStock }}</strong> <small>{{ product.unit }}</small></td>
                             <td>
@@ -85,54 +89,57 @@
                         <span class="eyebrow">PRODUCT DETAILS</span>
                     </div>
                     <div class="product-detail-header-actions">
-                        <button class="icon-button" type="button" aria-label="Print QR" title="Print QR" @click="printQr"><i class="fa-solid fa-print"></i></button>
+                        <button class="icon-button" type="button" aria-label="Print barcode" title="Print barcode" @click="printBarcode"><i class="fa-solid fa-print"></i></button>
                         <button class="icon-button" type="button" aria-label="Edit product" title="Edit product" @click="editOpen = true"><i class="fa-solid fa-pen"></i></button>
                         <button class="icon-button" type="button" aria-label="Close" @click="closeDetails"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                 </header>
                 <div class="product-details-workspace">
-                <div class="product-details-body">
-                    <section class="product-details-identity">
+                    <div class="product-details-body">
+                    <section class="product-details-left">
                         <div class="product-detail-photo">
                             <img v-if="selectedProduct.photo" :src="selectedProduct.photo" :alt="selectedProduct.name" />
                             <strong v-else>{{ selectedProduct.name.slice(0, 2).toUpperCase() }}</strong>
-                        </div>
-                        <div class="product-details-qr">
-                            <img v-if="detailQr" :src="detailQr" :alt="`${selectedProduct.name} QR code`" />
-                            <i v-else class="fa-solid fa-qrcode"></i>
                         </div>
                         <div class="product-details-copy">
                             <h2>{{ selectedProduct.name }}</h2>
                             <p class="mono">{{ selectedProduct.sku }}</p>
                             <span class="status-badge" :class="statusClass(selectedProduct)">{{ store.productStatus(selectedProduct) }}</span>
                         </div>
+                    </section>
+                    <section class="product-details-right">
+                        <div class="product-details-barcode">
+                            <span>BARCODE</span>
+                            <img v-if="detailBarcode" :src="detailBarcode" :alt="`${selectedProduct.name} barcode`" />
+                            <i v-else class="fa-solid fa-barcode"></i>
+                        </div>
                         <div class="details-stock">
                             <small>Current Stock</small>
                             <strong>{{ selectedProduct.currentStock }}</strong>
                             <span>{{ selectedProduct.unit }}</span>
                         </div>
+                        <dl class="product-details-grid">
+                            <div><dt>Category</dt><dd>{{ selectedProduct.category }}</dd></div>
+                            <div><dt>Type</dt><dd>{{ selectedProduct.type }}</dd></div>
+                            <div><dt>Location</dt><dd>{{ selectedProduct.location || 'Not assigned' }}</dd></div>
+                            <div><dt>Minimum Stock</dt><dd>{{ selectedProduct.minimumStock }} {{ selectedProduct.unit }}</dd></div>
+                            <div><dt>Supplier</dt><dd>{{ selectedProduct.supplier || 'Not assigned' }}</dd></div>
+                            <div><dt>Batches</dt><dd>{{ selectedProduct.batches.length }}</dd></div>
+                        </dl>
+                        <footer class="product-details-actions">
+                            <button class="button stock-in" :class="{ active: operation === 'in' }" type="button" @click="startOperation('in')"><i class="fa-solid fa-arrow-down"></i>Stock In</button>
+                            <button class="button stock-out" :class="{ active: operation === 'out' }" type="button" @click="startOperation('out')"><i class="fa-solid fa-arrow-up"></i>Stock Out</button>
+                        </footer>
+                        <StockOperationForm
+                            v-if="operation"
+                            :product="selectedProduct"
+                            :direction="operation"
+                            @close="operation = ''"
+                            @completed="completeOperation"
+                        />
                     </section>
-                    <dl class="product-details-grid">
-                        <div><dt>Category</dt><dd>{{ selectedProduct.category }}</dd></div>
-                        <div><dt>Type</dt><dd>{{ selectedProduct.type }}</dd></div>
-                        <div><dt>Location</dt><dd>{{ selectedProduct.location || 'Not assigned' }}</dd></div>
-                        <div><dt>Minimum Stock</dt><dd>{{ selectedProduct.minimumStock }} {{ selectedProduct.unit }}</dd></div>
-                        <div><dt>Supplier</dt><dd>{{ selectedProduct.supplier || 'Not assigned' }}</dd></div>
-                        <div><dt>Batches</dt><dd>{{ selectedProduct.batches.length }}</dd></div>
-                    </dl>
+                    </div>
                 </div>
-                <StockOperationForm
-                    v-if="operation"
-                    :product="selectedProduct"
-                    :direction="operation"
-                    @close="operation = ''"
-                    @completed="completeOperation"
-                />
-                </div>
-                <footer class="product-details-actions">
-                    <button class="button stock-in" :class="{ active: operation === 'in' }" type="button" @click="startOperation('in')"><i class="fa-solid fa-arrow-down"></i>Stock In</button>
-                    <button class="button stock-out" :class="{ active: operation === 'out' }" type="button" @click="startOperation('out')"><i class="fa-solid fa-arrow-up"></i>Stock Out</button>
-                </footer>
             </section>
         </div>
 
@@ -176,10 +183,10 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
 import ProductRegistrationModal from '@/components/ProductRegistrationModal.vue'
 import StockOperationForm from '@/components/StockOperationForm.vue'
 import { inventoryStore } from '@/services/inventoryStore'
+import { barcodeDataUrl } from '@/utils/barcode'
 
 export default {
     name: 'ProductsView',
@@ -191,7 +198,7 @@ export default {
             category: '',
             status: '',
             selectedProduct: null,
-            detailQr: '',
+            detailBarcode: '',
             operation: '',
             editOpen: false,
             filterOpen: false,
@@ -242,21 +249,21 @@ export default {
         },
         async openDetails(product) {
             this.selectedProduct = product
-            this.detailQr = ''
+            this.detailBarcode = ''
             try {
-                this.detailQr = await QRCode.toDataURL(product.qrCode, {
-                    width: 240,
-                    margin: 1,
-                    errorCorrectionLevel: 'M',
+                this.detailBarcode = barcodeDataUrl(product.bar, {
+                    width: 2,
+                    height: 68,
+                    fontSize: 13,
                 })
             } catch (error) {
-                this.store.addToast('Unable to generate this QR code.', 'danger')
+                this.store.addToast('Unable to generate this barcode.', 'danger')
             }
         },
         closeDetails() {
             if (this.editOpen) return
             this.selectedProduct = null
-            this.detailQr = ''
+            this.detailBarcode = ''
             this.operation = ''
         },
         startOperation(direction) {
@@ -268,9 +275,14 @@ export default {
         handleEdited(product) {
             this.selectedProduct = product
             this.editOpen = false
+            this.detailBarcode = barcodeDataUrl(product.bar, {
+                width: 2,
+                height: 68,
+                fontSize: 13,
+            })
         },
-        printQr() {
-            if (!this.selectedProduct || !this.detailQr) return
+        printBarcode() {
+            if (!this.selectedProduct || !this.detailBarcode) return
             const product = this.selectedProduct
             const safe = (value) =>
                 String(value || '')
@@ -280,18 +292,18 @@ export default {
                     .replaceAll('"', '&quot;')
             const printWindow = window.open('', '_blank', 'width=520,height=640')
             if (!printWindow) {
-                this.store.addToast('Allow pop-ups to print the QR label.', 'danger')
+                this.store.addToast('Allow pop-ups to print the barcode label.', 'danger')
                 return
             }
             printWindow.document.write(`<!doctype html><html><head><title>${safe(product.name)}</title><style>
                 @page{size:60mm 45mm;margin:3mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}
-                .label{width:54mm;height:39mm;border:.0625rem solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
-                img{width:24mm;height:24mm}.info{min-width:0}h1{font-size:11pt;margin:0 0 2mm;line-height:1.15}
-                p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
-            </style></head><body><div class="label"><img src="${this.detailQr}" alt=""><div class="info">
-                <h1>${safe(product.name)}</h1><p>${safe(product.sku)}</p>
-                <small>${safe(product.bar)}</small><small>${safe(product.location || 'No location')}</small>
-            </div></div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
+                .label{width:54mm;height:39mm;border:.0625rem solid #111;padding:3mm;display:grid;grid-template-rows:auto 1fr;gap:2mm}
+                .info{display:grid;grid-template-columns:1fr auto;gap:1mm 3mm;align-items:end}.barcode{display:grid;place-items:center}
+                img{max-width:48mm;width:100%;height:21mm;object-fit:contain}h1{font-size:11pt;margin:0;line-height:1.15}
+                p{font-family:monospace;font-size:8pt;font-weight:700;margin:0}small{display:block;font-size:6.5pt}
+            </style></head><body><div class="label"><div class="info"><h1>${safe(product.name)}</h1><p>${safe(product.sku)}</p>
+                <small>${safe(product.location || 'No location')}</small></div><div class="barcode"><img src="${this.detailBarcode}" alt=""></div>
+            </div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
             printWindow.document.close()
         },
     },

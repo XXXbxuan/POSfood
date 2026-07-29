@@ -3,16 +3,16 @@
         <section class="page-heading">
             <div><h1>Scan Product</h1></div>
             <button class="button primary" type="button" @click="scannerOpen = true">
-                <i class="fa-solid fa-qrcode"></i>{{ product ? 'Scan Another' : 'Open Scanner' }}
+                <i class="fa-solid fa-barcode"></i>{{ product ? 'Scan Another' : 'Open Scanner' }}
             </button>
         </section>
 
         <div class="scan-content-scroll">
         <section v-if="!product" class="scan-landing">
             <button class="scan-hero" type="button" @click="scannerOpen = true">
-                <span class="scan-hero-icon"><i class="fa-solid fa-qrcode"></i></span>
+                <span class="scan-hero-icon"><i class="fa-solid fa-barcode"></i></span>
                 <strong>Tap to scan</strong>
-                <p>Product QR · BAR · Batch label</p>
+                <p>Product Barcode · SKU · Batch label</p>
                 <span class="scan-line-decoration"></span>
             </button>
             <form class="manual-lookup panel" @submit.prevent="lookup(manualCode)">

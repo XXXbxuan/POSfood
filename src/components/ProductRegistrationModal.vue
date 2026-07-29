@@ -48,13 +48,29 @@
                         </select>
                     </label>
                     <label><span>Unit <b>*</b></span><input v-model.trim="form.unit" type="text" required placeholder="pcs, kg, cartons" /></label>
-                    <label><span>Product Code / SKU</span><input v-model.trim="form.sku" class="mono" type="text" :placeholder="suggestedSku" /></label>
+                    <label><span>Product Code / SKU</span>
+                        <input :value="displayedSku" class="mono product-sku-readonly" type="text" readonly aria-readonly="true" />
+                        <small class="product-sku-hint">Generated automatically from the selected category.</small>
+                    </label>
                     <label class="full"><span>BAR</span><input v-model.trim="form.bar" class="mono" type="text" placeholder="Generated automatically when empty" /></label>
                 </section>
 
                 <section v-else class="registration-step-panel form-grid two-column">
+                    <div class="location-select-pair full">
+                        <label><span>Warehouse Section</span>
+                            <select v-model="locationSection">
+                                <option value="">Not assigned</option>
+                                <option v-for="section in locationSections" :key="section" :value="section">{{ section }}</option>
+                            </select>
+                        </label>
+                        <label><span>Position Number</span>
+                            <select v-model="locationNumber" :disabled="!locationSection">
+                                <option value="">Select number</option>
+                                <option v-for="number in locationNumbers" :key="number" :value="number">{{ number }}</option>
+                            </select>
+                        </label>
+                    </div>
                     <label><span>Minimum Stock</span><input v-model.number="form.minimumStock" type="number" min="0" step="0.01" inputmode="decimal" /></label>
-                    <label><span>Warehouse Location</span><input v-model.trim="form.location" type="text" placeholder="Rack A-01" /></label>
                     <label><span>Cost Price (RM)</span><input v-model.number="form.costPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
                     <label><span>Selling Price (RM)</span><input v-model.number="form.sellingPrice" type="number" min="0" step="0.01" inputmode="decimal" /></label>
                     <label class="full"><span>Supplier</span><input v-model.trim="form.supplier" type="text" placeholder="Supplier name" /></label>
@@ -76,7 +92,7 @@
             <div v-else-if="stage === 'choice'" class="registration-result">
                 <span class="registration-success"><i class="fa-solid fa-check"></i></span>
                 <h3>Product is in the list</h3>
-                <p>You can close now or show its QR label.</p>
+                <p>You can close now or show its barcode label.</p>
                 <div class="registration-summary">
                     <div><small>Product</small><strong>{{ product.name }}</strong></div>
                     <div><small>SKU</small><strong class="mono">{{ product.sku }}</strong></div>
@@ -84,13 +100,13 @@
                 </div>
                 <div class="registration-choice-actions">
                     <button class="button secondary" type="button" @click="close">Cancel</button>
-                    <button class="button primary" type="button" @click="showQr"><i class="fa-solid fa-qrcode"></i>Show QR</button>
+                    <button class="button primary" type="button" @click="showBarcode"><i class="fa-solid fa-barcode"></i>Show Barcode</button>
                 </div>
             </div>
 
-            <div v-else class="registration-result qr-result">
-                <div class="registration-qr-card">
-                    <img :src="qrDataUrl" :alt="`${product.name} QR code`" />
+            <div v-else class="registration-result barcode-result">
+                <div class="registration-qr-card registration-barcode-card">
+                    <img :src="barcodeDataUrl" :alt="`${product.name} barcode`" />
                     <h3>{{ product.name }}</h3>
                     <p class="mono">{{ product.sku }}</p>
                     <small>{{ product.bar }}</small>
@@ -98,7 +114,7 @@
                 </div>
                 <div class="registration-choice-actions">
                     <button class="button secondary" type="button" @click="close">Close</button>
-                    <button class="button primary" type="button" @click="printQr"><i class="fa-solid fa-print"></i>Print</button>
+                    <button class="button primary" type="button" @click="printBarcode"><i class="fa-solid fa-print"></i>Print</button>
                 </div>
             </div>
         </section>
@@ -106,8 +122,31 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
 import { inventoryStore } from '@/services/inventoryStore'
+import { barcodeDataUrl as createBarcodeDataUrl } from '@/utils/barcode'
+
+const locationSections = [
+    'Rack A',
+    'Rack B',
+    'Rack C',
+    'Rack D',
+    'Chiller A',
+    'Chiller B',
+    'Freezer A',
+    'Freezer B',
+]
+
+const locationNumbers = Array.from({ length: 20 }, (_, index) =>
+    String(index + 1).padStart(2, '0'),
+)
+
+function parseLocation(value = '') {
+    const match = String(value).trim().match(/^(.*\s[A-Z])-(\d{2})$/)
+    return {
+        section: match?.[1] && locationSections.includes(match[1]) ? match[1] : '',
+        number: match?.[2] && locationNumbers.includes(match[2]) ? match[2] : '',
+    }
+}
 
 const emptyForm = () => ({
     name: '',
@@ -134,6 +173,7 @@ export default {
     emits: ['close', 'registered'],
     data() {
         const source = this.editProduct
+        const location = parseLocation(source?.location)
         return {
             store: inventoryStore,
             stage: 'form',
@@ -158,7 +198,11 @@ export default {
                 : emptyForm(),
             formError: '',
             product: null,
-            qrDataUrl: '',
+            barcodeDataUrl: '',
+            locationSection: location.section,
+            locationNumber: location.number,
+            locationSections,
+            locationNumbers,
         }
     },
     computed: {
@@ -167,6 +211,15 @@ export default {
         },
         suggestedSku() {
             return this.form.category ? this.store.nextSku(this.form.category) : 'Generated when saved'
+        },
+        displayedSku() {
+            if (
+                this.editing &&
+                this.form.category === this.editProduct.category
+            ) {
+                return this.form.sku
+            }
+            return this.suggestedSku
         },
     },
     methods: {
@@ -199,6 +252,10 @@ export default {
         save() {
             this.formError = ''
             try {
+                this.form.location =
+                    this.locationSection && this.locationNumber
+                        ? `${this.locationSection}-${this.locationNumber}`
+                        : ''
                 this.product = this.store.saveProduct(this.form, this.editProduct?.id)
                 if (this.editing) {
                     this.$emit('registered', this.product)
@@ -213,23 +270,23 @@ export default {
                 this.formError = error.message
             }
         },
-        async showQr() {
+        async showBarcode() {
             try {
-                this.qrDataUrl = await QRCode.toDataURL(this.product.qrCode, {
-                    width: 320,
-                    margin: 1,
-                    errorCorrectionLevel: 'M',
+                this.barcodeDataUrl = createBarcodeDataUrl(this.product.bar, {
+                    width: 2.5,
+                    height: 110,
+                    fontSize: 18,
                 })
-                this.stage = 'qr'
+                this.stage = 'barcode'
             } catch (error) {
-                this.store.addToast('Unable to generate this QR code.', 'danger')
+                this.store.addToast('Unable to generate this barcode.', 'danger')
             }
         },
-        async printQr() {
-            if (!this.qrDataUrl) await this.showQr()
+        async printBarcode() {
+            if (!this.barcodeDataUrl) await this.showBarcode()
             const printWindow = window.open('', '_blank', 'width=520,height=640')
             if (!printWindow) {
-                this.store.addToast('Allow pop-ups to print the QR label.', 'danger')
+                this.store.addToast('Allow pop-ups to print the barcode label.', 'danger')
                 return
             }
             const safe = (value) =>
@@ -240,13 +297,13 @@ export default {
                     .replaceAll('"', '&quot;')
             printWindow.document.write(`<!doctype html><html><head><title>${safe(this.product.name)}</title><style>
                 @page{size:60mm 45mm;margin:3mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}
-                .label{width:54mm;height:39mm;border:.0625rem solid #111;padding:3mm;display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
-                img{width:24mm;height:24mm}.info{min-width:0}h1{font-size:11pt;margin:0 0 2mm;line-height:1.15}
-                p{font-family:monospace;font-size:8pt;font-weight:700;margin:1mm 0;overflow-wrap:anywhere}small{display:block;font-size:6.5pt;margin-top:1mm}
-            </style></head><body><div class="label"><img src="${this.qrDataUrl}" alt=""><div class="info">
-                <h1>${safe(this.product.name)}</h1><p>${safe(this.product.sku)}</p>
-                <small>${safe(this.product.bar)}</small><small>${safe(this.product.location || 'No location')}</small>
-            </div></div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
+                .label{width:54mm;height:39mm;border:.0625rem solid #111;padding:3mm;display:grid;grid-template-rows:auto 1fr;gap:2mm}
+                .info{display:grid;grid-template-columns:1fr auto;gap:1mm 3mm;align-items:end}.barcode{display:grid;place-items:center}
+                img{max-width:48mm;width:100%;height:21mm;object-fit:contain}h1{font-size:11pt;margin:0;line-height:1.15}
+                p{font-family:monospace;font-size:8pt;font-weight:700;margin:0}small{display:block;font-size:6.5pt}
+            </style></head><body><div class="label"><div class="info"><h1>${safe(this.product.name)}</h1><p>${safe(this.product.sku)}</p>
+                <small>${safe(this.product.location || 'No location')}</small></div><div class="barcode"><img src="${this.barcodeDataUrl}" alt=""></div>
+            </div><script>window.onload=()=>{window.print();window.close()}<\/script></body></html>`)
             printWindow.document.close()
         },
     },

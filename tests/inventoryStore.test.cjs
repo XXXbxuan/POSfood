@@ -95,19 +95,11 @@ try {
     assert.equal(product.currentStock, 0)
     assert.equal(product.bar, 'TEST-BAR-001')
     assert.equal(Object.hasOwn(product, 'barcode'), false)
-    assert.equal(product.qrCode, 'IMS:PRODUCT:TEST-001')
+    assert.equal(product.sku, 'TEST-0001')
+    assert.equal(product.qrCode, 'IMS:PRODUCT:TEST-0001')
     assert.equal(inventoryStore.findProduct(product.bar).id, product.id)
     assert.equal(inventoryStore.findProduct(product.qrCode).id, product.id)
-    assert.throws(
-        () =>
-            inventoryStore.saveProduct({
-                name: 'Duplicate Test Item',
-                sku: 'TEST-001',
-                category: 'Testing',
-                unit: 'pcs',
-            }),
-        /already exists/,
-    )
+    assert.equal(inventoryStore.nextSku('Testing'), 'TEST-0002')
 
     const receiving = inventoryStore.receiveStock({
         productId: product.id,
@@ -125,7 +117,7 @@ try {
     assert.equal(product.currentStock, 50)
     assert.equal(product.batches[0].quantity, 50)
     assert.equal(receiving.movement.staffId, 'INV001')
-    assert.equal(inventoryStore.findProduct('IMS:BATCH:TEST-001:BTEST001').id, product.id)
+    assert.equal(inventoryStore.findProduct('IMS:BATCH:TEST-0001:BTEST001').id, product.id)
 
     const editedProduct = inventoryStore.saveProduct(
         {
@@ -174,7 +166,7 @@ try {
         [45, 50],
     )
 
-    console.log('Inventory logic checks passed: register -> QR -> receive -> edit -> deduct -> stock 45.')
+console.log('Inventory logic checks passed: register -> barcode -> receive -> edit -> deduct -> stock 45.')
 } finally {
     if (fs.existsSync(compiledPath)) fs.rmSync(compiledPath)
 }

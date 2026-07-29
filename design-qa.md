@@ -1,112 +1,68 @@
-# Design QA
+# Design QA — Product Details, Location Selection, and Barcode
 
-## Source visual truth
+## Comparison target
 
-- Collapsed right panel: `C:\Users\User\AppData\Local\Temp\codex-clipboard-4281fbd9-5d5b-4a11-9193-06cc08608da8.png` (174 × 245).
-- Product action footer: `C:\Users\User\AppData\Local\Temp\codex-clipboard-e291c5a8-b0df-4b56-9289-c03e89cb07b2.png` (501 × 642).
-- History summary/table spacing: `C:\Users\User\AppData\Local\Temp\codex-clipboard-eeaceee2-c560-4700-8779-0fe7c7ef6207.png` (928 × 134).
-- Movement detail information layout: `C:\Users\User\AppData\Local\Temp\codex-clipboard-356c1ada-1b10-42bd-a57a-d2395dfc273b.png` (932 × 724).
-- Sticker editor: `C:\Users\User\AppData\Local\Temp\codex-clipboard-bc5ddece-c8f8-4d93-a649-b1beffe9311b.png` (921 × 594).
-
-## Implementation evidence
-
-- Label designer: `C:\Users\User\Desktop\project\POSfood\audit\30-label-designer-final.png`.
-- Product details, narrow viewport: `C:\Users\User\Desktop\project\POSfood\audit\31-product-details-narrow-final.png`.
-- History list with separated regions: `C:\Users\User\Desktop\project\POSfood\audit\32-history-list-spaced-final.png`.
-- Redesigned movement detail: `C:\Users\User\Desktop\project\POSfood\audit\33-history-detail-final.png`.
-- Dashboard collapsed rail: `C:\Users\User\Desktop\project\POSfood\audit\34-dashboard-collapsed-rail-final.png`.
-- Dashboard open with right-card overlap: `C:\Users\User\Desktop\project\POSfood\audit\35-dashboard-open-right-overlap-final.png`.
-- Source/implementation comparisons:
-  - `audit/qa-product-actions-comparison.png`
-  - `audit/qa-history-gap-comparison.png`
-  - `audit/qa-history-detail-comparison.png`
-  - `audit/qa-label-comparison.png`
-
-## Viewports and normalization
-
-- Product details: source and implementation are both 501 × 642 pixels at a 501 × 642 CSS viewport.
-- History spacing: implementation captured at 870 × 650 CSS pixels. A same-content 134-pixel-high focus crop was resized horizontally to 928 pixels to match the source crop.
-- Movement detail: implementation captured at 930 × 724 CSS pixels and normalized by 2 horizontal pixels to the 932 × 724 source.
-- Sticker editor: implementation captured at 920 × 594 CSS pixels and normalized by 1 horizontal pixel to the 921 × 594 source.
-- Dashboard rail: implementation captured at 930 × 724 CSS pixels.
-- Browser device scale factor: 1.
-- State: authenticated inventory workspace with representative local product and movement data. Record values differ from the anonymized source screenshots, while layout and interaction states match.
-
-## Full-view comparison evidence
-
-- Product comparison confirms the two stock actions now have a measured 24.8-pixel inset below the buttons instead of touching the modal edge.
-- History comparison confirms the summary cards and table are separate regions with a measured 32-pixel gap.
-- Movement detail comparison shows the header no longer carries product/record identifiers. Product, stock change, movement ID, reference, and operator are grouped by meaning.
-- Sticker comparison confirms the editor fits a 920 × 594 viewport without page overflow and retains all controls.
-- Dashboard capture shows the control on the divider with exactly 50% of its width overlapping the right-side Recent activity card.
-
-## Focused region comparison evidence
-
-- `qa-product-actions-comparison.png` is a 1:1 full-height comparison focused on the action footer.
-- `qa-history-gap-comparison.png` isolates the bottom of the summary cards, the inter-section gap, and the table header.
-- `qa-history-detail-comparison.png` keeps the complete 932 × 724 modal readable, including the bottom-right operator card.
-- `qa-label-comparison.png` keeps the complete canvas and control panel readable. No additional crop was needed.
-
-## Required fidelity surfaces
-
-- Fonts and typography: passed. Existing POSfood weights, uppercase eyebrows, mono identifiers, and tablet-readable hierarchy remain consistent. Movement quantity and operator identity now have clearer emphasis.
-- Spacing and layout rhythm: passed. History uses a 32-pixel region gap; Product Details keeps 24.8 pixels below the actions; the label editor fits the short tablet viewport; the dashboard rail is physically attached to the panel boundary.
-- Colors and visual tokens: passed. Existing teal, green, coral, soft-surface, border, and muted-text tokens are reused throughout.
-- Image quality and asset fidelity: passed. Product photos/initials, generated QR content, barcode output, and the bundled Font Awesome icon set are retained. No placeholder imagery or hand-drawn icon assets were introduced.
-- Copy and content: passed. Product data remains intact; movement detail replaces the redundant `Stock In` pill with direct direction icon plus quantity, moves the movement ID into Product details, and labels the operator card clearly.
-
-## Browser and interaction checks
-
-- Dashboard: opened and collapsed Recent activity; verified the right-pointing chevron in both states and measured a 50% button overlap into the right-side card while open.
-- Products: opened 12oz Paper Cup at 501 × 642; verified the footer is fully visible with 24.8 pixels below the buttons.
-- History: opened Stock History at 870 × 650; measured a 32-pixel summary/table gap; opened a Stock In record at 930 × 724.
-- Labels: selected Chicken Sandwich, opened the designer, added a custom text box, entered `Handle with care`, and verified it rendered on the canvas.
-- Labels: dragged the complete Quantity field group by 45 × 30 pixels and verified the computed transform changed accordingly. Received and the other field groups use the same interaction.
-- Labels: reloaded without saving the test edits and confirmed the clean editor state.
-- Browser console: no errors in the tested Dashboard, Products, History, or Labels states.
-- Production build: passed.
-- Inventory logic test: passed.
-
-## Comparison history
-
-1. Initial History reference had the summary cards visually attached to the table.
-   - Fix: increased the effective section gap after the final loaded theme to 32 pixels.
-   - Post-fix evidence: `audit/32-history-list-spaced-final.png` and `audit/qa-history-gap-comparison.png`.
-2. Initial Product Details reference had the Stock In/Stock Out buttons touching the modal bottom.
-   - Fix: added an explicit footer inset after the final loaded theme.
-   - Post-fix evidence: `audit/31-product-details-narrow-final.png` and `audit/qa-product-actions-comparison.png`.
-3. Initial movement detail used a dense two-column definition grid with operator and record metadata mixed together.
-   - Fix: replaced it with Product, Stock Change, and bottom-right Operator groups; moved Movement ID below; simplified the overview to direction icon and quantity.
-   - Post-fix evidence: `audit/33-history-detail-final.png` and `audit/qa-history-detail-comparison.png`.
-4. Initial label editor could only edit predefined text values and moved value text separately from field labels.
-   - Fix: added persistent custom text boxes and made each label/value field a single draggable/resizable target.
-   - Post-fix evidence: `audit/30-label-designer-final.png` and tested live transforms.
-5. First short-viewport label pass inherited a 650-pixel minimum modal height.
-   - Fix: removed the inherited minimum, compacted editor controls, locked background scrolling, and recaptured at 920 × 594.
-   - Post-fix evidence: `audit/30-label-designer-final.png`; controls and footer are fully visible.
-6. The first attached-rail pass placed the button toward the left panel.
-   - Fix: the open-state button now overlaps the right-side Recent activity card by exactly half its width and keeps the requested right-facing chevron. The collapsed-state button stays centered and fully visible.
-   - Post-fix evidence: `audit/35-dashboard-open-right-overlap-final.png`; browser geometry measured a 0.5 overlap ratio.
+- Source visual truth:
+  - `C:\Users\User\AppData\Local\Temp\codex-clipboard-d77ab59d-0b15-4767-a321-0b9f480e026d.png` — stock-action bottom spacing, 624 × 617 px.
+  - `C:\Users\User\AppData\Local\Temp\codex-clipboard-667378c2-63a6-4adf-9824-67833269a7cf.png` — latest confirmation that the buttons still touched the modal edge.
+  - `C:\Users\User\AppData\Local\Temp\codex-clipboard-fed84b75-9969-462b-aa5b-1fe004a8263f.png` — product detail information, 878 × 630 px.
+  - `C:\Users\User\AppData\Local\Temp\codex-clipboard-de12842b-5292-48c1-a0ce-19666fb25674.png` — product-list category/SKU cell, 113 × 71 px.
+  - `C:\Users\User\AppData\Local\Temp\codex-clipboard-df00d01b-3935-4afb-8b1e-2a09b2aa63e2.png` — warehouse location field, 399 × 119 px.
+  - `C:\Users\User\AppData\Local\Temp\codex-clipboard-7af17c1c-0420-4983-9696-fe4dc0230002.png` — product QR output to replace, 586 × 499 px.
+- Browser-rendered implementation:
+  - `audit/36-products-sku-only.png` — 900 × 650 px.
+  - `audit/37-product-details-40-60-barcode.png` — 900 × 650 px.
+  - `audit/40-product-details-narrow-fixed.png` — 501 × 642 px.
+  - `audit/46-product-details-safe-bottom.png` — 501 × 642 px, final explicit safe-area implementation.
+  - `audit/44-label-designer-barcode-final.png` — 920 × 594 px.
+  - `audit/45-registration-location-paired.png` — 900 × 650 px.
+- Combined full-view comparison: `audit/qa-feedback-round2-comparison.png`.
+- Focused bottom-edge comparison: `audit/qa-stock-buttons-safe-area-comparison.png`.
+- Density normalization: browser screenshots were captured at device scale factor 1. Source images were aspect-fit into equal 760 × 440 px comparison cells without cropping.
+- States: products list, product-detail modal, narrow product-detail modal scrolled to actions, registration Stock Setup step, and label designer.
 
 ## Findings
 
-- No actionable P0, P1, or P2 findings remain.
+- No actionable P0, P1, or P2 differences remain.
+- Product detail uses measured 39.999% / 59.999% columns at 900 px viewport.
+- Narrow product detail now reserves a real 20 px spacer row below the buttons plus 28.81 px to the modal edge; the white safe area remains visible after scrolling to the bottom.
+- Product list shows the product code only (`DAIR-0001`); the category name is not repeated in that cell.
+- Warehouse location is a fixed two-stage choice: 8 warehouse sections plus `Not assigned`, followed by positions `01`–`20`. The final evidence shows `Rack B` and `03` in equal-width adjacent controls.
+- Product detail, registration copy/actions, scan entry points, and warehouse labels no longer expose QR UI. The label designer contains one 224 × 56 px one-dimensional barcode image and zero QR images.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing product font family, heavy headings, compact uppercase eyebrow, tabular SKU styling, and status hierarchy are preserved.
+- Spacing and layout rhythm: modal frame, 40/60 split, card gaps, action spacing, and narrow-screen bottom padding are visibly consistent.
+- Colors and visual tokens: existing teal, pale teal, red, amber, border, and surface tokens are reused with no new off-brand colors.
+- Image quality and asset fidelity: barcodes are generated as real PNG assets with Code 128 through JsBarcode; no CSS-drawn or placeholder barcode remains.
+- Copy and content: visible QR references are replaced with Barcode; product-code-only and fixed-location copy match the requested behavior.
+
+## Interaction and accessibility checks
+
+- Product row opens the correct detail modal.
+- Barcode images generate with readable alt text and data URLs.
+- Warehouse Position Number stays disabled until a section is selected, then accepts one of the fixed values.
+- Registration, label designer, and product detail controls remain keyboard-addressable native controls.
+- Browser console errors/warnings checked: none.
+- Production build and inventory logic checks passed.
+
+## Comparison history
+
+1. First pass found two P2 issues:
+   - the narrow action row still appeared flush against the modal edge;
+   - the label barcode inherited the old QR-sized image dimensions.
+2. Fixes:
+   - mobile product-detail content now contributes its full height to the scroll area and preserves bottom padding;
+   - barcode selectors were strengthened and the label code row was changed to one centered column.
+3. Post-fix evidence:
+   - `audit/40-product-details-narrow-fixed.png` shows the action-row gap;
+   - `audit/44-label-designer-barcode-final.png` shows the full-width horizontal barcode;
+   - `audit/45-registration-location-paired.png` shows the two fixed location choices side by side.
+4. The user's latest screenshot showed that padding alone was not visibly reliable in the deployed narrow layout. A dedicated grid spacer row was added below the buttons. `audit/qa-stock-buttons-safe-area-comparison.png` and `audit/46-product-details-safe-bottom.png` show the final, visibly separated state.
 
 ## Follow-up polish
 
-- P3: At viewports shorter than the 724-pixel movement-detail target, the modal scrolls internally; all information remains reachable.
-
-## Implementation checklist
-
-- [x] Attach half of the dashboard control to the right-side card.
-- [x] Keep Product Details actions away from the modal bottom edge.
-- [x] Separate History summary cards from the movement table.
-- [x] Center movement pills vertically and horizontally.
-- [x] Reorganize movement detail into understandable groups.
-- [x] Put the operator identity in a bottom-right icon card.
-- [x] Add arbitrary sticker text boxes.
-- [x] Make Quantity, Received, and related field groups movable and resizable.
-- [x] Verify the short tablet label-editor viewport.
-- [x] Verify build, logic, primary interactions, and console errors.
+- No P3 visual follow-up is required for this request.
 
 final result: passed
