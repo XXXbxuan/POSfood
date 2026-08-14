@@ -17175,10 +17175,10 @@
 .sr-only,
 .fa-sr-only {
     position: absolute;
-    width: 0.0625rem;
-    height: 0.0625rem;
+    width: 1px;
+    height: 1px;
     padding: 0;
-    margin: -0.0625rem;
+    margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
@@ -17188,10 +17188,10 @@
 .sr-only-focusable:not(:focus),
 .fa-sr-only-focusable:not(:focus) {
     position: absolute;
-    width: 0.0625rem;
-    height: 0.0625rem;
+    width: 1px;
+    height: 1px;
     padding: 0;
-    margin: -0.0625rem;
+    margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;

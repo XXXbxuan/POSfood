@@ -12,7 +12,7 @@ export function barcodeDataUrl(value, options = {}) {
         margin: options.margin ?? 0,
         displayValue: options.displayValue !== false,
         font: 'monospace',
-        fontSize: options.fontSize || 14,
+        fontSize: options.fontSize || 16,
         textMargin: options.textMargin ?? 4,
         lineColor: options.lineColor || '#102f35',
         background: options.background || '#ffffff',

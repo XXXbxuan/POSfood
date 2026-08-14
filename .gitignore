@@ -5,3 +5,8 @@ dist/
 __MACOSX/
 **/.DS_Store
 *.log
+audit/
+logbook/
+src.zip
+design-qa.md
+.openai/site-build-*.tar.gz

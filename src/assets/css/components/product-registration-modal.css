@@ -1,0 +1,427 @@
+/* Register product -> optional QR -> print */
+.registration-modal {
+    width: min(43.75rem, calc(100vw - 2.25rem));
+    max-height: min(45rem, calc(100dvh - 1.75rem));
+}
+
+.registration-form {
+    max-height: calc(100dvh - 7.375rem);
+    overflow-y: auto;
+}
+
+.registration-result {
+    display: flex;
+    min-height: 22.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1.75rem;
+    text-align: center;
+}
+
+.registration-success {
+    display: grid;
+    width: 3.625rem;
+    height: 3.625rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--inv-success-soft);
+    color: var(--inv-success);
+    font-size: 1.5625rem;
+}
+
+.registration-result > h3 {
+    margin-top: 0.875rem;
+    font-size: 1.3125rem;
+}
+
+.registration-result > p {
+    margin-top: 0.3125rem;
+    color: var(--inv-text-secondary);
+    font-size: 1rem;
+}
+
+.registration-summary {
+    display: grid;
+    width: min(100%, 30rem);
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1.375rem;
+    border: 0.0625rem solid var(--inv-border);
+    border-radius: var(--inv-radius-sm);
+    background: #f8f9fa;
+}
+
+.registration-summary > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.8125rem;
+    border-right: 0.0625rem solid var(--inv-border);
+}
+
+.registration-summary > div:last-child {
+    border-right: 0;
+}
+
+.registration-summary small {
+    color: var(--inv-text-secondary);
+    font-size: 0.975rem;
+}
+
+.registration-summary strong {
+    overflow: hidden;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.registration-choice-actions {
+    display: grid;
+    width: min(100%, 18.75rem);
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5625rem;
+    margin-top: 1.375rem;
+}
+
+.registration-qr-card {
+    display: flex;
+    width: 16.5625rem;
+    align-items: center;
+    flex-direction: column;
+    padding: 1.125rem;
+    border: 0.0625rem solid #bfc5cd;
+    border-radius: var(--inv-radius);
+    background: #fff;
+}
+
+.registration-qr-card img {
+    width: 11.125rem;
+    height: 11.125rem;
+}
+
+.registration-qr-card h3 {
+    margin-top: 0.625rem;
+    font-size: 1.125rem;
+}
+
+.registration-qr-card p {
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.registration-qr-card small,
+.registration-qr-card span {
+    margin-top: 0.1875rem;
+    color: var(--inv-text-secondary);
+    font-size: 0.975rem;
+}
+
+.registration-success {
+    background: var(--inv-success-soft);
+    color: var(--inv-success-dark);
+}
+
+.modal-header p,
+.registration-result > p,
+.empty-state p,
+.summary-placeholder p,
+.scan-hero p,
+.manual-lookup label,
+.audit-note,
+.receive-actions p {
+    font-size: 1rem;
+    line-height: 1.55;
+}
+
+.success-mark,
+.registration-success {
+    width: 4.5rem;
+    height: 4.5rem;
+    font-size: 1.875rem;
+}
+
+.registration-modal {
+    width: min(55rem, calc(100vw - 2.375rem));
+    max-height: min(50rem, calc(100dvh - 1.75rem));
+}
+
+.registration-form {
+    max-height: calc(100dvh - 8.125rem);
+}
+
+.registration-summary {
+    width: min(100%, 35rem);
+}
+
+.registration-qr-card {
+    width: 18.75rem;
+    padding: 1.375rem;
+}
+
+.registration-qr-card img {
+    width: 12.25rem;
+    height: 12.25rem;
+}
+
+/* Tablet and smaller desktop still keep larger fonts without breaking layout */
+@media (max-width: 73.75rem) {
+    .inv-page {
+        padding: 1.5rem 1.375rem 2.5rem;
+    }
+
+    .page-heading h1 {
+        font-size: clamp(2rem, 3.8vw, 2.5rem);
+    }
+
+    .tool-picker {
+        width: min(53.75rem, calc(100vw - 1.625rem));
+    }
+
+    .tool-picker-body {
+        grid-template-columns: 20.625rem minmax(0, 1fr);
+    }
+
+    .registration-modal,
+    .quick-workspace-modal,
+    .label-designer-modal {
+        width: min(100%, calc(100vw - 1.625rem));
+    }
+}
+
+/* Registration wizard */
+.registration-modal {
+    width: min(53.75rem, calc(100vw - 2.375rem));
+}
+
+.registration-form {
+    display: flex;
+    min-height: 32.5rem;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.registration-steps {
+    display: grid;
+    grid-template-columns: auto minmax(5rem, 1fr) auto;
+    align-items: center;
+    padding: 1.125rem 1.75rem;
+    border-bottom: 0.0625rem solid var(--inv-border);
+    background: #f7fbfb;
+}
+
+.registration-steps button {
+    display: flex;
+    align-items: center;
+    gap: 0.5625rem;
+    border: 0;
+    background: transparent;
+    color: var(--inv-text-secondary);
+    font-weight: 800;
+}
+
+.registration-steps button span {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 50%;
+    background: #dfecee;
+}
+
+.registration-steps button.active,
+.registration-steps button.complete {
+    color: var(--inv-primary-dark);
+}
+
+.registration-steps button.active span,
+.registration-steps button.complete span {
+    background: var(--inv-primary);
+    color: #fff;
+}
+
+.registration-steps > i {
+    height: 0.125rem;
+    margin-inline: 0.875rem;
+    background: #dce8ea;
+}
+
+.registration-step-panel {
+    align-content: start;
+    flex: 1;
+    padding: 1.5rem 1.75rem;
+}
+
+.registration-step-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding: 1rem 1.75rem 1.375rem;
+    border-top: 0.0625rem solid var(--inv-border);
+    background: #fff;
+}
+
+.registration-step-actions .button {
+    width: 100%;
+}
+
+.product-photo-picker {
+    display: grid;
+    grid-template-columns: 4.625rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.product-photo-picker > span {
+    display: grid;
+    width: 4.625rem;
+    height: 4.625rem;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background: var(--inv-primary-soft);
+    color: var(--inv-primary);
+}
+
+.product-photo-picker img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.registration-modal-compact {
+    height: auto;
+    min-height: 0;
+}
+
+.registration-modal-compact .registration-result {
+    min-height: 0;
+    padding: 1.5rem 1.5rem 1.75rem;
+}
+
+.registration-modal-compact .registration-success {
+    width: 3.75rem;
+    height: 3.75rem;
+}
+
+.registration-modal-compact .registration-summary {
+    margin-top: 1.125rem;
+}
+
+.registration-modal-compact .registration-choice-actions {
+    margin-top: 1.125rem;
+}
+
+.form-grid,
+.receive-form > .form-grid,
+.registration-step-panel {
+    gap: 0.875rem;
+    padding: 1rem;
+}
+
+.registration-modal {
+    width: min(50rem, calc(100vw - 2rem));
+    height: min(45rem, calc(100dvh - 2rem));
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+}
+
+.registration-form {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.registration-steps {
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+}
+
+.registration-steps button {
+    font-size: 1.0625rem;
+}
+
+.registration-step-panel {
+    align-content: start;
+    overflow-y: auto;
+}
+
+.registration-step-actions {
+    min-height: 4.5rem;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+/* Registered-product state: content-sized card instead of the full form canvas. */
+.registration-modal.registration-modal-compact {
+  position: relative;
+  display: block;
+  width: min(34rem, calc(100vw - 2rem));
+  height: auto;
+  min-height: 0;
+  max-height: calc(100dvh - 2rem);
+}
+
+.registration-modal.registration-modal-compact .modal-header {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  z-index: 2;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.registration-modal.registration-modal-compact .modal-header > div {
+  display: none;
+}
+
+.registration-modal.registration-modal-compact .registration-result {
+  min-height: 0;
+  height: auto;
+  flex: none;
+  justify-content: flex-start;
+  padding: 3rem 1.5rem 1.75rem;
+}
+
+.registration-modal.registration-modal-compact .registration-summary {
+  width: 100%;
+}
+
+.form-grid label > span,
+.registration-step-panel label > span,
+.receive-step-fields label > span {
+    color: var(--pf-ink-2);
+    font-size: 0.9375rem;
+    font-weight: 850;
+}
+
+.registration-step-panel,
+.receive-step-fields {
+    gap: 0.875rem;
+    padding: 1rem 1.25rem;
+}
+
+.success-mark,
+.registration-success {
+    background: var(--pf-green-soft);
+    color: var(--pf-green);
+}
+
+.registration-steps button.active span {
+    background: var(--pf-teal);
+}
+
+.registration-barcode-card img {
+    width: min(100%, 22rem);
+    height: 8.5rem;
+    object-fit: contain;
+}
+
+.registration-barcode-card {
+    width: min(100%, 28rem);
+}

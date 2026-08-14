@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prepare-sites-build.cjs",
-    "serve": "vite preview",
-    "test:logic": "node tests/inventoryStore.test.cjs"
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "html5-qrcode": "^2.3.8",
     "jsbarcode": "^3.12.1",
     "nprogress": "^0.2.0",
+    "qrcode": "^1.5.4",
     "vue": "^3.0.5",
     "vue-router": "^4.0.11"
   },

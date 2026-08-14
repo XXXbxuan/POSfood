@@ -1,0 +1,9 @@
+/* Shared breakpoints only. Page-specific responsive rules live with their page. */
+@media (max-width: 56rem) {
+    .mobile-menu { display: grid; }
+}
+
+@media (max-width: 44rem) {
+    .modal-backdrop { padding: 0; }
+    .form-modal { width: 100%; max-height: 100dvh; border-radius: 0; }
+}

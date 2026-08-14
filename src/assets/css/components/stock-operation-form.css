@@ -1,0 +1,209 @@
+.stock-equation {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.25rem 1.4375rem 0;
+    padding: 0.9375rem;
+    border: 0.0625rem solid #bfdbfe;
+    border-radius: var(--inv-radius);
+    background: var(--inv-primary-soft);
+}
+
+.stock-equation.out {
+    border-color: #fecaca;
+    background: var(--inv-danger-soft);
+}
+
+.stock-equation > div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.stock-equation span {
+    color: var(--inv-text-secondary);
+    font-size: 0.9375rem;
+}
+
+.stock-equation strong {
+    font-size: 1.5rem;
+}
+
+.stock-equation > i {
+    color: var(--inv-text-light);
+    font-size: 1.125rem;
+}
+
+.quantity-stepper {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr 2.75rem;
+}
+
+.quantity-stepper button {
+    border: 0.0625rem solid #c9cdd3;
+    background: #eceef1;
+    font-size: 1.375rem;
+    cursor: pointer;
+}
+
+.quantity-stepper button:first-child {
+    border-radius: var(--inv-radius-sm) 0 0 var(--inv-radius-sm);
+}
+
+.quantity-stepper button:last-child {
+    border-radius: 0 var(--inv-radius-sm) var(--inv-radius-sm) 0;
+}
+
+.quantity-stepper input {
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+    text-align: center;
+}
+
+/* Embedded stock operation */
+.embedded-operation {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    border-left: 0.0625rem solid var(--inv-border);
+    background: #f7fbfb;
+}
+
+.embedded-operation-header {
+    display: flex;
+    min-height: 4.625rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.9375rem 1.0625rem;
+    border-bottom: 0.0625rem solid var(--inv-border);
+    background: #fff;
+}
+
+.embedded-operation-header > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.1875rem;
+}
+
+.embedded-operation-header h2 {
+    font-size: 1.25rem;
+}
+
+.embedded-operation-header p {
+    overflow: hidden;
+    color: var(--inv-text-secondary);
+    font-size: 0.9375rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.embedded-operation .stock-equation {
+    flex: 0 0 auto;
+    margin: 0.875rem 0.9375rem 0;
+}
+
+.embedded-operation-form {
+    min-height: 0;
+    grid-template-columns: 1fr 1fr;
+    overflow-y: auto;
+}
+
+.embedded-operation-form > label:nth-child(n + 3),
+.embedded-operation-form .form-error,
+.embedded-operation-form .operation-submit {
+    grid-column: 1 / -1;
+}
+
+.embedded-operation-form textarea {
+    min-height: 4.125rem;
+}
+
+.embedded-operation-form .operation-submit {
+    width: 100%;
+    min-height: 2.8125rem;
+}
+
+.scan-hero-workspace .embedded-operation {
+    max-height: 30.625rem;
+}
+
+.summary-equation,
+.stock-equation {
+    gap: 0.875rem;
+    padding: 1.125rem 1rem;
+    border-radius: 1rem;
+}
+
+.summary-equation strong,
+.stock-equation strong,
+.completion-equation strong,
+.hero-stock strong {
+    font-size: 2.25rem;
+}
+
+.summary-equation,
+.stock-equation {
+    gap: 0.625rem;
+    padding: 0.875rem;
+}
+
+.summary-equation strong,
+.stock-equation strong,
+.completion-equation strong,
+.hero-stock strong {
+    font-size: 1.75rem;
+}
+
+.embedded-operation {
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.embedded-operation-header {
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+}
+
+.embedded-operation-form {
+    padding: 1rem;
+}
+
+.quantity-stepper {
+    min-width: 0;
+}
+
+.quantity-stepper button {
+    min-width: 2.75rem;
+}
+
+.embedded-operation {
+    border-color: var(--pf-line);
+    background: #fff;
+}
+
+.embedded-operation-header {
+    border-block-end-color: var(--pf-line);
+}
+
+.stock-equation {
+    border-color: #cde8e3;
+    border-radius: 1rem;
+    background: var(--pf-surface-soft);
+}
+
+.quantity-stepper {
+    border-color: var(--pf-line-strong);
+    border-radius: 0.75rem;
+}
+
+.quantity-stepper button {
+    color: var(--pf-teal-dark);
+}
+
