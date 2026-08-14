@@ -1,0 +1,191 @@
+.sidebar-controller {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.sidebar-controller .sidebar-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    border: 0;
+    background: rgba(23, 24, 38, 0.24);
+    pointer-events: auto;
+}
+
+.sidebar-controller .pos-sidebar {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 16.5rem;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 1.2rem;
+    transform: translateX(-102%);
+    border-right: 1px solid #ececec;
+    background: #fff;
+    box-shadow: 0.8rem 0 2rem rgba(23, 24, 38, 0.13);
+    pointer-events: auto;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-controller .pos-sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar-controller .sidebar-brand {
+    margin: 0.3rem 0.35rem 1.5rem;
+    color: #171826;
+    font-size: 1.32rem;
+    font-weight: 900;
+}
+
+.sidebar-controller .sidebar-brand span {
+    color: #fc8019;
+}
+
+.sidebar-controller .pos-sidebar nav {
+    min-height: 0;
+    display: grid;
+    gap: 0.95rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 2rem;
+}
+
+.sidebar-controller .pos-sidebar nav button,
+.sidebar-controller .lock-button,
+.sidebar-controller .logout-button {
+    width: 100%;
+    min-height: 3.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.7rem;
+    background: #fff;
+    color: #70737d;
+    text-align: left;
+    font-weight: 800;
+}
+
+.sidebar-controller .pos-sidebar button i {
+    width: 1.4rem;
+    font-size: 1.12rem;
+    text-align: center;
+}
+
+.sidebar-controller .pos-sidebar nav button.active {
+    border-color: #fc8019;
+    background: #fff2e8;
+    color: #fc8019;
+}
+
+.sidebar-controller .sidebar-spacer {
+    flex: 1;
+}
+
+.sidebar-controller .profile-card {
+    width: 100%;
+    min-height: 4.2rem;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+    padding: 0.8rem;
+    border: 1px solid transparent;
+    border-radius: 0.75rem;
+    background: #f6f6f7;
+    color: #171826;
+    text-align: left;
+}
+
+.sidebar-controller .profile-card:hover,
+.sidebar-controller .profile-card.active {
+    border-color: #ffc18c;
+    background: #fff2e8;
+}
+
+.sidebar-controller .profile-card > i {
+    width: auto;
+    color: #b0b2b8;
+    font-size: 0.95rem;
+}
+
+.sidebar-controller .profile-card.active > i {
+    color: #fc8019;
+}
+
+.sidebar-controller .profile-card strong,
+.sidebar-controller .profile-card small {
+    display: block;
+}
+
+.sidebar-controller .profile-card small {
+    max-width: 10rem;
+    margin-top: 0.15rem;
+    overflow: hidden;
+    color: #90939b;
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar-controller .avatar {
+    width: 2.4rem;
+    height: 2.4rem;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #fff2e8;
+    color: #fc8019;
+    font-size: 0.95rem;
+    font-weight: 900;
+}
+
+.sidebar-controller .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sidebar-controller .lock-button {
+    margin-bottom: 0.35rem;
+    color: #fc8019;
+}
+
+.sidebar-controller .lock-button:hover {
+    background: #fff2e8;
+}
+
+.sidebar-controller .logout-button {
+    color: #ef4444;
+}
+
+.sidebar-controller .logout-button:hover {
+    background: #fff1f1;
+}
+
+@media (max-width: 40em) {
+    .sidebar-controller .pos-sidebar {
+        width: 15rem;
+    }
+
+}
+
+.sidebar-controller .sidebar-brand {
+    width: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+}

@@ -1,0 +1,193 @@
+.tables-grid {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(8rem, 1fr));
+    grid-auto-rows: 10.45rem;
+    align-content: start;
+    column-gap: 1rem;
+    row-gap: 1.4rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.1rem 0 0.8rem;
+}
+
+.tables-grid .table-card {
+    position: relative;
+    height: 10.45rem;
+    overflow: hidden;
+    border: 1px solid #ededed;
+    border-radius: 0.8rem;
+    background: #fff;
+    box-shadow: 0 0.55rem 1.4rem rgba(23, 24, 38, 0.08);
+}
+
+.tables-grid .table-card.selected {
+    border-color: #fc8019;
+    box-shadow:
+        0 0 0 0.18rem rgba(252, 128, 25, 0.18),
+        0 0.7rem 1.7rem rgba(23, 24, 38, 0.1);
+}
+
+.tables-grid .table-art {
+    position: relative;
+    width: 7.2rem;
+    height: 7.2rem;
+    margin: 0 auto;
+    transform: translateY(-0.18rem);
+}
+
+.tables-grid .chair {
+    position: absolute;
+    display: block;
+    border-radius: 4rem;
+    background: #dedede;
+}
+
+.tables-grid .chair.top,
+.tables-grid .chair.bottom {
+    width: 2rem;
+    height: 0.38rem;
+}
+
+.tables-grid .seats-4 .chair.top.one,
+.tables-grid .seats-4 .chair.bottom.one {
+    left: 2.6rem;
+}
+
+.tables-grid .seats-6 .chair.top.one,
+.tables-grid .seats-6 .chair.bottom.one {
+    left: 1.15rem;
+}
+
+.tables-grid .chair.top.one {
+    top: 0.1rem;
+}
+
+.tables-grid .chair.top.two {
+    top: 0.1rem;
+    right: 1.15rem;
+}
+
+.tables-grid .chair.bottom.one {
+    bottom: 0.1rem;
+}
+
+.tables-grid .chair.bottom.two {
+    right: 1.15rem;
+    bottom: 0.1rem;
+}
+
+.tables-grid .chair.left,
+.tables-grid .chair.right {
+    width: 0.38rem;
+    height: 2.4rem;
+    top: 2.4rem;
+}
+
+.tables-grid .chair.left {
+    left: 0.15rem;
+}
+
+.tables-grid .chair.right {
+    right: 0.15rem;
+}
+
+.tables-grid .table-shape {
+    position: absolute;
+    inset: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(23, 24, 38, 0.06);
+    border-radius: 0.35rem;
+    color: #fff;
+    box-shadow: inset 0 -0.25rem 0 rgba(23, 24, 38, 0.07);
+}
+
+.tables-grid .table-shape strong {
+    font-size: 1.05rem;
+}
+
+.tables-grid .table-shape span {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.tables-grid .vacant .table-shape {
+    background: #20b956;
+}
+
+.tables-grid .served .table-shape,
+.tables-grid .paid .table-shape {
+    background: #ef4444;
+}
+
+.tables-grid .cleaning .table-shape {
+    background: #aeb3bb;
+}
+
+.tables-grid .service .table-shape {
+    background: #f4b63c;
+}
+
+.tables-grid .payment-strip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.18rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    border-radius: 0 0 0.76rem 0.76rem;
+    background: #7d858f;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+}
+
+.tables-grid .payment-strip.paid {
+    color: #70f0dc;
+}
+
+.tables-grid .payment-strip.served {
+    color: #ff7d75;
+}
+
+.tables-grid .add-table-card {
+    height: 10.45rem;
+    display: grid;
+    place-items: center;
+    border: 2px dashed #cfd1d6;
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.6);
+    color: #fc8019;
+    font-size: 1.35rem;
+    box-shadow: none;
+}
+
+.tables-grid .add-table-card:hover {
+    border-color: #fc8019;
+    background: #fff7f0;
+}
+
+@media (max-width: 73.75em) {
+    .tables-grid {
+        grid-template-columns: repeat(4, minmax(7.5rem, 1fr));
+        grid-auto-rows: 9.7rem;
+        row-gap: 1.25rem;
+    }
+
+    .tables-grid .table-card,
+    .tables-grid .add-table-card {
+        height: 9.7rem;
+    }
+}

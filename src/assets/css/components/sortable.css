@@ -1,0 +1,44 @@
+.long-sort-enabled {
+    --long-sort-accent: #fc8019;
+}
+
+.long-sort-enabled [data-sort-id] {
+    cursor: grab;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.long-sort-enabled .long-sort-chosen {
+    z-index: 5;
+    border-color: var(--long-sort-accent);
+    animation: long-sort-ready-wiggle 0.24s ease-in-out infinite alternate;
+    cursor: grabbing;
+    box-shadow:
+        0 0 0 0.18rem rgba(252, 128, 25, 0.18),
+        0 0.8rem 1.8rem rgba(23, 24, 38, 0.14);
+}
+
+.long-sort-enabled .long-sort-active {
+    cursor: grabbing;
+}
+
+.long-sort-enabled .long-sort-placeholder {
+    border-style: dashed;
+    opacity: 0.35;
+}
+
+@keyframes long-sort-ready-wiggle {
+    from {
+        rotate: -0.35deg;
+    }
+
+    to {
+        rotate: 0.35deg;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .long-sort-enabled .long-sort-chosen {
+        animation: none;
+    }
+}

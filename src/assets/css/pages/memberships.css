@@ -1,0 +1,1106 @@
+.membership-page,
+.voucher-page {
+    min-height: 100vh;
+    background: var(--pos-color-background);
+}
+
+.membership-shell,
+.voucher-shell {
+    min-height: 100vh;
+}
+
+.module-page-content {
+    padding: 1.25rem;
+}
+
+.module-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.module-heading > div > span,
+.module-editor-modal > header span,
+.member-profile-title > div > span {
+    color: var(--pos-color-accent);
+    font-size: 0.88rem;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+}
+
+.module-heading h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.75rem;
+}
+
+.membership-page .module-page-content {
+    padding: 1rem 1.15rem;
+}
+
+.membership-page .module-heading {
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.membership-page .module-heading h2 {
+    font-size: 1.8rem;
+}
+
+.module-heading p {
+    margin: 0.2rem 0 0;
+    color: var(--pos-color-muted);
+    font-size: 0.98rem;
+}
+
+.module-search {
+    width: min(25rem, 45vw);
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--pos-color-border);
+    border-radius: var(--pos-control-radius);
+    background: #fff;
+}
+
+.module-search i {
+    color: var(--pos-color-muted);
+}
+
+.module-search input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+.module-primary-action,
+.module-secondary-action {
+    min-height: 2.9rem;
+    padding: 0 1.15rem;
+    border-radius: var(--pos-control-radius);
+    font-weight: 900;
+}
+
+.module-primary-action {
+    border: 1px solid var(--pos-color-accent);
+    background: var(--pos-color-accent);
+    color: #fff;
+}
+
+.module-primary-action i {
+    margin-right: 0.45rem;
+}
+
+.module-secondary-action {
+    border: 1px solid var(--pos-color-border);
+    background: #fff;
+    color: var(--pos-color-text);
+}
+
+.member-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+
+.member-summary-grid article {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 4.55rem;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--pos-color-border);
+    border-radius: var(--pos-card-radius);
+    background: #fff;
+}
+
+.member-summary-grid article > i {
+    width: 2.65rem;
+    height: 2.65rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.65rem;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+}
+
+.member-summary-grid span,
+.member-summary-grid strong {
+    display: block;
+}
+
+.member-summary-grid span {
+    color: var(--pos-color-muted);
+    font-size: 0.9rem;
+}
+
+.member-summary-grid strong {
+    margin-top: 0.15rem;
+    font-size: 1.15rem;
+}
+
+.member-workspace {
+    height: calc(100vh - 10.2rem);
+    min-height: 34rem;
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.72fr) minmax(31rem, 1.28fr);
+    gap: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.member-list-card,
+.member-detail-card {
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid var(--pos-color-border);
+    border-radius: var(--pos-card-radius);
+    background: #fff;
+}
+
+.member-list-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.module-filter-tabs {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--pos-color-border);
+}
+
+.module-filter-tabs button {
+    min-height: 2.35rem;
+    padding: 0 0.8rem;
+    border: 0;
+    border-radius: 0.48rem;
+    background: transparent;
+    color: var(--pos-color-muted);
+    font-size: 0.92rem;
+    font-weight: 900;
+}
+
+.module-filter-tabs button.active {
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+}
+
+.member-list-scroll {
+    min-height: 0;
+    flex: 1;
+    overflow: auto;
+    padding: 0.65rem;
+}
+
+.member-list-row {
+    width: 100%;
+    min-height: 4.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.5rem;
+    padding: 0.65rem;
+    border: 1px solid #ececee;
+    border-radius: 0.65rem;
+    background: #fafafa;
+    color: var(--pos-color-text);
+    text-align: left;
+}
+
+.member-list-row.active {
+    border-color: var(--pos-color-accent);
+    background: var(--pos-color-accent-soft);
+}
+
+.member-list-row.inactive {
+    opacity: 0.58;
+}
+
+.member-avatar {
+    width: 2.8rem;
+    height: 2.8rem;
+    flex: 0 0 2.8rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--pos-color-accent);
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 900;
+}
+
+.member-avatar.large {
+    width: 3.45rem;
+    height: 3.45rem;
+    flex-basis: 3.45rem;
+    font-size: 1.1rem;
+}
+
+.member-list-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.member-list-copy strong,
+.member-list-copy small {
+    display: block;
+}
+
+.member-list-copy small {
+    margin-top: 0.18rem;
+    overflow: hidden;
+    color: var(--pos-color-muted);
+    font-size: 0.85rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.member-points {
+    color: var(--pos-color-accent);
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+.member-list-row > i {
+    color: #b1b3b8;
+    font-size: 0.88rem;
+}
+
+.module-empty-state,
+.empty-detail {
+    min-height: 16rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    color: var(--pos-color-muted);
+    text-align: center;
+}
+
+.module-empty-state > i,
+.empty-detail > i {
+    color: #d3d5d8;
+    font-size: 2.1rem;
+}
+
+.module-empty-state small,
+.empty-detail small {
+    font-size: 0.88rem;
+}
+
+.member-detail-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 0.9rem 0.9rem 1.35rem;
+}
+
+.member-detail-card > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.member-profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.member-profile-points {
+    min-width: 4.6rem;
+    margin-left: 0.45rem;
+    padding-left: 0.7rem;
+    border-left: 1px solid #ffd1aa;
+    text-align: right;
+}
+
+.member-profile-points span,
+.member-profile-points strong {
+    display: block;
+}
+
+.member-profile-points span {
+    color: var(--pos-color-accent);
+    font-size: 0.88rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.member-profile-points strong {
+    margin-top: 0.05rem;
+    color: var(--pos-color-accent);
+    font-size: 1.35rem;
+}
+
+.member-profile-title {
+    min-width: 0;
+    width: auto;
+    flex: 0 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.member-identity-card {
+    min-width: 0;
+    width: min(26rem, 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.7rem;
+    background: #f7f7f8;
+}
+
+.member-identity-card > div:first-child {
+    min-width: 0;
+    flex: 0 1 16rem;
+}
+
+.member-profile-title h3 {
+    margin: 0.1rem 0;
+    font-size: 1.3rem;
+}
+
+.member-profile-title small {
+    color: var(--pos-color-muted);
+    font-size: 1.02rem;
+}
+
+.module-icon-button {
+    width: 2.8rem;
+    height: 2.8rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid #ffd0aa;
+    border-radius: 0.6rem;
+    background: #fff;
+    color: var(--pos-color-accent);
+}
+
+.member-detail-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin: 0.75rem 0;
+}
+
+.member-detail-stats article {
+    padding: 0.65rem 0.7rem;
+    border-radius: 0.65rem;
+    background: #f6f6f7;
+}
+
+.member-order-summary {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding: 0.65rem 2.2rem 0.65rem 0.7rem;
+    border: 0;
+    border-radius: 0.65rem;
+    background: #f6f6f7;
+    color: var(--pos-color-text);
+    text-align: left;
+}
+
+.member-order-summary span,
+.member-order-summary strong {
+    display: block;
+}
+
+.member-order-summary span {
+    color: var(--pos-color-muted);
+    font-size: 0.98rem;
+}
+
+.member-order-summary strong {
+    grid-column: 1;
+    margin-top: 0.2rem;
+    font-size: 1.2rem;
+}
+
+.member-order-summary i {
+    position: absolute;
+    right: 0.8rem;
+    color: var(--pos-color-accent);
+}
+
+.member-order-summary:hover {
+    background: var(--pos-color-accent-soft);
+}
+
+.member-voucher-summary {
+    position: relative;
+    width: 100%;
+    min-height: 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    margin-bottom: 0.55rem;
+    padding: 0.65rem 2.4rem 0.65rem 0.75rem;
+    border: 0;
+    border-radius: 0.65rem;
+    background: #f6f6f7;
+    color: var(--pos-color-text);
+    text-align: left;
+}
+
+.member-voucher-summary span,
+.member-voucher-summary strong {
+    display: block;
+}
+
+.member-voucher-summary span {
+    color: var(--pos-color-muted);
+    font-size: 1.04rem;
+}
+
+.member-voucher-summary strong {
+    grid-column: 1;
+    margin-top: 0.2rem;
+    font-size: 1.2rem;
+}
+
+.member-voucher-summary i {
+    position: absolute;
+    right: 0.85rem;
+    color: var(--pos-color-accent);
+}
+
+.member-voucher-summary:hover,
+.member-voucher-summary:focus-visible {
+    background: var(--pos-color-accent-soft);
+    outline: 0;
+}
+
+.member-detail-stats span,
+.member-detail-stats strong {
+    display: block;
+}
+
+.member-detail-stats span {
+    color: var(--pos-color-muted);
+    font-size: 1.04rem;
+}
+
+.member-detail-stats strong {
+    margin-top: 0.2rem;
+    font-size: 1.2rem;
+}
+
+.member-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+}
+
+.member-contact-grid > div {
+    position: relative;
+    min-width: 0;
+    min-height: 4.35rem;
+    padding: 0.7rem 0.85rem 0.9rem;
+}
+
+.member-contact-grid > div::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0.85rem;
+    width: 80%;
+    height: 1px;
+    background: var(--pos-color-border);
+}
+
+.member-contact-grid dt {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--pos-color-muted);
+    font-size: 1.06rem;
+}
+
+.member-contact-grid dt i {
+    color: var(--pos-color-accent);
+    font-size: 1.1rem;
+}
+
+.member-contact-grid dd {
+    margin: 0.35rem 0 0;
+    overflow-wrap: anywhere;
+    font-size: 0.96rem;
+    font-weight: 800;
+}
+
+.member-owned-vouchers {
+    margin-top: 1.5rem;
+    margin-left: 1em;
+    padding-top: 0;
+}
+
+.member-owned-vouchers > header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.55rem;
+    margin-bottom: 0.8rem;
+}
+
+.member-owned-vouchers > header strong {
+    font-size: 1.12rem;
+}
+
+.member-owned-vouchers > header span {
+    min-width: 1.65rem;
+    padding: 0.2rem 0.35rem;
+    border-radius: 1rem;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+    font-size: 0.92rem;
+    font-weight: 900;
+    text-align: center;
+}
+
+.member-owned-vouchers > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.member-owned-vouchers button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--pos-color-border);
+    border-radius: 0.55rem;
+    background: #fff;
+    color: var(--pos-color-text);
+    text-align: left;
+}
+
+.member-owned-vouchers button:hover,
+.member-owned-vouchers button:focus-visible {
+    border-color: var(--pos-color-accent);
+    background: var(--pos-color-accent-soft);
+    outline: 0;
+}
+
+.member-owned-vouchers button strong {
+    overflow: hidden;
+    font-size: 1.05rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.member-owned-vouchers button b {
+    color: var(--pos-color-accent);
+    font-size: 1.06rem;
+    white-space: nowrap;
+}
+
+.member-owned-vouchers > small {
+    color: var(--pos-color-muted);
+    font-size: 0.98rem;
+}
+
+.member-history-section {
+    margin-top: 0.75rem;
+}
+
+.member-history-section > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.member-history-section h4 {
+    margin: 0;
+}
+
+.member-history-section > header span {
+    min-width: 1.7rem;
+    padding: 0.25rem;
+    border-radius: 1rem;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.member-history-list article {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    padding: 0.58rem 0.65rem;
+    border-radius: 0.55rem;
+    background: #fafafa;
+}
+
+.member-history-list strong,
+.member-history-list small {
+    display: block;
+}
+
+.member-history-list small,
+.member-history-empty {
+    margin-top: 0.15rem;
+    color: var(--pos-color-muted);
+    font-size: 0.82rem;
+}
+
+.member-orders-modal {
+    width: min(38rem, calc(100vw - 2rem));
+    max-height: min(42rem, calc(100vh - 2rem));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 0.9rem;
+    background: #fff;
+    box-shadow: 0 1.5rem 4rem rgba(23, 24, 38, 0.28);
+}
+
+.member-orders-modal > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.15rem;
+    border-bottom: 1px solid var(--pos-color-border);
+}
+
+.member-orders-modal > header span {
+    color: var(--pos-color-accent);
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+}
+
+.member-orders-modal > header h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.25rem;
+}
+
+.member-orders-modal > header button {
+    width: 2.65rem;
+    height: 2.65rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+}
+
+.member-orders-list {
+    min-height: 0;
+    display: grid;
+    align-content: start;
+    gap: 0.55rem;
+    padding: 1rem 1.15rem;
+    overflow-y: auto;
+}
+
+.member-orders-list article {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem;
+    border-radius: 0.6rem;
+    background: #f7f7f8;
+}
+
+.member-orders-list strong,
+.member-orders-list small {
+    display: block;
+}
+
+.member-orders-list small {
+    margin-top: 0.15rem;
+    color: var(--pos-color-muted);
+    font-size: 0.85rem;
+}
+
+.member-orders-list b {
+    color: var(--pos-color-accent);
+    white-space: nowrap;
+}
+
+.member-status-button {
+    position: sticky;
+    z-index: 2;
+    bottom: 0.75rem;
+    width: 100%;
+    min-height: 2.8rem;
+    margin-top: auto;
+    margin-bottom: 0.15rem;
+    border: 1px solid #ffc4bf;
+    border-radius: 0.55rem;
+    background: #fff4f3;
+    color: var(--pos-color-danger);
+    font-weight: 900;
+}
+
+.member-voucher-preview-modal {
+    position: relative;
+    width: min(25rem, calc(100vw - 2rem));
+    padding: 4.2rem 1.25rem 1.25rem;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.5rem 4rem rgba(23, 24, 38, 0.28);
+}
+
+.member-voucher-preview-close {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    z-index: 2;
+    border: 0;
+    border-radius: 50%;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+}
+
+.member-voucher-preview-card {
+    min-height: 25rem;
+    margin: 0 auto;
+}
+
+.member-voucher-list-modal {
+    width: min(68rem, calc(100vw - 2rem));
+    max-height: min(42rem, calc(100vh - 2rem));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.5rem 4rem rgba(23, 24, 38, 0.28);
+}
+
+.member-voucher-list-modal > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.15rem 1.3rem;
+    border-bottom: 1px solid var(--pos-color-border);
+}
+
+.member-voucher-list-modal > header span {
+    color: var(--pos-color-accent);
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+.member-voucher-list-modal > header h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.35rem;
+}
+
+.member-voucher-list-modal > header button {
+    width: 2.8rem;
+    height: 2.8rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+}
+
+.member-voucher-detail-list {
+    min-height: 0;
+    display: grid;
+    align-content: start;
+    gap: 0.65rem;
+    padding: 1rem 1.3rem 1.3rem;
+    overflow-y: auto;
+}
+
+.member-voucher-detail-list > button {
+    width: 100%;
+    min-height: 4.8rem;
+    display: grid;
+    grid-template-columns: minmax(7rem, 1fr) repeat(3, minmax(7rem, 1fr)) auto 1rem;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--pos-color-border);
+    border-radius: 0.7rem;
+    background: #fff;
+    color: var(--pos-color-text);
+    text-align: left;
+}
+
+.member-voucher-detail-list > button:hover,
+.member-voucher-detail-list > button:focus-visible {
+    border-color: var(--pos-color-accent);
+    background: var(--pos-color-accent-soft);
+    outline: 0;
+}
+
+.member-voucher-detail-list > button > strong { font-size: 1rem; }
+.member-voucher-detail-list span small,
+.member-voucher-detail-list span b { display: block; }
+.member-voucher-detail-list span small { color: var(--pos-color-muted); font-size: 0.86rem; }
+.member-voucher-detail-list span b { margin-top: 0.2rem; font-size: 0.96rem; }
+.member-voucher-detail-list em { color: var(--pos-color-accent); font-style: normal; font-weight: 900; }
+.member-voucher-detail-list > button > i { color: var(--pos-color-accent); }
+.member-voucher-detail-list > p { margin: 2rem 0; color: var(--pos-color-muted); text-align: center; }
+
+.member-status-button.activate {
+    border-color: #bde9c7;
+    background: #effbf2;
+    color: var(--pos-color-success);
+}
+
+.member-status-confirm-modal {
+    width: min(30rem, calc(100vw - 2rem));
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.5rem 4rem rgba(23, 24, 38, 0.28);
+    text-align: center;
+}
+
+.member-status-confirm-icon {
+    width: 3.3rem;
+    height: 3.3rem;
+    display: grid;
+    place-items: center;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+    font-size: 1.2rem;
+}
+
+.member-status-confirm-modal h2 {
+    margin: 0.85rem 0 0.35rem;
+    font-size: 1.35rem;
+}
+
+.member-status-confirm-modal p {
+    margin: 0;
+    color: var(--pos-color-muted);
+    font-size: 1.05rem;
+}
+
+.member-status-confirm-modal footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin-top: 1.25rem;
+}
+
+.member-status-confirm-modal footer button {
+    min-height: 3rem;
+}
+
+.module-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(23, 24, 38, 0.58);
+}
+
+.module-editor-modal {
+    width: min(42rem, 96vw);
+    max-height: 94vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 1.5rem 4rem rgba(23, 24, 38, 0.28);
+}
+
+.member-editor-modal {
+    width: min(54rem, 96vw);
+}
+
+.member-editor-modal .module-form-grid {
+    gap: 1rem;
+    padding: 1.4rem;
+}
+
+.member-editor-modal .module-form-grid label {
+    font-size: 1rem;
+}
+
+.member-editor-modal .module-form-grid input,
+.member-editor-modal .module-form-grid select {
+    height: 3.5rem;
+    font-size: 1.1rem;
+}
+
+.member-editor-modal .module-form-grid textarea {
+    min-height: 6.5rem;
+    font-size: 1.1rem;
+}
+
+.module-editor-modal > header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.2rem;
+    border-bottom: 1px solid var(--pos-color-border);
+}
+
+.module-editor-modal > header h2 {
+    margin: 0.12rem 0 0;
+    font-size: 1.35rem;
+}
+
+.module-editor-modal > header button {
+    width: 2.65rem;
+    height: 2.65rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--pos-color-accent-soft);
+    color: var(--pos-color-accent);
+}
+
+.module-editor-modal form {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.module-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+    padding: 1.2rem;
+}
+
+.module-form-grid label {
+    display: block;
+    color: #42444d;
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+.module-form-grid label.full {
+    grid-column: 1 / -1;
+}
+
+.module-form-grid input,
+.module-form-grid select,
+.module-form-grid textarea {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0 0.75rem;
+    border: 1px solid #dfe0e3;
+    border-radius: 0.55rem;
+    background: #fafafa;
+    outline: 0;
+}
+
+.module-form-grid input,
+.module-form-grid select {
+    height: 3rem;
+}
+
+.module-form-grid textarea {
+    min-height: 5rem;
+    padding-top: 0.7rem;
+    resize: vertical;
+}
+
+.module-form-grid input:focus,
+.module-form-grid select:focus,
+.module-form-grid textarea:focus {
+    border-color: var(--pos-color-accent);
+    background: #fff;
+}
+
+.module-editor-modal form > footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    padding: 1rem 1.2rem;
+    border-top: 1px solid var(--pos-color-border);
+}
+
+.module-form-error {
+    margin: 0 1.2rem 0.8rem;
+    color: var(--pos-color-danger);
+    font-size: 0.92rem;
+    font-weight: 900;
+}
+
+@media (max-width: 52em) {
+    .member-workspace {
+        height: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .member-list-card,
+    .member-detail-card {
+        min-height: 28rem;
+    }
+}
+
+@media (max-width: 40em) {
+    .module-page-content {
+        padding: 0.75rem;
+    }
+
+    .module-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .module-search {
+        width: 100%;
+    }
+
+    .member-summary-grid,
+    .member-detail-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .member-contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .member-profile-title {
+        width: auto;
+        flex: 1;
+    }
+
+    .member-owned-vouchers > div {
+        grid-template-columns: 1fr;
+    }
+
+    .member-profile-points {
+        min-width: 4.6rem;
+    }
+
+    .module-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .module-form-grid label.full {
+        grid-column: auto;
+    }
+}

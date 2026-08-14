@@ -1,0 +1,422 @@
+.staff-profile-page {
+    height: 100dvh;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #f7f7f8;
+    color: #171826;
+}
+
+.staff-profile-page > .pos-topbar {
+    flex: none;
+}
+
+.staff-profile-topbar-title {
+    font-size: 1.1rem;
+    font-weight: 900;
+}
+
+.staff-profile-workspace {
+    width: min(100%, 92rem);
+    min-height: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0.75rem clamp(1rem, 3vw, 2.25rem) 0.9rem;
+    overflow: hidden;
+}
+
+.staff-profile-header {
+    min-height: 5.25rem;
+    flex: none;
+    display: flex;
+    align-items: flex-start;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid #dedfe2;
+}
+
+.staff-profile-header-copy {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.9rem;
+}
+
+.staff-profile-header h1 {
+    margin: 0;
+    font-size: 1.65rem;
+    line-height: 1.05;
+}
+
+.staff-profile-home {
+    min-height: 3.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0 0.85rem;
+    border: 1px solid #dedfe2;
+    border-radius: 0.65rem;
+    background: #fff;
+    color: #171826;
+    font-size: 0.96rem;
+    font-weight: 900;
+}
+
+.staff-profile-home i {
+    color: #fc8019;
+}
+
+.staff-profile-layout {
+    min-height: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(14.5rem, 17rem) minmax(0, 1fr);
+    gap: 0.95rem;
+    margin-top: 0.75rem;
+    overflow: hidden;
+}
+
+.staff-profile-identity,
+.staff-profile-form {
+    min-height: 0;
+    border: 1px solid #e1e2e5;
+    border-radius: 0.9rem;
+    background: #fff;
+    box-shadow: 0 0.6rem 1.5rem rgba(23, 24, 38, 0.05);
+}
+
+.staff-profile-identity {
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    text-align: center;
+}
+
+.staff-profile-photo {
+    position: relative;
+    width: 5.6rem;
+    height: 5.6rem;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    overflow: visible;
+    border: 0.2rem solid #fff;
+    border-radius: 50%;
+    background: #fff2e8;
+    color: #fc8019;
+    box-shadow: 0 0 0 1px #ffd1ac, 0 0.55rem 1.2rem rgba(35, 27, 22, 0.1);
+    font-size: 1.35rem;
+    font-weight: 900;
+}
+
+.staff-profile-photo img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+}
+
+.staff-profile-photo > i {
+    position: absolute;
+    right: -0.1rem;
+    bottom: 0.1rem;
+    width: 1.85rem;
+    height: 1.85rem;
+    display: grid;
+    place-items: center;
+    border: 0.16rem solid #fff;
+    border-radius: 50%;
+    background: #fc8019;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.staff-profile-identity h2 {
+    margin: 0.65rem 0 0.12rem;
+    font-size: 1.08rem;
+}
+
+.staff-profile-identity > p {
+    margin: 0;
+    color: #8a8d95;
+    font-size: 0.88rem;
+    font-weight: 800;
+}
+
+.staff-profile-change-photo {
+    min-height: 2.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    margin-top: 0.7rem;
+    padding: 0 0.8rem;
+    border: 1px solid #ffc18c;
+    border-radius: 0.6rem;
+    background: #fff7f0;
+    color: #fc8019;
+    font-size: 0.95rem;
+    font-weight: 900;
+}
+
+.staff-profile-readonly {
+    width: 100%;
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.85rem 0 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid #eeeeef;
+    text-align: left;
+}
+
+.staff-profile-readonly div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    padding: 0.62rem 0.7rem;
+    border-radius: 0.6rem;
+    background: #f7f7f8;
+}
+
+.staff-profile-readonly dt {
+    color: #8a8d95;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.staff-profile-readonly dd {
+    margin: 0;
+    color: #171826;
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+.staff-profile-form {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.staff-profile-form-section {
+    min-height: 0;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.15rem 1.35rem;
+}
+
+.staff-profile-form-section:first-child {
+    flex-grow: 1.12;
+}
+
+.staff-profile-form-section.security {
+    flex-grow: 0.88;
+}
+
+.staff-profile-form-section + .staff-profile-form-section {
+    border-top: 1px solid #eeeeef;
+}
+
+.staff-profile-form-section > header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.staff-profile-section-icon {
+    width: 3rem;
+    height: 3rem;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 0.75rem;
+    background: #fff2e8;
+    color: #fc8019;
+    font-size: 1.05rem;
+}
+
+.staff-profile-form-section h2 {
+    margin: 0;
+    font-size: 1.12rem;
+}
+
+.staff-profile-form-section header p {
+    margin: 0.2rem 0 0;
+    color: #8a8d95;
+    font-size: 0.96rem;
+}
+
+.staff-profile-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.staff-profile-field {
+    min-width: 0;
+}
+
+.staff-profile-field.full {
+    grid-column: 1 / -1;
+}
+
+.staff-profile-field > span {
+    display: block;
+    margin-bottom: 0.42rem;
+    color: #30313a;
+    font-size: 0.96rem;
+    font-weight: 900;
+}
+
+.staff-profile-field > div {
+    height: 3.55rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    box-sizing: border-box;
+    padding: 0 0.95rem;
+    border: 1px solid #dedfe2;
+    border-radius: 0.72rem;
+    background: #fafafa;
+}
+
+.staff-profile-field > div:focus-within {
+    border-color: #fc8019;
+    background: #fff;
+    box-shadow: 0 0 0 0.16rem rgba(252, 128, 25, 0.1);
+}
+
+.staff-profile-field > div > i {
+    width: 1rem;
+    flex: none;
+    color: #fc8019;
+    text-align: center;
+    font-size: 1.12rem;
+}
+
+.staff-profile-field input {
+    min-width: 0;
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #171826;
+    font: inherit;
+    font-size: 1.1rem;
+}
+
+.staff-profile-field div > button {
+    width: 2.2rem;
+    height: 2.2rem;
+    flex: none;
+    border: 0;
+    border-radius: 50%;
+    background: #fff2e8;
+    color: #fc8019;
+    font-size: 1.02rem;
+}
+
+.staff-profile-message {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 1rem 0.65rem;
+    padding: 0.58rem 0.75rem;
+    border-radius: 0.62rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+}
+
+.staff-profile-message.success {
+    background: #eaf8ee;
+    color: #128443;
+}
+
+.staff-profile-message.error {
+    background: #fff0ef;
+    color: #cf3d35;
+}
+
+.staff-profile-actions {
+    flex: none;
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) minmax(11rem, 1.35fr);
+    gap: 0.8rem;
+    margin-top: 0;
+    padding: 0.85rem 1.35rem;
+    border-top: 1px solid #eeeeef;
+    background: #fafafa;
+}
+
+.staff-profile-actions button {
+    min-height: 3rem;
+    border-radius: 0.62rem;
+    font-size: 0.96rem;
+    font-weight: 900;
+}
+
+.staff-profile-reset {
+    border: 1px solid #dedfe2;
+    background: #fff;
+    color: #171826;
+}
+
+.staff-profile-save {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 0;
+    background: #fc8019;
+    color: #fff;
+}
+
+.staff-profile-save:disabled {
+    opacity: 0.6;
+}
+
+@media (max-width: 56em) {
+    .staff-profile-layout {
+        grid-template-columns: 14rem minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 40em) {
+    .staff-profile-workspace {
+        overflow-y: auto;
+    }
+
+    .staff-profile-header-copy {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+
+    .staff-profile-layout {
+        grid-template-columns: 1fr;
+        overflow: visible;
+    }
+
+    .staff-profile-identity {
+        align-self: stretch;
+    }
+
+    .staff-profile-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-profile-field.full {
+        grid-column: auto;
+    }
+}

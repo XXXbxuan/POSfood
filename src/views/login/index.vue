@@ -1,112 +1,233 @@
 <template>
-    <main class="login-page login-page-simple">
-        <section class="login-form-panel simple-login-panel">
-            <div class="login-form-wrap login-form-card">
-                <div class="login-card-brand">
-                    <span><i class="fa-solid fa-boxes-stacked"></i></span>
-                    <div><strong>INVENTORY</strong><small>MANAGEMENT SYSTEM</small></div>
+    <main class="login-page" :style="{ '--login-bg': `url(${backgroundImg})` }">
+        <div class="brand-mark">posfood</div>
+
+        <label class="login-language-switcher" :aria-label="$t('language')">
+            <i class="fa-solid fa-language"></i>
+            <select
+                :value="$language.code"
+                @change="$setLanguage($event.target.value)"
+            >
+                <option
+                    v-for="language in languages"
+                    :key="language.code"
+                    :value="language.code"
+                >
+                    {{ language.label }}
+                </option>
+            </select>
+        </label>
+
+        <section class="login-panel">
+            <div class="panel-texture"></div>
+
+            <transition name="form-swap" mode="out-in">
+                <div
+                    :key="loginStep"
+                    class="login-form"
+                    :class="{ 'login-pin-form': loginStep === 'pin' }"
+                >
+                    <p class="eyebrow">
+                        {{ isUnlocking ? 'Session locked' : 'Welcome back' }}
+                    </p>
+                    <h1>{{ loginStep === 'pin' ? 'Enter PIN' : 'Login' }}</h1>
+
+                    <div
+                        v-if="loginStep === 'credentials'"
+                        class="login-mode-tabs"
+                    >
+                        <button
+                            type="button"
+                            :class="{ active: loginMode === 'qr' }"
+                            @click="setLoginMode('qr')"
+                        >
+                            <i class="fa-solid fa-qrcode"></i>Scan QR
+                        </button>
+                        <button
+                            type="button"
+                            :class="{ active: loginMode === 'password' }"
+                            @click="setLoginMode('password')"
+                        >
+                            <i class="fa-solid fa-keyboard"></i>ID & Password
+                        </button>
+                    </div>
+
+                    <form
+                        v-if="
+                            loginStep === 'credentials' &&
+                            loginMode === 'password'
+                        "
+                        @submit.prevent="verifyCredentials"
+                    >
+                        <label class="input-row">
+                            <i class="fa-solid fa-id-badge"></i>
+                            <input
+                                v-model.trim="loginForm.employeeId"
+                                type="text"
+                                autocomplete="username"
+                                placeholder="Staff ID"
+                            />
+                        </label>
+
+                        <label class="input-row">
+                            <i class="fa-solid fa-key"></i>
+                            <input
+                                v-model="loginForm.password"
+                                type="password"
+                                autocomplete="current-password"
+                                placeholder="Password"
+                            />
+                        </label>
+
+                        <p v-if="formMessage" class="form-message">
+                            {{ formMessage }}
+                        </p>
+
+                        <div class="form-bottom">
+                            <span class="demo-hint"
+                                >Demo: EMP001 / restro123</span
+                            >
+                            <button class="login-button" type="submit">
+                                Continue <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div
+                        v-else-if="loginStep === 'credentials'"
+                        class="staff-qr-login"
+                    >
+                        <button
+                            type="button"
+                            class="qr-scan-box"
+                            @click="scanStaffQr"
+                        >
+                            <span class="staff-camera-icon">
+                                <i class="fa-solid fa-camera"></i>
+                            </span>
+                            <strong>Scan staff card QR</strong>
+                            <span>Scan identity, then enter your PIN</span>
+                        </button>
+                        <p v-if="formMessage" class="form-message">
+                            {{ formMessage }}
+                        </p>
+                    </div>
+
+                    <section v-else class="login-pin-lock">
+                        <div class="login-pin-photo">
+                            <img
+                                v-if="pendingAccount?.profileImage"
+                                :src="pendingAccount.profileImage"
+                                :alt="pendingAccount.name"
+                            />
+                            <span v-else>{{ accountInitials }}</span>
+                        </div>
+                        <h2>{{ pendingAccount?.name }}</h2>
+                        <p class="login-pin-role">
+                            {{ pendingAccount?.employeeId }} &middot;
+                            {{ pendingAccount?.role }}
+                        </p>
+                        <p class="login-pin-prompt">
+                            Enter your PIN to continue
+                        </p>
+
+                        <div class="login-pin-boxes">
+                            <span
+                                v-for="index in 4"
+                                :key="index"
+                                :class="{
+                                    filled: loginForm.pin.length >= index,
+                                }"
+                            >{{ loginForm.pin.length >= index ? '*' : '' }}</span>
+                        </div>
+
+                        <div class="login-pin-pad">
+                            <button
+                                v-for="number in [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+                                :key="number"
+                                type="button"
+                                @click="pressLoginPin(number)"
+                            >
+                                {{ number }}
+                            </button>
+                            <button type="button" @click="clearLoginPin">
+                                CLEAR
+                            </button>
+                            <button type="button" @click="pressLoginPin(0)">
+                                0
+                            </button>
+                            <button
+                                type="button"
+                                aria-label="Backspace"
+                                @click="backspaceLoginPin"
+                            >
+                                <i class="fa-solid fa-delete-left"></i>
+                            </button>
+                        </div>
+
+                        <p v-if="formMessage" class="login-pin-error">
+                            {{ formMessage }}
+                        </p>
+                        <button
+                            v-if="!isUnlocking"
+                            class="login-pin-back"
+                            type="button"
+                            @click="backToCredentials"
+                        >
+                            Back
+                        </button>
+                    </section>
                 </div>
-                <transition name="form-swap" mode="out-in">
-                    <div v-if="step === 'credentials'" key="credentials">
-                        <h2>{{ isUnlocking ? 'Session locked' : 'Sign in' }}</h2>
-
-                        <div v-if="!isUnlocking" class="login-tabs">
-                            <button :class="{ active: mode === 'qr' }" type="button" @click="setMode('qr')">
-                                <i class="fa-solid fa-qrcode"></i>Staff QR
-                            </button>
-                            <button :class="{ active: mode === 'password' }" type="button" @click="setMode('password')">
-                                <i class="fa-solid fa-key"></i>ID & Password
-                            </button>
-                        </div>
-
-                        <button v-if="mode === 'qr' && !isUnlocking" class="staff-card-scan" type="button" @click="scannerOpen = true">
-                            <span><i class="fa-solid fa-camera"></i></span>
-                            <strong>Scan staff QR code</strong>
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
-
-                        <form v-else-if="!isUnlocking" class="login-fields" @submit.prevent="verifyPassword">
-                            <label>
-                                <span>Staff ID</span>
-                                <div><i class="fa-regular fa-id-badge"></i><input v-model.trim="credentials.employeeId" type="text" autocomplete="username" /></div>
-                            </label>
-                            <label>
-                                <span>Password</span>
-                                <div><i class="fa-solid fa-lock"></i><input v-model="credentials.password" type="password" autocomplete="current-password" /></div>
-                            </label>
-                            <button class="button primary full-width" type="submit">Continue<i class="fa-solid fa-arrow-right"></i></button>
-                        </form>
-
-                        <button v-else class="button primary full-width" type="button" @click="prepareLockedAccount">
-                            Continue to PIN<i class="fa-solid fa-arrow-right"></i>
-                        </button>
-
-                        <p v-if="message" class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ message }}</p>
-                    </div>
-
-                    <div v-else key="pin" class="pin-login">
-                        <button v-if="!isUnlocking" class="back-link" type="button" @click="back">
-                            <i class="fa-solid fa-arrow-left"></i>Back
-                        </button>
-                        <div class="staff-identity">
-                            <span>{{ initials }}</span>
-                            <div><strong>{{ pendingAccount.name }}</strong><small>{{ pendingAccount.employeeId }} · {{ pendingAccount.role }}</small></div>
-                        </div>
-                        <h2>Enter PIN</h2>
-                        <div class="pin-dots" aria-label="Four digit PIN">
-                            <span v-for="index in 4" :key="index" :class="{ filled: pin.length >= index }"></span>
-                        </div>
-                        <div class="pin-pad">
-                            <button v-for="number in [1,2,3,4,5,6,7,8,9]" :key="number" type="button" @click="pressPin(number)">{{ number }}</button>
-                            <button class="pin-command" type="button" @click="pin = ''">CLEAR</button>
-                            <button type="button" @click="pressPin(0)">0</button>
-                            <button class="pin-command" type="button" aria-label="Delete digit" @click="pin = pin.slice(0, -1)"><i class="fa-solid fa-delete-left"></i></button>
-                        </div>
-                        <p v-if="message" class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ message }}</p>
-                    </div>
-                </transition>
-            </div>
-            <p class="login-device-status"><span></span>Main Warehouse</p>
+            </transition>
         </section>
-
-        <ScannerModal
-            v-if="scannerOpen"
-            mode="staff"
-            title="Scan staff QR code"
-            @close="scannerOpen = false"
-            @scanned="handleStaffScan"
+        <CameraScannerModal
+            v-if="showStaffScanner"
+            title="Scan staff card"
+            subtitle="Use this device camera to scan the worker ID card"
+            action-label="Complete demo staff scan"
+            hint="Position the staff card QR inside the frame"
+            unavailable-message="Allow camera permission, or close this window and sign in manually."
+            @close="showStaffScanner = false"
+            @action="completeStaffScan"
+            @scanned="completeStaffScan"
         />
     </main>
 </template>
 
 <script>
-import ScannerModal from '@/components/common/ScannerModal.vue'
-import { inventoryStore } from '@/services/inventoryStore'
+import backgroundImg from '@/assets/img/background/dark_background.jpg'
+import CameraScannerModal from '@/components/common/CameraScannerModal.vue'
+import { LANGUAGES } from '@/system/language'
+import { roleHome } from '@/services/pos/permissions.js'
+import {
+    findStaffAccount,
+    recordStaffLogin,
+} from '@/services/pos/staff.js'
 
 export default {
-    name: 'LoginView',
-    components: { ScannerModal },
+    name: 'POSLogin',
+    components: { CameraScannerModal },
     data() {
         return {
-            store: inventoryStore,
-            step: 'credentials',
-            mode: 'qr',
-            scannerOpen: false,
+            backgroundImg,
+            languages: LANGUAGES,
+            loginStep: 'credentials',
+            loginMode: 'qr',
+            showStaffScanner: false,
+            isUnlocking: false,
             pendingAccount: null,
-            pin: '',
-            message: '',
-            credentials: {
-                employeeId: 'INV001',
-                password: 'inventory123',
+            formMessage: '',
+            pinResetTimer: null,
+            loginForm: {
+                employeeId: 'EMP001',
+                password: 'restro123',
+                pin: '',
             },
         }
     },
     computed: {
-        isUnlocking() {
-            return this.$route.query.locked === '1' && Boolean(this.store.state.activeAccount)
-        },
-        initials() {
-            return (this.pendingAccount?.name || '')
+        accountInitials() {
+            return String(this.pendingAccount?.name || '')
                 .split(' ')
                 .map((part) => part[0])
                 .join('')
@@ -115,70 +236,119 @@ export default {
         },
     },
     mounted() {
-        if (this.isUnlocking) this.prepareLockedAccount()
+        if (
+            this.$route.query.locked === '1' ||
+            localStorage.getItem('posfood_session_locked') === '1'
+        ) {
+            this.prepareLockedSession()
+        }
+    },
+    beforeUnmount() {
+        window.clearTimeout(this.pinResetTimer)
     },
     methods: {
-        setMode(mode) {
-            this.mode = mode
-            this.message = ''
+        prepareLockedSession() {
+            let activeAccount = null
+            try {
+                activeAccount = JSON.parse(
+                    localStorage.getItem('posfood_active_account'),
+                )
+            } catch (error) {
+                activeAccount = null
+            }
+            const account = findStaffAccount(activeAccount?.employeeId)
+            if (!account || account.status !== 'active') {
+                localStorage.removeItem('posfood_active_account')
+                localStorage.removeItem('posfood_session_locked')
+                return
+            }
+            this.isUnlocking = true
+            this.pendingAccount = account
+            this.loginStep = 'pin'
         },
-        prepareLockedAccount() {
-            const account = this.store.findStaff(this.store.state.activeAccount?.employeeId)
-            if (!account) {
-                this.store.logout()
-                this.message = 'This staff account is no longer active.'
+        verifyCredentials() {
+            const account = findStaffAccount(this.loginForm.employeeId)
+            if (
+                !account ||
+                account.status !== 'active' ||
+                this.loginForm.password !== account.password
+            ) {
+                this.formMessage = 'Staff ID or password is incorrect.'
                 return
             }
             this.pendingAccount = account
-            this.step = 'pin'
+            this.loginForm.pin = ''
+            this.formMessage = ''
+            this.loginStep = 'pin'
         },
-        verifyPassword() {
-            const account = this.store.findStaff(this.credentials.employeeId)
-            if (!account || account.password !== this.credentials.password) {
-                this.message = 'Staff ID or password is incorrect.'
+        setLoginMode(mode) {
+            this.loginMode = mode
+            this.formMessage = ''
+        },
+        scanStaffQr() {
+            this.showStaffScanner = true
+            this.formMessage = ''
+        },
+        completeStaffScan() {
+            const account = findStaffAccount('EMP001')
+            this.showStaffScanner = false
+            if (!account || account.status !== 'active') {
+                this.formMessage = 'This staff account is not available.'
                 return
             }
             this.pendingAccount = account
-            this.pin = ''
-            this.message = ''
-            this.step = 'pin'
+            this.loginForm.employeeId = account.employeeId
+            this.loginForm.pin = ''
+            this.formMessage = ''
+            this.loginStep = 'pin'
         },
-        handleStaffScan(value) {
-            this.scannerOpen = false
-            const account = this.store.findStaff(value)
-            if (!account) {
-                this.message = 'Staff QR code was not recognised.'
-                return
-            }
-            this.pendingAccount = account
-            this.pin = ''
-            this.message = ''
-            this.step = 'pin'
+        pressLoginPin(number) {
+            if (this.loginForm.pin.length >= 4) return
+            this.formMessage = ''
+            this.loginForm.pin += String(number)
+            if (this.loginForm.pin.length === 4) this.verifyPin()
         },
-        pressPin(number) {
-            if (this.pin.length >= 4) return
-            this.pin += String(number)
-            this.message = ''
-            if (this.pin.length === 4) window.setTimeout(this.verifyPin, 120)
+        clearLoginPin() {
+            window.clearTimeout(this.pinResetTimer)
+            this.loginForm.pin = ''
+            this.formMessage = ''
+        },
+        backspaceLoginPin() {
+            window.clearTimeout(this.pinResetTimer)
+            this.loginForm.pin = this.loginForm.pin.slice(0, -1)
+            this.formMessage = ''
         },
         verifyPin() {
-            if (this.pin !== this.pendingAccount.pin) {
-                this.message = 'PIN is incorrect.'
-                this.pin = ''
+            if (
+                !this.pendingAccount ||
+                this.pendingAccount.status !== 'active' ||
+                this.loginForm.pin !== this.pendingAccount.pin
+            ) {
+                this.formMessage = 'Staff PIN is incorrect.'
+                window.clearTimeout(this.pinResetTimer)
+                this.pinResetTimer = window.setTimeout(() => {
+                    this.loginForm.pin = ''
+                }, 350)
                 return
             }
-            if (this.isUnlocking) this.store.unlockSession()
-            else this.store.startSession(this.pendingAccount)
-            this.$router.replace('/inventory/dashboard')
+            localStorage.setItem(
+                'posfood_active_account',
+                JSON.stringify({
+                    name: this.pendingAccount.name,
+                    employeeId: this.pendingAccount.employeeId,
+                    role: this.pendingAccount.role,
+                }),
+            )
+            localStorage.removeItem('posfood_session_locked')
+            recordStaffLogin(this.pendingAccount.employeeId)
+            this.$router.replace(roleHome(this.pendingAccount.role))
         },
-        back() {
-            this.step = 'credentials'
+        backToCredentials() {
+            this.loginStep = 'credentials'
             this.pendingAccount = null
-            this.pin = ''
-            this.message = ''
+            this.loginForm.pin = ''
+            this.formMessage = ''
         },
     },
 }
 </script>
-
-<style scoped src="@/assets/css/pages/login.css"></style>

@@ -1,139 +1,191 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import NProgress from 'nprogress'
-import { inventoryStore } from '@/services/inventoryStore'
-import { PERMISSIONS } from '@/services/permissions'
-import { t } from '@/system/language'
+import * as NProgress from 'nprogress'
+import POSCheckout from '@/views/checkout/index.vue'
+import POSKitchen from '@/views/kitchen/component.js'
+import POSOrder from '@/views/order/index.vue'
+import POSStaffManagement from '@/views/staff-management/component.js'
+import POSStart from '@/views/start/index.vue'
+import {
+    PERMISSIONS,
+    hasPermission,
+    normalizePermissionRole,
+    readActiveAccount,
+    roleHome,
+} from '@/services/pos/permissions.js'
+import { findStaffAccount } from '@/services/pos/staff.js'
 
-const routes = [
+const mainRoutes = [
     {
         path: '/',
-        name: 'login',
+        name: 'POSLogin',
         component: () => import('@/views/login/index.vue'),
-        meta: { title: 'Staff Login' },
+        meta: { title: 'POSfood' },
     },
     {
-        path: '/inventory',
-        component: () => import('@/layouts/InventoryLayout.vue'),
-        meta: { requiresAuth: true },
-        children: [
-            {
-                path: '',
-                redirect: '/inventory/dashboard',
-            },
-            {
-                path: 'dashboard',
-                name: 'dashboard',
-                component: () => import('@/views/home/index.vue'),
-                meta: { title: 'Dashboard', nav: 'dashboard', permission: PERMISSIONS.VIEW_DASHBOARD },
-            },
-            {
-                path: 'reports',
-                name: 'reports',
-                component: () => import('@/views/dashboard/index.vue'),
-                meta: { title: 'Reports', nav: 'reports', permission: PERMISSIONS.VIEW_REPORTS },
-            },
-            {
-                path: 'products',
-                name: 'products',
-                component: () => import('@/views/products/index.vue'),
-                meta: { title: 'Products', nav: 'products', permission: PERMISSIONS.VIEW_PRODUCTS },
-            },
-            {
-                path: 'warehouses',
-                name: 'warehouses',
-                component: () => import('@/views/warehouses/index.vue'),
-                meta: { title: 'Warehouses', nav: 'warehouses', permission: PERMISSIONS.VIEW_WAREHOUSES },
-            },
-            {
-                path: 'receive',
-                name: 'receive',
-                component: () => import('@/views/receive-stock/index.vue'),
-                meta: { title: 'Receive Stock', nav: 'receive', permission: PERMISSIONS.RECEIVE_STOCK },
-            },
-            {
-                path: 'internal-stock-in',
-                name: 'internal-stock-in',
-                redirect: { name: 'receive', query: { type: 'standard' } },
-            },
-            {
-                path: 'stock-movement-requests',
-                name: 'stock-movement-requests',
-                component: () => import('@/views/stock-movement-requests/index.vue'),
-                meta: { title: 'Supplier Stock In Requests', nav: 'supplier-requests', permission: PERMISSIONS.RECEIVE_STOCK },
-            },
-            {
-                path: 'dispatch',
-                name: 'dispatch',
-                component: () => import('@/views/dispatch/index.vue'),
-                meta: { title: 'Ship Items', nav: 'dispatch', permission: PERMISSIONS.ISSUE_STOCK },
-            },
-            {
-                path: 'scan',
-                name: 'scan',
-                component: () => import('@/views/scan-product/index.vue'),
-                meta: { title: 'Scan Product', nav: 'scan', permission: PERMISSIONS.VIEW_PRODUCTS },
-            },
-            {
-                path: 'history',
-                name: 'history',
-                component: () => import('@/views/history/index.vue'),
-                meta: { title: 'Stock History', nav: 'history', permission: PERMISSIONS.VIEW_STOCK_HISTORY },
-            },
-            {
-                path: 'labels',
-                name: 'labels',
-                component: () => import('@/views/labels/index.vue'),
-                meta: { title: 'Label Printing', nav: 'labels', permission: PERMISSIONS.PRINT_LABELS },
-            },
-            {
-                path: 'staff',
-                name: 'staff',
-                component: () => import('@/views/staff/index.vue'),
-                meta: { title: 'Staff Management', nav: 'staff', permission: PERMISSIONS.VIEW_STAFF },
-            },
-            {
-                path: 'suppliers',
-                name: 'suppliers',
-                component: () => import('@/views/suppliers/index.vue'),
-                meta: { title: 'Supplier Management', nav: 'suppliers', permission: PERMISSIONS.VIEW_SUPPLIERS },
-            },
-        ],
+        path: '/pos/order',
+        name: 'POSOrder',
+        component: POSOrder,
+        meta: {
+            title: 'POSfood Order',
+            sidebar: 'Home',
+            permission: PERMISSIONS.CREATE_ORDER,
+        },
     },
-    { path: '/:pathMatch(.*)*', redirect: '/' },
+    {
+        path: '/pos/start',
+        name: 'POSStart',
+        component: POSStart,
+        meta: {
+            title: 'POSfood Start Order',
+            sidebar: 'Home',
+            permission: PERMISSIONS.VIEW_POS,
+        },
+    },
+    {
+        path: '/pos/checkout',
+        name: 'POSCheckout',
+        component: POSCheckout,
+        meta: {
+            title: 'POSfood Checkout',
+            sidebar: 'Home',
+            permission: PERMISSIONS.CHECKOUT_ORDER,
+        },
+    },
+    {
+        path: '/pos/receipt/:id',
+        name: 'POSReceipt',
+        component: () => import('@/views/receipt/index.vue'),
+        meta: {
+            title: 'POSfood Receipt',
+            sidebar: 'History',
+            permission: PERMISSIONS.VIEW_TRANSACTIONS,
+        },
+    },
+    {
+        path: '/pos/transactions',
+        name: 'POSTransactions',
+        component: () => import('@/views/transactions/index.vue'),
+        meta: {
+            title: 'POSfood Transactions',
+            sidebar: 'History',
+            permission: PERMISSIONS.VIEW_TRANSACTIONS,
+        },
+    },
+    {
+        path: '/pos/menu',
+        name: 'POSMenuManagement',
+        component: () => import('@/views/menu-management/index.vue'),
+        meta: {
+            title: 'POSfood Menu Management',
+            sidebar: 'Menu',
+            permission: PERMISSIONS.MANAGE_MENU,
+        },
+    },
+    {
+        path: '/pos/reports',
+        name: 'POSReporting',
+        component: () => import('@/views/reporting/index.vue'),
+        meta: {
+            title: 'POSfood Reporting',
+            sidebar: 'Reports',
+            permission: PERMISSIONS.VIEW_REPORTS,
+        },
+    },
+    {
+        path: '/pos/memberships',
+        name: 'POSMemberships',
+        component: () => import('@/views/memberships/index.vue'),
+        meta: {
+            title: 'POSfood Memberships',
+            sidebar: 'Membership',
+            permission: PERMISSIONS.MANAGE_MEMBERS,
+        },
+    },
+    {
+        path: '/pos/vouchers',
+        name: 'POSVouchers',
+        component: () => import('@/views/vouchers/index.vue'),
+        meta: {
+            title: 'POSfood Vouchers',
+            sidebar: 'Vouchers',
+            permission: PERMISSIONS.MANAGE_VOUCHERS,
+        },
+    },
+    {
+        path: '/pos/staff',
+        name: 'POSStaffManagement',
+        component: POSStaffManagement,
+        meta: {
+            title: 'POSfood Staff Management',
+            sidebar: 'Staff',
+            permission: PERMISSIONS.MANAGE_STAFF,
+        },
+    },
+    {
+        path: '/pos/profile',
+        name: 'POSStaffProfile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: {
+            title: 'POSfood My Profile',
+            sidebar: 'Profile',
+            allowAllStaff: true,
+        },
+    },
+    {
+        path: '/pos/kitchen',
+        name: 'POSKitchen',
+        component: POSKitchen,
+        meta: {
+            title: 'POSfood Kitchen',
+            sidebar: 'Kitchen',
+            permission: PERMISSIONS.VIEW_KITCHEN,
+        },
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/',
+    },
 ]
-
 const router = createRouter({
     history: createWebHistory(),
-    scrollBehavior: () => ({ left: 0, top: 0 }),
-    routes,
+    scrollBehavior() {
+        return { left: 0, top: 0 }
+    },
+    routes: mainRoutes,
 })
-
 router.beforeEach((to) => {
     NProgress.start()
-    document.title = `${t(to.meta.title || 'Inventory')} · ${t('Inventory Management System')}`
-    if (
-        to.meta.requiresAuth &&
-        (!inventoryStore.state.activeAccount ||
-            inventoryStore.state.sessionLocked)
-    ) {
+    if (to.path === '/') return
+
+    if (localStorage.getItem('posfood_session_locked') === '1') {
+        return { path: '/', query: { locked: '1' } }
+    }
+
+    const activeAccount = readActiveAccount()
+    const storedAccount = activeAccount?.employeeId
+        ? findStaffAccount(activeAccount.employeeId)
+        : null
+
+    if (!activeAccount || !storedAccount || storedAccount.status !== 'active') {
+        localStorage.removeItem('posfood_active_account')
+        localStorage.removeItem('posfood_session_locked')
+        return { path: '/', query: { auth: 'required' } }
+    }
+
+    const activeRole = normalizePermissionRole(storedAccount.role)
+    if (to.meta.allowAllStaff) return
+    if (!hasPermission(activeRole, to.meta.permission)) {
         return {
-            path: '/',
-            query: inventoryStore.state.sessionLocked ? { locked: '1' } : {},
+            path: roleHome(activeRole),
+            query: { denied: to.fullPath },
         }
     }
-    if (to.name === 'login' && inventoryStore.state.activeAccount && !inventoryStore.state.sessionLocked)
-        return '/inventory/dashboard'
-    if (
-        to.meta.permission &&
-        inventoryStore.state.activeAccount &&
-        !inventoryStore.can(to.meta.permission)
-    ) {
-        inventoryStore.addToast('You do not have access to that module.', 'danger')
-        return '/inventory/dashboard'
-    }
 })
-
-router.afterEach(() => NProgress.done())
-router.onError(() => NProgress.done())
-
+router.afterEach(() => {
+    NProgress.done()
+})
+router.onError(() => {
+    NProgress.done()
+})
 export default router
+export { mainRoutes }

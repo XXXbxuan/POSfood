@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 210" role="img" aria-label="Demo QR code">
+  <rect width="210" height="210" rx="8" fill="#fff"/>
+  <g fill="#111827">
+    <path d="M14 14h56v56H14zm8 8v40h40V22zm8 8h24v24H30zM140 14h56v56h-56zm8 8v40h40V22zm8 8h24v24h-24zM14 140h56v56H14zm8 8v40h40v-40zm8 8h24v24H30z"/>
+    <path d="M84 14h14v14H84zm28 0h14v14h-14zM84 42h14v28H84zm14 14h28v14H98zm14-28h14v14h-14zm-28 56h14v14H84zm28 0h28v14h-28zm42 0h14v14h-14zm-70 28h28v14H84zm42-14h14v28h-14zm28 14h28v14h-28zM84 140h14v14H84zm28-14h14v28h-14zm28 14h14v14h-14zm28-14h14v28h-14zM84 168h28v14H84zm42-14h14v28h-14zm28 14h42v14h-42zm-56 28h28v-14H98zm42-14h14v14h-14zm42 0h14v14h-14zM14 84h14v14H14zm28 0h28v14H42zm-14 28h14v14H28zm28-14h14v28H56z"/>
+  </g>
+  <circle cx="105" cy="105" r="19" fill="#00a9ce"/>
+  <path d="M96 106c5-12 17-16 25-9-3 13-11 21-24 20l7-9z" fill="#fff"/>
+  <text x="105" y="202" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#00a9ce">TNG DEMO PAYMENT</text>
+</svg>

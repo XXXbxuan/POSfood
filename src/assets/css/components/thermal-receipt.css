@@ -1,0 +1,132 @@
+.thermal-receipt * {
+    box-sizing: border-box;
+}
+
+.thermal-receipt {
+    width: 22rem;
+    padding: 1.35rem 1.25rem;
+    background: #fff;
+    color: #171826;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 1rem 2.5rem rgba(23, 24, 38, 0.14);
+}
+
+.thermal-receipt header {
+    text-align: center;
+}
+
+.thermal-receipt h1 {
+    margin: 0 0 0.25rem;
+    font:
+        900 1.35rem Arial,
+        sans-serif;
+    letter-spacing: 0.05em;
+}
+
+.thermal-receipt p {
+    margin: 0.1rem 0;
+    font-size: 0.66rem;
+}
+
+.thermal-receipt .receipt-divider {
+    overflow: hidden;
+    margin: 0.58rem 0;
+    color: #555;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.thermal-receipt .receipt-info {
+    display: grid;
+    gap: 0.22rem;
+}
+
+.thermal-receipt .receipt-info div,
+.thermal-receipt .receipt-totals div {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.7rem;
+}
+
+.thermal-receipt .receipt-info strong {
+    text-align: right;
+}
+
+.thermal-receipt .items-heading {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.64rem;
+    font-weight: 900;
+}
+
+.thermal-receipt .receipt-items article {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.8rem;
+    margin: 0.58rem 0;
+    font-size: 0.7rem;
+}
+
+.thermal-receipt .receipt-items strong,
+.thermal-receipt .receipt-items small,
+.thermal-receipt .receipt-items span {
+    display: block;
+}
+
+.thermal-receipt .receipt-items small {
+    margin: 0.1rem 0;
+    color: #767676;
+    font-size: 0.6rem;
+}
+
+.thermal-receipt .receipt-items b {
+    align-self: end;
+}
+
+.thermal-receipt .receipt-totals {
+    display: grid;
+    gap: 0.27rem;
+}
+
+.thermal-receipt .receipt-totals .grand {
+    margin: 0.28rem 0;
+    padding: 0.35rem 0;
+    border-top: 1px dashed #777;
+    border-bottom: 1px dashed #777;
+    font-size: 0.86rem;
+    font-weight: 900;
+}
+
+.thermal-receipt footer {
+    text-align: center;
+}
+
+.thermal-receipt footer strong {
+    font-size: 0.8rem;
+}
+
+.thermal-receipt.compact {
+    width: 20rem;
+    padding: 0.9rem 1rem;
+    box-shadow: none;
+}
+
+.thermal-receipt .compact .receipt-divider {
+    margin: 0.42rem 0;
+}
+
+.thermal-receipt .compact .receipt-items article {
+    margin: 0.4rem 0;
+}
+
+@media print {
+    .thermal-receipt,
+    .thermal-receipt.compact {
+        width: 80mm;
+        padding: 5mm;
+        box-shadow: none;
+    }
+}
